@@ -1,0 +1,21 @@
+# Knowledge map (our own convention, not a Claude Code feature). Routes a ticket component
+# to the small set of code and docs that matter. Owned by the architect; changes go through a PR.
+# Format rules (pr-guard parses this with a tiny reader): top-level key = component, list fields in [a, b] flow style.
+# risk: low | medium | high | blocked  (see docs/autonomy-by-risk.md)
+# STATUS: DRAFT. Code paths are the intended layout; pr-guard fails any glob that matches no file,
+# so entries are added together with the code they describe (start with the harness entry below).
+
+harness:
+  components: [Harness, CI]
+  code_paths: [.github/**, .claude/**, scripts/**]
+  docs: [docs/autonomy-by-risk.md, docs/ticket-workflow.md]
+  protected_paths: [.github/**, .claude/**, scripts/**, CLAUDE.md, REPO_CONTEXT.md, docs/knowledge-map.yaml]
+  owners: [shivansh-gupta-ness]
+  risk: blocked
+
+# Add as the code lands, one per component (from the Mini WMS scaffold):
+# inventory:   code_paths [src/backend/**/Inventory/**, src/frontend/**/inventory/**]            risk: medium
+# inbound:     receiving / put-away                                                                risk: medium
+# outbound:    orders, picking, shipping                                                           risk: medium
+# locations:   warehouse, zones, bins                                                              risk: low
+# auth:        authentication and roles                                                            risk: high

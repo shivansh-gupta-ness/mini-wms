@@ -1,0 +1,34 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vs/
+.vscode/*
+!.vscode/settings.json
+*.user
+*.suo
+
+# .NET
+bin/
+obj/
+TestResults/
+coverage/
+*.log
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# Secrets and local config (never commit)
+.env
+.env.*
+*.pfx
+*.key
+secrets/
+appsettings.*.local.json
+CLAUDE.local.md
+
+# Claude Code runtime state (per person, never shared)
+.claude/state/
+.claude/worktrees/
+.claude/settings.local.json

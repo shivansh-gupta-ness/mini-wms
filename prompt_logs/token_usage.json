@@ -1,0 +1,340 @@
+{
+  "generated": "2026-11-17T15:48:48.586Z",
+  "grand": {
+    "calls": 60,
+    "input": 117,
+    "output": 75323,
+    "cacheRead": 4995055,
+    "cacheWrite": 293195,
+    "thinking": 17414,
+    "models": {
+      "claude-sonnet-4-6": 15,
+      "claude-sonnet-5-5": 45
+    },
+    "total": 5363690
+  },
+  "byDay": {
+    "2026-11-17": {
+      "calls": 60,
+      "input": 117,
+      "output": 75323,
+      "cacheRead": 4995055,
+      "cacheWrite": 293195,
+      "thinking": 17414,
+      "models": {
+        "claude-sonnet-4-6": 15,
+        "claude-sonnet-5-5": 45
+      },
+      "total": 5363690
+    }
+  },
+  "bySession": {
+    "c65f4548-f0b0-4be8-a353-eb589f45bc26": {
+      "calls": 1,
+      "input": 3,
+      "output": 227,
+      "cacheRead": 23902,
+      "cacheWrite": 10510,
+      "thinking": 113,
+      "models": {
+        "claude-sonnet-4-6": 1
+      },
+      "total": 34642
+    },
+    "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
+      "calls": 59,
+      "input": 114,
+      "output": 75096,
+      "cacheRead": 4971153,
+      "cacheWrite": 282685,
+      "thinking": 17301,
+      "models": {
+        "claude-sonnet-4-6": 14,
+        "claude-sonnet-5-5": 45
+      },
+      "total": 5329048
+    }
+  },
+  "byPrompt": {
+    "16cb0bd7-a992-4128-833d-e48038c2feb5": {
+      "calls": 6,
+      "input": 14,
+      "output": 8575,
+      "cacheRead": 529918,
+      "cacheWrite": 13092,
+      "thinking": 1366,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 551599
+    },
+    "74579a33-fc1e-45f7-9dbd-55ca53a19d0f": {
+      "label": "Make sure to write my each prompt in prompt_logs/logs.md file. go through my claude code adoption plan, here we are not running any pilot, but i want to do each setup mentioned in the adoption plan like setting up (not whole setup like for tickets and docs we will have tickets folder having tickets and docs folder having docs content instead of jira and atlassian, since i don't have wsl2 we are dropping wsl2 for now). I am doing monitored spec driven development of Mini Warehouse Management System(production grade app but will not deploy) to evaluate claude code in .net and angular. Before starting spec driven development, I want to do whole git, github and other things mentioned in implementation reference of claude code adoption plan setup. Use the prompts inside dev_prompts to create agents, skills, and plugins. Help me in setup by asking clarifying questions. Also, if dev_prompts need any modifcation then consult from me because they can conflict. And, help me in creating new agents, skills and plugins mentioned in claude code adoption plan by asking clarifying questions.",
+      "time": "2026-11-17T10:28:29.407Z",
+      "calls": 1,
+      "input": 3,
+      "output": 227,
+      "cacheRead": 23902,
+      "cacheWrite": 10510,
+      "thinking": 113,
+      "models": {
+        "claude-sonnet-4-6": 1
+      },
+      "total": 34642
+    },
+    "2d95c4c6-749f-4bd4-8ba0-faf2c5265c42": {
+      "label": "Make sure to write my each prompt in prompt_logs/logs.md file. go through my claude code adoption plan, here we are not running any pilot, but i want to do each setup mentioned in the adoption plan like setting up (not whole setup like for tickets and docs we will have tickets folder having tickets and docs folder having docs content instead of jira and atlassian, since i don't have wsl2 we are dropping wsl2 for now). I am doing monitored spec driven development of Mini Warehouse Management System(production grade app but will not deploy) to evaluate claude code in .net and angular. Before starting spec driven development, I want to do whole git, github and other things mentioned in implementation reference of claude code adoption plan setup. Use the prompts inside dev_prompts to create agents, skills, and plugins. Help me in setup by asking clarifying questions. Also, if dev_prompts need any modifcation then consult from me because they can conflict. And, help me in creating new agents, skills and plugins mentioned in claude code adoption plan by asking clarifying questions. Also, help me in setup claude.md file",
+      "time": "2026-11-17T10:30:51.675Z",
+      "calls": 14,
+      "input": 16,
+      "output": 6441,
+      "cacheRead": 965830,
+      "cacheWrite": 69653,
+      "thinking": 2174,
+      "models": {
+        "claude-sonnet-4-6": 14
+      },
+      "total": 1041940
+    },
+    "8f280528-3932-4794-8065-12bc46453c25": {
+      "label": "Make sure to montior and log my token usage at every level from per prompt to per whatever. github username is: shivansh-gupta-ness",
+      "time": "2026-11-17T10:44:35.709Z",
+      "calls": 7,
+      "input": 14,
+      "output": 3315,
+      "cacheRead": 342766,
+      "cacheWrite": 26080,
+      "thinking": 471,
+      "models": {
+        "claude-sonnet-5-5": 7
+      },
+      "total": 372175
+    },
+    "1a162e23-93dc-4ef0-a24c-fb2b5e067f3a": {
+      "label": "gh login done, continue setup",
+      "time": "2026-11-17T11:01:33.359Z",
+      "calls": 9,
+      "input": 20,
+      "output": 10623,
+      "cacheRead": 541729,
+      "cacheWrite": 25468,
+      "thinking": 3427,
+      "models": {
+        "claude-sonnet-5-5": 9
+      },
+      "total": 577840
+    },
+    "6be51025-cb9d-480a-9bd1-c0234215a538": {
+      "label": "go ahead with this format and also do this - prompt_logs/logs.md to carry a one-line token summary under each logged prompt and used model name at both places.",
+      "time": "2026-11-17T11:39:17.334Z",
+      "calls": 2,
+      "input": 6,
+      "output": 3806,
+      "cacheRead": 162726,
+      "cacheWrite": 689,
+      "thinking": 2858,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 167227
+    },
+    "f996fdce-d6dd-42d0-bebc-30233e7eec16": {
+      "label": "I want to rename the Claude_Eval folder to MiniWMS folder. And remove existing MiniWMS folder don't do this. And, I want to push whole claude_eval to github. Treat whole Claude_Eval as miniWMS, put all code files inside src/ sub folder",
+      "time": "2026-11-17T12:00:28.695Z",
+      "calls": 12,
+      "input": 26,
+      "output": 29638,
+      "cacheRead": 1277232,
+      "cacheWrite": 29365,
+      "thinking": 5859,
+      "models": {
+        "claude-sonnet-5-5": 12
+      },
+      "total": 1336261
+    },
+    "0c35e7d2-9dd4-4431-94a3-e9dcecf47766": {
+      "label": "continue from where you left",
+      "time": "2026-11-17T15:44:13.471Z",
+      "calls": 9,
+      "input": 18,
+      "output": 12698,
+      "cacheRead": 1150952,
+      "cacheWrite": 118338,
+      "thinking": 1146,
+      "models": {
+        "claude-sonnet-5-5": 9
+      },
+      "total": 1282006
+    }
+  },
+  "byModel": {
+    "claude-sonnet-4-6": {
+      "calls": 15,
+      "input": 19,
+      "output": 6668,
+      "cacheRead": 989732,
+      "cacheWrite": 80163,
+      "thinking": 2287,
+      "models": {
+        "claude-sonnet-4-6": 15
+      },
+      "total": 1076582
+    },
+    "claude-sonnet-5-5": {
+      "calls": 45,
+      "input": 98,
+      "output": 68655,
+      "cacheRead": 4005323,
+      "cacheWrite": 213032,
+      "thinking": 15127,
+      "models": {
+        "claude-sonnet-5-5": 45
+      },
+      "total": 4287108
+    }
+  },
+  "bySubagent": {},
+  "byTool": {
+    "Glob": {
+      "calls": 4,
+      "input": 9,
+      "output": 1758,
+      "cacheRead": 149711,
+      "cacheWrite": 42254,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 3,
+        "claude-sonnet-5-5": 1
+      },
+      "total": 193732
+    },
+    "Read": {
+      "calls": 4,
+      "input": 5,
+      "output": 743,
+      "cacheRead": 204175,
+      "cacheWrite": 30661,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 3,
+        "claude-sonnet-5-5": 1
+      },
+      "total": 235584
+    },
+    "PowerShell": {
+      "calls": 26,
+      "input": 56,
+      "output": 17777,
+      "cacheRead": 2184068,
+      "cacheWrite": 137279,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 4,
+        "claude-sonnet-5-5": 22
+      },
+      "total": 2339180
+    },
+    "Write": {
+      "calls": 12,
+      "input": 23,
+      "output": 44514,
+      "cacheRead": 1307828,
+      "cacheWrite": 49701,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 1,
+        "claude-sonnet-5-5": 11
+      },
+      "total": 1402066
+    },
+    "AskUserQuestion": {
+      "calls": 4,
+      "input": 5,
+      "output": 2614,
+      "cacheRead": 336406,
+      "cacheWrite": 4386,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 3,
+        "claude-sonnet-5-5": 1
+      },
+      "total": 343411
+    },
+    "(text only)": {
+      "calls": 4,
+      "input": 7,
+      "output": 2372,
+      "cacheRead": 320909,
+      "cacheWrite": 5686,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-4-6": 1,
+        "claude-sonnet-5-5": 3
+      },
+      "total": 328974
+    },
+    "Bash": {
+      "calls": 2,
+      "input": 4,
+      "output": 3618,
+      "cacheRead": 107190,
+      "cacheWrite": 16383,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 127195
+    },
+    "Grep": {
+      "calls": 2,
+      "input": 4,
+      "output": 521,
+      "cacheRead": 138429,
+      "cacheWrite": 5192,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 144146
+    },
+    "Edit": {
+      "calls": 2,
+      "input": 4,
+      "output": 1406,
+      "cacheRead": 246339,
+      "cacheWrite": 1653,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 249402
+    }
+  },
+  "byBranch": {
+    "HEAD": {
+      "calls": 51,
+      "input": 99,
+      "output": 62625,
+      "cacheRead": 3844103,
+      "cacheWrite": 174857,
+      "thinking": 16268,
+      "models": {
+        "claude-sonnet-4-6": 15,
+        "claude-sonnet-5-5": 36
+      },
+      "total": 4081684
+    },
+    "main": {
+      "calls": 9,
+      "input": 18,
+      "output": 12698,
+      "cacheRead": 1150952,
+      "cacheWrite": 118338,
+      "thinking": 1146,
+      "models": {
+        "claude-sonnet-5-5": 9
+      },
+      "total": 1282006
+    }
+  }
+}

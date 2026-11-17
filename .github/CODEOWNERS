@@ -1,0 +1,15 @@
+# Owners are reviewer teams in a real organisation. This is a personal evaluation repo,
+# so one named person owns everything. Broad rule first: the last matching pattern wins.
+*                         @shivansh-gupta-ness
+
+# Sensitive areas (kept as separate lines so they can move to teams later)
+/src/backend/**/Auth*/    @shivansh-gupta-ness
+/infrastructure/          @shivansh-gupta-ness
+
+# Shared context, the knowledge map, the harness and CI (including pr-guard): agents never edit these
+/CLAUDE.md                @shivansh-gupta-ness
+/REPO_CONTEXT.md          @shivansh-gupta-ness
+/docs/knowledge-map.yaml  @shivansh-gupta-ness
+/.github/                 @shivansh-gupta-ness
+/.claude/                 @shivansh-gupta-ness
+/scripts/                 @shivansh-gupta-ness
