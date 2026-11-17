@@ -121,6 +121,23 @@ continue from where you left
 
 **Context:** Session was interrupted while writing harness hooks; resuming setup (hooks, agents, skill, plugin repo, GitHub repo + ruleset, adapted dev_prompts).
 
-**Tokens:** 1,282,006 total (in 18 · out 12,698 [thinking 1,146] · cache-read 1,150,952 · cache-write 118,338) · 9 API calls · **Model:** claude-sonnet-5-5 (9)
+**Tokens:** 7,222,292 total (in 82 · out 58,401 [thinking 17,158] · cache-read 6,963,256 · cache-write 200,553) · 41 API calls · **Model:** claude-sonnet-5-5 (41)
+
+---
+## Prompt 11 — 2026-11-17
+**User:**
+is change implementer and test-writer are conflicting with new-per_ticket_feature and run-feature-BE-v1? ask clarifying question which agents/skills are going to be used and when?
+
+**Context:** Rejected the plugin PR step to ask about overlap. Confirmed yes, overlap with dev_prompts pipeline (branch/scope, implementation, tests, gates, STOP, context maintenance). Asked which design to use.
+
+**Tokens:** pending (not in a transcript yet; refreshed at the end of the turn)
+
+---
+## Prompt 12 — 2026-11-17 (answers to pipeline questions)
+**User:** Ticket read: tickets/<ID>.md. Jira upload replacement: docs/reports/<ID>/. Paths/QA: "go with the first option" (repo-relative paths, QA as docs/qa/<ID>.md), "also enable change-implementer and test-writer in plugin". Pipeline design: "since a feature could span across multiple repo and each repo can have its own agents/skills to enforce their criteria also, then what is recommended?". Plugin scope: "Ship in the plugin too".
+
+**Context:** Adopted layered design: shared plugin (ticket-scout, change-implementer, test-writer, start-ticket) + per-repo pipeline skills (run-feature-be, run-feature-fe) built from adapted dev_prompts, per-repo hooks/context; cross-repo features = one ticket per repo linked by parent/depends_on. Editing agents shipped in plugin v0.2.0 (PR opened).
+
+**Tokens:** n/a — answered inside the previous prompt's turn (AskUserQuestion); counted there.
 
 ---

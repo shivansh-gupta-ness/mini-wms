@@ -14,3 +14,6 @@ IDs count up per type. Copy the matching file from `_templates/` and fill every 
 
 A ticket without acceptance criteria is not `ready`. Write them as Given / When / Then so tests can be derived.
 The ticket file is the only source of work state; the branch name carries the ID (`feat/FEAT-001-add-stock`).
+
+## Features that span repositories or layers
+Create one ticket per repository (or per layer, e.g. backend and frontend), each with its own owner, component, risk and `allowed_paths`. Link them with `parent:` (the feature ticket) and `depends_on: [FEAT-001]` (for example the frontend ticket depends on the backend ticket that publishes the API contract in `docs/specs/`). An agent works in one repository at a time, so each repository's scope guard stays valid. Use `allowed_paths` that include `docs/reports/<ID>/**` when the feature pipeline will file reports.

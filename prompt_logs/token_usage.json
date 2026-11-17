@@ -1,31 +1,31 @@
 {
-  "generated": "2026-11-17T15:48:48.586Z",
+  "generated": "2026-11-17T16:14:32.121Z",
   "grand": {
-    "calls": 60,
-    "input": 117,
-    "output": 75323,
-    "cacheRead": 4995055,
-    "cacheWrite": 293195,
-    "thinking": 17414,
+    "calls": 92,
+    "input": 181,
+    "output": 121026,
+    "cacheRead": 10807359,
+    "cacheWrite": 375410,
+    "thinking": 33426,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 45
+      "claude-sonnet-5-5": 77
     },
-    "total": 5363690
+    "total": 11303976
   },
   "byDay": {
     "2026-11-17": {
-      "calls": 60,
-      "input": 117,
-      "output": 75323,
-      "cacheRead": 4995055,
-      "cacheWrite": 293195,
-      "thinking": 17414,
+      "calls": 92,
+      "input": 181,
+      "output": 121026,
+      "cacheRead": 10807359,
+      "cacheWrite": 375410,
+      "thinking": 33426,
       "models": {
         "claude-sonnet-4-6": 15,
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 77
       },
-      "total": 5363690
+      "total": 11303976
     }
   },
   "bySession": {
@@ -42,17 +42,17 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 59,
-      "input": 114,
-      "output": 75096,
-      "cacheRead": 4971153,
-      "cacheWrite": 282685,
-      "thinking": 17301,
+      "calls": 91,
+      "input": 178,
+      "output": 120799,
+      "cacheRead": 10783457,
+      "cacheWrite": 364900,
+      "thinking": 33313,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 77
       },
-      "total": 5329048
+      "total": 11269334
     }
   },
   "byPrompt": {
@@ -155,16 +155,16 @@
     "0c35e7d2-9dd4-4431-94a3-e9dcecf47766": {
       "label": "continue from where you left",
       "time": "2026-11-17T15:44:13.471Z",
-      "calls": 9,
-      "input": 18,
-      "output": 12698,
-      "cacheRead": 1150952,
-      "cacheWrite": 118338,
-      "thinking": 1146,
+      "calls": 41,
+      "input": 82,
+      "output": 58401,
+      "cacheRead": 6963256,
+      "cacheWrite": 200553,
+      "thinking": 17158,
       "models": {
-        "claude-sonnet-5-5": 9
+        "claude-sonnet-5-5": 41
       },
-      "total": 1282006
+      "total": 7222292
     }
   },
   "byModel": {
@@ -181,16 +181,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 45,
-      "input": 98,
-      "output": 68655,
-      "cacheRead": 4005323,
-      "cacheWrite": 213032,
-      "thinking": 15127,
+      "calls": 77,
+      "input": 162,
+      "output": 114358,
+      "cacheRead": 9817627,
+      "cacheWrite": 295247,
+      "thinking": 31139,
       "models": {
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 77
       },
-      "total": 4287108
+      "total": 10227394
     }
   },
   "bySubagent": {},
@@ -209,56 +209,56 @@
       "total": 193732
     },
     "Read": {
-      "calls": 4,
-      "input": 5,
-      "output": 743,
-      "cacheRead": 204175,
-      "cacheWrite": 30661,
+      "calls": 9,
+      "input": 15,
+      "output": 8687,
+      "cacheRead": 1141731,
+      "cacheWrite": 48000,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 1
+        "claude-sonnet-5-5": 6
       },
-      "total": 235584
+      "total": 1198433
     },
     "PowerShell": {
-      "calls": 26,
-      "input": 56,
-      "output": 17777,
-      "cacheRead": 2184068,
-      "cacheWrite": 137279,
+      "calls": 39,
+      "input": 82,
+      "output": 36106,
+      "cacheRead": 4518514,
+      "cacheWrite": 164367,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 4,
-        "claude-sonnet-5-5": 22
+        "claude-sonnet-5-5": 35
       },
-      "total": 2339180
+      "total": 4719069
     },
     "Write": {
-      "calls": 12,
-      "input": 23,
-      "output": 44514,
-      "cacheRead": 1307828,
-      "cacheWrite": 49701,
+      "calls": 16,
+      "input": 31,
+      "output": 56830,
+      "cacheRead": 2015230,
+      "cacheWrite": 63525,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 11
+        "claude-sonnet-5-5": 15
       },
-      "total": 1402066
+      "total": 2135616
     },
     "AskUserQuestion": {
-      "calls": 4,
-      "input": 5,
-      "output": 2614,
-      "cacheRead": 336406,
-      "cacheWrite": 4386,
+      "calls": 7,
+      "input": 11,
+      "output": 5843,
+      "cacheRead": 803356,
+      "cacheWrite": 14536,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 1
+        "claude-sonnet-5-5": 4
       },
-      "total": 343411
+      "total": 823746
     },
     "(text only)": {
       "calls": 4,
@@ -286,16 +286,16 @@
       "total": 127195
     },
     "Grep": {
-      "calls": 2,
-      "input": 4,
-      "output": 521,
-      "cacheRead": 138429,
-      "cacheWrite": 5192,
+      "calls": 9,
+      "input": 18,
+      "output": 4406,
+      "cacheRead": 1504379,
+      "cacheWrite": 19006,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 2
+        "claude-sonnet-5-5": 9
       },
-      "total": 144146
+      "total": 1527809
     },
     "Edit": {
       "calls": 2,
@@ -325,16 +325,16 @@
       "total": 4081684
     },
     "main": {
-      "calls": 9,
-      "input": 18,
-      "output": 12698,
-      "cacheRead": 1150952,
-      "cacheWrite": 118338,
-      "thinking": 1146,
+      "calls": 41,
+      "input": 82,
+      "output": 58401,
+      "cacheRead": 6963256,
+      "cacheWrite": 200553,
+      "thinking": 17158,
       "models": {
-        "claude-sonnet-5-5": 9
+        "claude-sonnet-5-5": 41
       },
-      "total": 1282006
+      "total": 7222292
     }
   }
 }
