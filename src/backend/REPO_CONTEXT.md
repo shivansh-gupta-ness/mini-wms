@@ -23,7 +23,14 @@ Put new code in the module folder, not at the project root.
 ## Build, test, run
 - Build: `dotnet build src/backend` (warnings are errors; must finish with 0 warnings).
 - Test: `dotnet test src/backend`.
-- Run the API: `dotnet run --project src/backend/MiniWms.Api` (host behaviour arrives in TASK-002; port 5080).
+- Coverage (ADR-005; scope Domain, Application, Api; excludes `Program.cs`, migrations, generated code; settings in `coverage.runsettings`):
+  - `dotnet tool restore` installs ReportGenerator from `.config/dotnet-tools.json`.
+  - `dotnet test src/backend --collect:"XPlat Code Coverage"` writes a Cobertura file per test project.
+  - `powershell -NoProfile -ExecutionPolicy Bypass -File src/backend/coverage.ps1` runs tests, writes the text summary under `src/backend/TestResults/coverage-report` and gates at 90% line coverage (exit 1 below).
+  - `powershell -NoProfile -ExecutionPolicy Bypass -File src/backend/coverage.ps1 -Cobertura <path>` skips the tests; report and gate only. A relative path resolves against your current folder.
+  - Why `-ExecutionPolicy Bypass`: the Windows default policy blocks scripts; the flag applies to that one run only.
+  - `dotnet test src/backend --filter "AC=<id>"` runs the tests of one acceptance criterion.
+- Run the API: `dotnet run --project src/backend/MiniWms.Api` (the API host exists and listens on http://localhost:5080 per its launch profile).
 - The pinned SDK is in the root `global.json` (10.0.300). Tools may not be on PATH in agent shells: use `C:\Program Files\dotnet`.
 
 ## Rules (ADR-001)
@@ -35,4 +42,4 @@ Put new code in the module folder, not at the project root.
 ## Tests
 - xUnit. A test that proves an acceptance criterion carries `[Trait("AC", "<ticket or spec id>")]`, for example `TASK-001.2` or `LOC-1.1`.
 - Repository-structure tests walk up from the test folder to the folder holding `global.json` to find the repo root.
-- No coverage tooling yet (TASK-003); no database yet (TASK-004).
+- Coverage tooling: see Build, test, run. No database yet (TASK-004).

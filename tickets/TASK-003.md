@@ -2,7 +2,7 @@
 id: TASK-003
 type: task
 title: Backend test and coverage tooling with 90% gate
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low

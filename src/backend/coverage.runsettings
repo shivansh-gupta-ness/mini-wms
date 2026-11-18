@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coverage scope (ADR-005, TASK-003): only Domain, Application and Api are counted.
+     Infrastructure and the test projects are not counted; migrations, Program.cs and generated code are excluded. -->
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Include>[MiniWms.Domain]*,[MiniWms.Application]*,[MiniWms.Api]*</Include>
+          <ExcludeByFile>**/Program.cs,**/Migrations/**,**/*.g.cs,**/*.Designer.cs,**/obj/**</ExcludeByFile>
+          <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
+          <SkipAutoProps>false</SkipAutoProps>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
