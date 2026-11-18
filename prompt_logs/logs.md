@@ -454,6 +454,98 @@ Chore PR for both (Recommended)
 
 **Context:** Committed the owner status edits (TASK-002 and TASK-003 draft -> ready) on chore/tickets-ready from main d78f4f2 with the pending prompt logs; pushed and opened a PR.
 
+---
+
+**User:**
+/start-ticket TASK-002 (third attempt)
+
+**Context:** Checking PR #9 merge, ticket status and tree, then branching and scouting.
+
+---
+
+**User:**
+approve the plan, go ahead
+
+**Context:** TASK-002 plan approved. Wrote .claude/state/active-ticket.json; starting change-implementer (steps 1-4) in an isolated worktree, then test-writer (step 5).
+
+---
+
+**User:**
+continue with test-writer
+
+**Context:** change-implementer has not reported yet; test-writer must start from its applied changes, so it waits for the completion notice.
+
+---
+
+**User:**
+continue with test-writer
+
+**Context (outcome):** TASK-002 first full agent run: implementer and test-writer ran in worktrees, work applied back; own re-run: build 0 warnings/0 errors, Api.Tests 12/12, Application.Tests 14/14, exit 0; ac-results.md and ac-log row written (7/7 PASS); active-ticket.json removed. Changes uncommitted on task/TASK-002-api-host-health-endpoint.
+
+---
+
+**User:**
+YES do it
+
+**Context:** Committing TASK-002 on task/TASK-002-api-host-health-endpoint, pushing, opening the PR, then recording PR number and done status.
+
+---
+
+**User (outcome):**
+YES do it (continued)
+
+**Context:** Pushed task/TASK-002-api-host-health-endpoint, opened PR #10, then set TASK-002 done and recorded #10 in the AC log (second commit).
+
+---
+
+**User:**
+/code-review (output pasted by the harness) and /start-ticket TASK-003
+
+**Context:** code-review reported 10 findings on task/TASK-002; findings 2-6 describe already-merged PR #6/#7 files (diff probably taken against a stale local main). Starting TASK-003 checks.
+
+---
+
+**Context (TASK-003 step 5):** ticket-scout brief shown; corrected three stale points (network works for dotnet restores, PR limit is 1000/30, frontend-runner line in ADR-005 is stale). Recommended gate = src/backend/coverage.ps1. Waiting for approval.
+
+---
+
+**User:**
+approve the plan, go ahead
+
+**Context:** TASK-003 plan approved (gate = src/backend/coverage.ps1, scope Domain+Application+Api combined, AC6 proven by real filter runs). Wrote active-ticket.json; starting change-implementer (steps 1-4 and 6), then test-writer (step 5).
+
+---
+
+**Context (TASK-003):** change-implementer step 1 applied back (8 files). My own checks found two bugs: -Cobertura resolved after Set-Location (wrong folder) and the PowerShell execution policy blocks powershell -File. Sent a fix task to change-implementer; test-writer waits for it.
+
+---
+
+**User (outcome):**
+approve the plan, go ahead (TASK-003 continued)
+
+**Context:** TASK-003 done through the agent flow: implementer, a fix round and test-writer, all applied back. My own runs: build 0 warnings and 0 errors, 58 tests pass (32 new), the real gate run passes (5 of 5 lines, 100 percent), the failing gate and the report-only mode were verified, and the AC filter runs were verified. ac-results.md and the ac-log row are written (7 of 7 PASS). Uncommitted on task/TASK-003-backend-test-coverage-tooling.
+
+---
+
+**User:**
+yes do it
+
+**Context:** Committing TASK-003 on task/TASK-003-backend-test-coverage-tooling, pushing, opening the PR, then recording the PR number and done status.
+
+---
+
+**User (outcome):**
+yes do it (continued)
+
+**Context:** Pushed task/TASK-003-backend-test-coverage-tooling, opened PR 11, then set TASK-003 done and recorded PR 11 in the AC log (second commit).
+
+---
+
+**User:**
+do follow up fix
+
+**Context:** Turned the TASK-002 review findings (1 CORS lost on errors, 7 generic problem types and traceId, 8 and 9 weak tests) into tickets/BUG-001.md (status ready, 9 ACs) on chore/bug-001-ticket; PR opened so the ticket is on main before /start-ticket BUG-001. Findings 4-6 (hooks) and 10 (shared RepoLocator) deliberately out of scope.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
