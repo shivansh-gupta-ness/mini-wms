@@ -6,7 +6,8 @@ export function readInput() {
   try { return JSON.parse(fs.readFileSync(0, 'utf8') || '{}'); } catch { return {}; }
 }
 
-// The folder the session or agent works in. Inside an agent worktree this is the worktree folder.
+// The project folder (CLAUDE_PROJECT_DIR). Claude Code keeps it at the original repository root even while an agent works
+// in a worktree; the hook input's `cwd` field is the folder the agent is really in (see workRoot).
 export const root = () => process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
 // Agent worktrees live in <repo>/.claude/worktrees/<name>. Paths there must be judged as if they were in <repo>
@@ -18,6 +19,15 @@ export const mainRoot = () => {
   const base = root();
   const m = base.match(WORKTREE);
   return m ? base.slice(0, m.index) : base;
+};
+
+// The folder whose files a hook should check (for example where the tests must run): the agent's worktree when the hook input's
+// `cwd` is inside one, otherwise the project folder. Without this, Stop and SubagentStop hooks test the main checkout, which
+// does not yet contain what the agent changed in its worktree.
+export const workRoot = (input = {}) => {
+  const c = typeof input.cwd === 'string' ? input.cwd : '';
+  const m = c.match(WORKTREE);
+  return m ? c.slice(0, m.index + m[0].length) : root();
 };
 
 // Repo-relative path with forward slashes, with any agent-worktree prefix removed.

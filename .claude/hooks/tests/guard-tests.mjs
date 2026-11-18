@@ -4,7 +4,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HOOKS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const GIT_DIR = 'C:\\Program Files\\Git\\cmd';
@@ -131,6 +131,40 @@ check('remove: the folder is gone', !fs.existsSync(wt));
 check('remove: the throwaway branch is gone', !git(['branch', '--list', 'worktree-agent-t1']).trim());
 const outside = hook('worktree-remove.mjs', { worktree_path: path.join(tmp, 'somewhere-else') }, G, G);
 check('remove: refuses to touch a folder outside .claude\\worktrees', outside.status === 0 && fs.existsSync(tmp));
+
+console.log('-- hook folder for tests (workRoot): the agent worktree, not the main checkout');
+process.env.CLAUDE_PROJECT_DIR = P;
+const lib = await import(pathToFileURL(path.join(HOOKS, 'lib.mjs')).href);
+const wtDir = path.join(P, '.claude', 'worktrees', 'agent-x');
+check('workRoot: input cwd inside a worktree gives the worktree root', lib.workRoot({ cwd: path.join(wtDir, 'src', 'backend') }) === wtDir, lib.workRoot({ cwd: path.join(wtDir, 'src', 'backend') }));
+check('workRoot: input cwd at the worktree root gives the worktree root', lib.workRoot({ cwd: wtDir }) === wtDir);
+check('workRoot: input cwd in the main checkout gives the project folder', lib.workRoot({ cwd: path.join(P, 'src') }) === P);
+check('workRoot: no cwd gives the project folder', lib.workRoot({}) === P);
+check('workRoot: lowercase drive letter in a worktree cwd still gives the worktree', lib.workRoot({ cwd: lower(path.join(wtDir, 'src')) }) === lower(wtDir));
+
+console.log('-- settings.json: hook commands do not depend on the current folder');
+const REPO = path.resolve(HOOKS, '..', '..');
+const settings = JSON.parse(fs.readFileSync(path.join(REPO, '.claude', 'settings.json'), 'utf8'));
+const hookCommands = Object.values(settings.hooks).flat().flatMap((g) => g.hooks);
+check('settings: every hook is a command hook', hookCommands.every((h) => h.type === 'command'), `${hookCommands.length} hooks`);
+check('settings: every hook command starts from "$CLAUDE_PROJECT_DIR"', hookCommands.every((h) => h.command.includes('"$CLAUDE_PROJECT_DIR/')));
+check('settings: no hook command uses a path relative to the current folder', hookCommands.every((h) => !/^node (\.claude|scripts)/.test(h.command)));
+check('settings: every hook runs through bash explicitly', hookCommands.every((h) => h.shell === 'bash'));
+const BASH = 'C:\\Program Files\\Git\\bin\\bash.exe';
+const viaSettings = (event, matcherPart, payload, cwd) => {
+  const group = settings.hooks[event].find((g) => !matcherPart || (g.matcher || '').includes(matcherPart));
+  return spawnSync(BASH, ['-c', group.hooks[0].command], {
+    cwd, input: JSON.stringify(payload), encoding: 'utf8', env: { ...process.env, PATH: ENV_PATH, CLAUDE_PROJECT_DIR: REPO },
+  });
+};
+const elsewhere = path.join(tmp, 'some', 'other', 'folder');
+fs.mkdirSync(elsewhere, { recursive: true });
+const scopeRun = viaSettings('PreToolUse', 'Edit', f(path.join(REPO, '.env')), elsewhere);
+check('settings command: scope guard still blocks a secret file when run from an unrelated folder', scopeRun.status === 2, `exit ${scopeRun.status} ${String(scopeRun.stderr).split('\n')[0]}`);
+const cmdRun = viaSettings('PreToolUse', 'Bash', c('git push origin main'), elsewhere);
+check('settings command: command guard still blocks a push to main when run from an unrelated folder', cmdRun.status === 2, `exit ${cmdRun.status} ${String(cmdRun.stderr).split('\n')[0]}`);
+const okRun = viaSettings('PreToolUse', 'Bash', c('git status'), elsewhere);
+check('settings command: an allowed command passes from an unrelated folder', okRun.status === 0, `exit ${okRun.status}`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(bad ? `${bad} FAILED` : 'ALL PASSED');

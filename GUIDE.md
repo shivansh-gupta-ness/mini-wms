@@ -101,6 +101,7 @@ Configured in `.claude/settings.json`, scripts in `.claude/hooks/`. They also ap
 
 Hand-off from a worktree: `node .claude/hooks/worktree-apply.mjs "<worktree path>" --remove` applies only what the agent changed to the task branch. It stages and commits nothing. `/start-ticket` runs it after each editing agent.
 The scope guard understands worktree paths: an agent's edit to `.claude/worktrees/x/src/a.cs` is judged as `src/a.cs`, the active ticket is read from the main repository, and blocks are logged there. Tests: `node .claude/hooks/tests/guard-tests.mjs` (temporary folders only).
+Hook commands in `.claude/settings.json` start from `"$CLAUDE_PROJECT_DIR"` and run through bash, so they work whatever folder the session is in. (A path relative to the current folder made the guards silently fail whenever the shell had moved.) `run-tests` tests the folder named by the hook input's `cwd`, which is the agent's worktree, not the main checkout, and writes a line to `.claude/state/hook-log.jsonl` showing which folder it used.
 
 Blocked actions are logged to `.claude/state/guard-log.jsonl`.
 
