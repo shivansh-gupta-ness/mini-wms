@@ -1,18 +1,18 @@
 {
-  "generated": "2026-11-18T18:24:04.117Z",
+  "generated": "2026-11-18T18:24:24.879Z",
   "grand": {
-    "calls": 205,
-    "input": 455,
-    "output": 254226,
-    "cacheRead": 27963509,
-    "cacheWrite": 1271674,
+    "calls": 206,
+    "input": 457,
+    "output": 254929,
+    "cacheRead": 28214175,
+    "cacheWrite": 1273042,
     "thinking": 60408,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 178,
+      "claude-sonnet-5-5": 179,
       "claude-opus-5-5": 12
     },
-    "total": 29489864
+    "total": 29742603
   },
   "byDay": {
     "2026-11-17": {
@@ -29,17 +29,17 @@
       "total": 12236390
     },
     "2026-11-18": {
-      "calls": 109,
-      "input": 266,
-      "output": 129516,
-      "cacheRead": 16231720,
-      "cacheWrite": 891972,
+      "calls": 110,
+      "input": 268,
+      "output": 130219,
+      "cacheRead": 16482386,
+      "cacheWrite": 893340,
       "thinking": 26251,
       "models": {
-        "claude-sonnet-5-5": 97,
+        "claude-sonnet-5-5": 98,
         "claude-opus-5-5": 12
       },
-      "total": 17253474
+      "total": 17506213
     }
   },
   "bySession": {
@@ -56,18 +56,18 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 204,
-      "input": 452,
-      "output": 253999,
-      "cacheRead": 27939607,
-      "cacheWrite": 1261164,
+      "calls": 205,
+      "input": 454,
+      "output": 254702,
+      "cacheRead": 28190273,
+      "cacheWrite": 1262532,
       "thinking": 60295,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 178,
+        "claude-sonnet-5-5": 179,
         "claude-opus-5-5": 12
       },
-      "total": 29455222
+      "total": 29707961
     }
   },
   "byPrompt": {
@@ -590,16 +590,16 @@
     "70b07916-4705-4095-88f0-1cb66dc7cc9e": {
       "label": "And, i want to have prompts folder inside .claude folder like we have in claude-plugin repo",
       "time": "2026-11-18T18:21:15.010Z",
-      "calls": 6,
-      "input": 14,
-      "output": 5795,
-      "cacheRead": 1473132,
-      "cacheWrite": 8230,
+      "calls": 7,
+      "input": 16,
+      "output": 6498,
+      "cacheRead": 1723798,
+      "cacheWrite": 9598,
       "thinking": 2538,
       "models": {
-        "claude-sonnet-5-5": 6
+        "claude-sonnet-5-5": 7
       },
-      "total": 1487171
+      "total": 1739910
     }
   },
   "byModel": {
@@ -616,16 +616,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 178,
-      "input": 410,
-      "output": 229054,
-      "cacheRead": 25242591,
-      "cacheWrite": 911415,
+      "calls": 179,
+      "input": 412,
+      "output": 229757,
+      "cacheRead": 25493257,
+      "cacheWrite": 912783,
       "thinking": 55025,
       "models": {
-        "claude-sonnet-5-5": 178
+        "claude-sonnet-5-5": 179
       },
-      "total": 26383470
+      "total": 26636209
     },
     "claude-opus-5-5": {
       "calls": 12,
@@ -711,18 +711,18 @@
       "total": 990952
     },
     "(text only)": {
-      "calls": 34,
-      "input": 69,
-      "output": 26837,
-      "cacheRead": 5008759,
-      "cacheWrite": 45460,
+      "calls": 35,
+      "input": 71,
+      "output": 27540,
+      "cacheRead": 5259425,
+      "cacheWrite": 46828,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 31,
+        "claude-sonnet-5-5": 32,
         "claude-opus-5-5": 2
       },
-      "total": 5081125
+      "total": 5333864
     },
     "Bash": {
       "calls": 69,
@@ -851,16 +851,16 @@
       "total": 1899401
     },
     "setup/prompts-in-claude": {
-      "calls": 4,
-      "input": 8,
-      "output": 3089,
-      "cacheRead": 988228,
-      "cacheWrite": 6658,
+      "calls": 5,
+      "input": 10,
+      "output": 3792,
+      "cacheRead": 1238894,
+      "cacheWrite": 8026,
       "thinking": 522,
       "models": {
-        "claude-sonnet-5-5": 4
+        "claude-sonnet-5-5": 5
       },
-      "total": 997983
+      "total": 1250722
     }
   }
 }

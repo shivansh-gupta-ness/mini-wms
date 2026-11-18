@@ -14,7 +14,7 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 | `src/frontend/` | Angular app | not scaffolded yet |
 | `tickets/` | Local tickets (replaces Jira): `FEAT-001.md`, `BUG-001.md`, `TASK-001.md` | active |
 | `docs/` | Specs, ADRs, knowledge map (replaces Confluence) | active |
-| `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited); adapted copies in `dev_prompts/local/`; the skills run the copies in `.claude/prompts/` | active |
+| `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited). The adapted prompts the skills run are in `.claude/prompts/` | active |
 | `prompt_logs/` | `logs.md` (every user prompt) and `token_usage.md` (token report) | active |
 | `.claude/` | Agents, skills, prompts, settings, hooks (the harness) | active |
 | `.github/` | CODEOWNERS, PR template, `pr-guard` workflow | active |

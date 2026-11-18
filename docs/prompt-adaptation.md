@@ -1,12 +1,12 @@
 # How the adopted prompts differ from the originals
 
-The three original feature-pipeline prompts are kept unchanged in `dev_prompts/original/`. The versions the skills actually run are in `.claude/prompts/` (the same files as the adapted record in `dev_prompts/local/`, with their internal paths pointing at `.claude/prompts/`). Each adapted file starts with a `LOCAL ADAPTATION` header that lists its substitutions.
+The three original feature-pipeline prompts are kept unchanged in `dev_prompts/original/`. The adapted versions the skills run are in `.claude/prompts/` (the same layout as the plugin's `prompts/` folder). The earlier `dev_prompts/local/` folder was removed; `.claude/prompts/` is the only adapted copy in this repo. Each adapted file starts with a `LOCAL ADAPTATION` header that lists its substitutions.
 
-Rule: the originals are never edited. Change the adapted copies only (in `.claude/prompts/`, and keep `dev_prompts/local/` in step), and update this file in the same PR.
+Rule: the originals are never edited. Change the adapted copies in `.claude/prompts/` only, and update this file in the same PR.
 
 ## Files
 
-| Original (`dev_prompts/original/`) | Adopted (`.claude/prompts/`, record in `dev_prompts/local/`) | Run by |
+| Original (`dev_prompts/original/`) | Adopted (`.claude/prompts/`) | Run by |
 |---|---|---|
 | `run-feature-BE-v1 1.md` (master runner) | `run-feature-be.md` | `/run-feature-be` |
 | `new-per_ticket_feature_prompts 3.md` (Prompts A, 2, 3, 4, B, 5) | `per-ticket-feature-prompts.md` | loaded by the BE runner |
@@ -41,7 +41,7 @@ The logic and quality rules are the same:
 |---|---|---|
 | `STORY_KEY` | Jira key, e.g. `PLN-18161` | Ticket ID, e.g. `FEAT-001` |
 | FE `JIRA_STORY` | Jira key | `TICKET_ID` |
-| `SERVICE_PATHS`, `SCHEMA_FILE`, `REPO_CONTEXT_PATHS`, `PIPELINE_DOC_PATH` | Absolute `C:\Codebase\...` paths | Repo-relative paths under `src/` (and `dev_prompts/local/`) |
+| `SERVICE_PATHS`, `SCHEMA_FILE`, `REPO_CONTEXT_PATHS`, `PIPELINE_DOC_PATH` | Absolute `C:\Codebase\...` paths | Repo-relative paths under `src/` (and `.claude/prompts/`) |
 | FE `UI_CODE_PATH`, `REPO_CONTEXT_PATH` | `<not-provided>` | `src/frontend`, `src/frontend/REPO_CONTEXT.md` |
 | `BASE_BRANCH` | `Dev` / `demo/base-branch.ppillay` | `main` |
 | `WORK_BRANCH_PREFIX` | `feature/` | `<feat|bug|task>/` by ticket type |

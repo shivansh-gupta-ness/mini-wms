@@ -310,3 +310,12 @@ And, i want to have prompts folder inside .claude folder like we have in claude-
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
+
+**User:**
+I have merged pr3 already, and delete the existing local folder of dev_prompts from here and its content, And, update wherever is needed
+
+**Context:** PR #3 merged. Removed dev_prompts/local (git rm); .claude/prompts is the only adapted copy. Updated prompt-adaptation.md, GUIDE.md, README.md, REPO_CONTEXT.md, sdd-roadmap.md. dev_prompts/original kept.
+
+**Tokens:** pending
+
+---
