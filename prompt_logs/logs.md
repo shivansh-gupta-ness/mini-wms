@@ -370,6 +370,90 @@ yes go ahead acc to plan
 
 **Context:** Fixed both path problems keeping worktree isolation: WorktreeCreate/WorktreeRemove hooks (uppercase-drive worktree path, baseline snapshot), worktree-aware lib.mjs, worktree-apply hand-off (prompt_logs excluded), start-ticket hand-off step, 51 hook tests (temp dirs). Verified with two real agent runs: worktree accepted; in-scope edit allowed, out-of-scope and protected edits blocked; changes carried back. Branch setup/worktree-fixes.
 
+---
+
+**User:**
+verify whether pr7 is merged correctly or not?
+
+**Context:** PR #7 is still OPEN (mergeable, pr-guard pass, branch updated with main at e60c5d9); PR #6 merged. Nothing from #7 is on main yet.
+
+---
+
+**User:**
+merged it, verify again
+
+**Context:** Verified PR #7 merged (aec0efc): hook files, settings, lib.mjs, skill, GUIDE, learning log on main; 51 hook tests pass on main checkout; PR limit 30 on main.
+
+---
+
+**User:**
+/start-ticket (no ticket ID given)
+
+**Context:** Step 1 failed: empty ID. Stopped and asked.
+
+---
+
+**User:**
+/start-ticket TASK-001
+
+**Context:** Steps 1-2 ok (ticket ready). Step 3 stopped: working tree holds the earlier uncommitted TASK-001 implementation. Asked owner: park it (option A) or discard and re-run through the agents (option B).
+
+---
+
+**User (answer):**
+Keep it: park on a task branch (Recommended)
+
+**Context:** TASK-001 work moved onto task/TASK-001-backend-solution-skeleton from main aec0efc, re-verified (build 0 warnings, 14/14 tests), committed locally as 47097c4 (28 files, 531 lines); upstream tracking removed; pr-guard passes non-exempt. Not pushed.
+
+---
+
+**User:**
+change it to done
+
+**Context:** tickets/TASK-001.md status ready -> done, committed on task/TASK-001-backend-solution-skeleton (not pushed).
+
+---
+
+**User:**
+yes open pr and push
+
+**Context:** Pushed task/TASK-001-backend-solution-skeleton and opened mini-wms PR #8 (28+1 files, 533 lines). Code-review and line-by-line boxes left for the owner.
+
+---
+
+**User:**
+yes, do it right now before merge
+
+**Context:** Added PR #8 to the TASK-001 row of docs/reports/ac-log.md, committed and pushed to the PR branch. TASK-007 must be started by the owner with /start-ticket TASK-007 (manual skill).
+
+---
+
+**User:**
+/start-ticket TASK-002
+
+**Context:** Checked ticket status and dependencies.
+
+---
+
+**User (answer):**
+i edited the status from myself
+
+**Context:** Re-checked: tickets/TASK-002.md still says draft on disk and on origin/main; working tree clean. Waiting for the saved change. PR #8 is merged.
+
+---
+
+**User:**
+/start-ticket TASK-002 (second attempt)
+
+**Context:** Re-checking status, tree and branch.
+
+---
+
+**User (answer):**
+Chore PR for both (Recommended)
+
+**Context:** Committed the owner status edits (TASK-002 and TASK-003 draft -> ready) on chore/tickets-ready from main d78f4f2 with the pending prompt logs; pushed and opened a PR.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
