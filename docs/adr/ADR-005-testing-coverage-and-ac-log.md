@@ -30,5 +30,5 @@ The evaluation needs proof that every acceptance criterion (AC) in `docs/specs/p
 
 ## Consequences
 - Test names carry the spec, so a failing AC is found by its ID.
-- The 1000-line PR limit counts tests; slice tickets so code and tests fit.
+- The 1000-line and 30-file PR limits count tests; slice tickets so code and tests fit.
 - Without CI, a passing local run is the only evidence; the reports under `docs/reports/<ID>/` quote real output so a reviewer can check it.
