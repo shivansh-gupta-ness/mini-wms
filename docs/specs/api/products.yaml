@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: Mini WMS API - Products
+  version: 1.0.0
+  description: >
+    Contract for module PRD (docs/specs/product.md). Conventions: docs/adr/ADR-003-api-conventions.md.
+    totalOnHand is 0 until the Inventory module exists, then the sum of the product's stock levels.
+servers:
+  - url: http://localhost:5080/api/v1
+paths:
+  /products:
+    get:
+      operationId: listProducts
+      summary: List products (paged, sortable by sku, name, isActive; searchable)
+      x-acceptance-criteria: [PRD-3.1, PRD-3.2]
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 25 } }
+        - { name: sort, in: query, description: "sku, name or isActive; prefix - for descending", schema: { type: string } }
+        - { name: q, in: query, description: Part of the SKU or name, schema: { type: string } }
+        - { name: isActive, in: query, schema: { type: boolean } }
+      responses:
+        '200': { description: A page of products, content: { application/json: { schema: { $ref: '#/components/schemas/ProductPage' } } } }
+    post:
+      operationId: createProduct
+      summary: Create a product (Admin)
+      x-acceptance-criteria: [PRD-1.1, PRD-1.2, PRD-1.3]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/CreateProductRequest' } } }
+      responses:
+        '201': { description: Created, headers: { Location: { schema: { type: string } } }, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /products/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      operationId: getProduct
+      summary: Get a product with its total stock on hand
+      x-acceptance-criteria: [PRD-3.3]
+      responses:
+        '200': { description: The product, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      operationId: updateProduct
+      summary: Change name, unit of measure or reorder level (Admin); the SKU cannot change
+      x-acceptance-criteria: [PRD-2.1, PRD-1.3]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/UpdateProductRequest' } } }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /products/{id}/deactivate:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      operationId: deactivateProduct
+      summary: Deactivate a product that has no stock (Admin)
+      x-acceptance-criteria: [PRD-2.2, PRD-2.3]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/VersionRequest' } } }
+      responses:
+        '200': { description: Deactivated, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+components:
+  parameters:
+    Id: { name: id, in: path, required: true, schema: { type: integer, format: int64 } }
+  responses:
+    ValidationError: { description: Request failed validation, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    NotFound: { description: Resource not found, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    Conflict: { description: Business-rule conflict or stale version, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+  schemas:
+    Product:
+      type: object
+      required: [id, sku, name, unitOfMeasure, reorderLevel, isActive, totalOnHand, lowStock, version]
+      properties:
+        id: { type: integer, format: int64 }
+        sku: { type: string, maxLength: 40 }
+        name: { type: string, maxLength: 150 }
+        unitOfMeasure: { type: string, maxLength: 20 }
+        reorderLevel: { type: integer, minimum: 0 }
+        isActive: { type: boolean }
+        totalOnHand: { type: integer, minimum: 0 }
+        lowStock: { type: boolean, description: "true when totalOnHand is at or below reorderLevel (INV-1.2)" }
+        version: { type: integer }
+    CreateProductRequest:
+      type: object
+      required: [sku, name, unitOfMeasure, reorderLevel]
+      properties:
+        sku: { type: string, maxLength: 40 }
+        name: { type: string, maxLength: 150 }
+        unitOfMeasure: { type: string, maxLength: 20 }
+        reorderLevel: { type: integer, minimum: 0 }
+    UpdateProductRequest:
+      type: object
+      required: [name, unitOfMeasure, reorderLevel, version]
+      properties:
+        name: { type: string, maxLength: 150 }
+        unitOfMeasure: { type: string, maxLength: 20 }
+        reorderLevel: { type: integer, minimum: 0 }
+        version: { type: integer }
+    VersionRequest:
+      type: object
+      required: [version]
+      properties: { version: { type: integer } }
+    ProductPage:
+      type: object
+      required: [items, page, pageSize, totalItems]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Product' } }
+        page: { type: integer }
+        pageSize: { type: integer }
+        totalItems: { type: integer }
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string, description: "validation, conflict, not-found, unauthorized, forbidden, error" }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
