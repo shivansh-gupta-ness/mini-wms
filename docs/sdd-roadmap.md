@@ -65,10 +65,10 @@ Claude drafts, you decide scope. Files in `docs/specs/`:
 ## Phase 3: Scaffold (build stage, 2 to 3 days, TASK tickets)
 | Ticket | Scope | Risk | Who |
 |---|---|---|---|
-| TASK-001 | .NET solution per ADR-001, health endpoint, test projects | low | agents |
+| TASK-001 | .NET solution per ADR-001, health endpoint, CORS and error handling, test projects | low | agents |
 | TASK-002 | EF Core SQLite, `DbContext`, first migration, local tool manifest with `dotnet-ef` 10 | low | agents |
 | TASK-003 | Angular app per ADR-006, routing, HTTP client, test runner | low | agents |
-| TASK-004 | Frontend-backend wiring for local runs (dev proxy, CORS) | low | agents |
+| TASK-004 | Frontend dev proxy and API health indicator (frontend only; CORS is in TASK-001) | low | agents |
 
 After the scaffold (you, in a `setup/` PR, because these are protected files):
 - Fill the Commands section of `REPO_CONTEXT.md` (build, test, run locally); add `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md`.
