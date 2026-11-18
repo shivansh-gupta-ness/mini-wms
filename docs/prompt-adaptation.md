@@ -1,12 +1,12 @@
 # How the adopted prompts differ from the originals
 
-The three original feature-pipeline prompts are kept unchanged in `dev_prompts/original/`. The versions that actually run are in `dev_prompts/local/`. Each local file starts with a `LOCAL ADAPTATION` header that lists its substitutions.
+The three original feature-pipeline prompts are kept unchanged in `dev_prompts/original/`. The versions the skills actually run are in `.claude/prompts/` (the same files as the adapted record in `dev_prompts/local/`, with their internal paths pointing at `.claude/prompts/`). Each adapted file starts with a `LOCAL ADAPTATION` header that lists its substitutions.
 
-Rule: the originals are never edited. Change the local copies only, and update this file in the same PR.
+Rule: the originals are never edited. Change the adapted copies only (in `.claude/prompts/`, and keep `dev_prompts/local/` in step), and update this file in the same PR.
 
 ## Files
 
-| Original (`dev_prompts/original/`) | Adopted (`dev_prompts/local/`) | Run by |
+| Original (`dev_prompts/original/`) | Adopted (`.claude/prompts/`, record in `dev_prompts/local/`) | Run by |
 |---|---|---|
 | `run-feature-BE-v1 1.md` (master runner) | `run-feature-be.md` | `/run-feature-be` |
 | `new-per_ticket_feature_prompts 3.md` (Prompts A, 2, 3, 4, B, 5) | `per-ticket-feature-prompts.md` | loaded by the BE runner |

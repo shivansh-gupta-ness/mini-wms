@@ -14,9 +14,9 @@ Preconditions (check first; STOP and tell the owner if any fails)
 - `git status` is clean apart from this ticket's work and `prompt_logs/` (which changes every turn and is ignored), and the current branch is `<feat|bug|task>/<ID>-*`.
 
 Method
-1. Read `dev_prompts/local/run-feature-be.md` (master runner) and follow its "Execution Instructions for the Agent". Fill its Configuration from the ticket:
+1. Read `.claude/prompts/run-feature-be.md` (master runner) and follow its "Execution Instructions for the Agent". Fill its Configuration from the ticket:
    `STORY_KEY` = the ID, `SERVICE_PATHS` = the `src/backend/...` projects inside `allowed_paths`, `REPO_CONTEXT_PATHS` = the root and `src/backend` context files (the root `REPO_CONTEXT.md` is protected: read it, never edit it; only `src/backend/REPO_CONTEXT.md` may be updated, and only if it is inside `allowed_paths`),
-   `BASE_BRANCH` = `main`. Resume point = the second argument if given, else `A`. The pipeline definition is `dev_prompts/local/per-ticket-feature-prompts.md`.
+   `BASE_BRANCH` = `main`. Resume point = the second argument if given, else `A`. The pipeline definition is `.claude/prompts/per-ticket-feature-prompts.md`.
 2. Delegate by stage:
    - Prompts A and B (scope, Target Contract, implementation, AC verification): the `change-implementer` agent, with the pipeline prompt text as its task.
    - Prompts 2, 3 and 4 (unit tests, QA coverage, gates): the `test-writer` agent. Gates (mapping 100, pass 100, coverage 90) are computed from real tool output, never asserted. In the Prompt 4 fix loop, route each fix by root cause: test-side causes (wrong test, missing mock, data setup, missing test) go to `test-writer`; code defects and missing validation go to `change-implementer`. `test-writer` never edits production code.

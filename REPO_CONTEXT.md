@@ -14,9 +14,9 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 | `src/frontend/` | Angular app | not scaffolded yet |
 | `tickets/` | Local tickets (replaces Jira): `FEAT-001.md`, `BUG-001.md`, `TASK-001.md` | active |
 | `docs/` | Specs, ADRs, knowledge map (replaces Confluence) | active |
-| `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited); adapted copies in `dev_prompts/local/` | active |
+| `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited); adapted copies in `dev_prompts/local/`; the skills run the copies in `.claude/prompts/` | active |
 | `prompt_logs/` | `logs.md` (every user prompt) and `token_usage.md` (token report) | active |
-| `.claude/` | Agents, skills, settings, hooks (the harness) | active |
+| `.claude/` | Agents, skills, prompts, settings, hooks (the harness) | active |
 | `.github/` | CODEOWNERS, PR template, `pr-guard` workflow | active |
 | `scripts/` | `pr-guard.mjs`, `token-report.mjs` | active |
 
@@ -24,7 +24,7 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 1. A ticket file in `tickets/` has an owner, a component, risk, acceptance criteria and `allowed_paths`.
 2. `/start-ticket <ID>` runs `ticket-scout`, shows a one-page brief and a plan, and waits for the owner's approval.
 3. After approval `change-implementer` and `test-writer` edit in a worktree, only inside `allowed_paths`. Feature tickets run through the
-   stack pipeline skills `/run-feature-be` or `/run-feature-fe` (built from `dev_prompts/local/`), which call those two agents per stage and add the
+   stack pipeline skills `/run-feature-be` or `/run-feature-fe` (they run the prompts in `.claude/prompts/`), which call those two agents per stage and add the
    gates (mapping 100, pass 100, coverage 90) and STOP rules. Small BUG/TASK tickets use the agents directly. A feature that spans layers or
    repos is one ticket per layer/repo, linked by `parent:` / `depends_on:`; the API contract in `docs/specs/` is the hand-off.
 4. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR.

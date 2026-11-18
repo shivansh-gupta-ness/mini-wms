@@ -14,7 +14,7 @@ Preconditions (check first; STOP and tell the owner if any fails)
 - If the ticket has `depends_on` backend tickets, their API contract must exist in `docs/specs/`. If not, STOP: do not invent a contract.
 
 Method
-1. Read `dev_prompts/local/agent-prompt-fe.md` in full. Fill its CONFIGURATION: `UI_CODE_PATH` = `src/frontend`, `REPO_CONTEXT_PATH` = `src/frontend/REPO_CONTEXT.md`
+1. Read `.claude/prompts/agent-prompt-fe.md` in full. Fill its CONFIGURATION: `UI_CODE_PATH` = `src/frontend`, `REPO_CONTEXT_PATH` = `src/frontend/REPO_CONTEXT.md`
    (or the root file if the folder has none yet; the root `REPO_CONTEXT.md` is protected: read it, never edit it, and propose any change in the final report instead), `TICKET_ID` = the ID, `TECHNICAL_NOTES` from the ticket's notes. The second argument selects Flow A or B; if absent, ask the question in its STEP 0.
 2. Follow the prompt exactly: Prime Directives, STOP protocol, build and stage rules. Delegate code edits to `change-implementer` and spec files to `test-writer`,
    with the relevant prompt sections as their task. The Angular build and tests must pass before staging.
