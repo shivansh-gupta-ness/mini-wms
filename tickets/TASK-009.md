@@ -1,0 +1,31 @@
+---
+id: TASK-009
+type: task
+title: Frontend HTTP layer: interceptors, ApiError and form error helper
+status: draft
+owner: shivansh-gupta-ness
+component: frontend-platform
+risk: low
+allowed_paths: [src/frontend/**, tickets/TASK-009.md, docs/reports/TASK-009/**, docs/reports/ac-log.md]
+docs: [docs/adr/ADR-006-angular-structure.md, docs/adr/ADR-003-api-conventions.md]
+parent: 
+depends_on: [TASK-007]
+---
+
+## Description
+Build the single HTTP layer ADR-006 describes: base path, token interceptor, error interceptor and a helper that applies server field errors to a reactive form. Set `status: ready` after TASK-007 is merged.
+
+## Acceptance criteria
+1. Given any request, when it is sent through the API client, then the base path `/api/v1` is prefixed and no API host is hard-coded.
+2. Given a session token exists, when a request is sent, then the token interceptor adds the bearer token; with no token, no header is added.
+3. Given an `application/problem+json` response, when the error interceptor handles it, then it produces a typed `ApiError` with `status`, `title`, `detail` and the field `errors`.
+4. Given a 5xx response, when it is handled, then the user sees a generic message with no technical detail (NFR-3).
+5. Given an `ApiError` with field errors, when the form helper is applied to a reactive form, then each message is set on the matching control and shown under it.
+6. Given the tests, when they run, then all pass and each AC-proving test name starts with `TASK-009.<n>`.
+
+## Out of scope
+- Real module services.
+- Sign-in screens.
+
+## Notes and links
+- Record AC results in `docs/reports/TASK-009/ac-results.md` and one row in `docs/reports/ac-log.md`.

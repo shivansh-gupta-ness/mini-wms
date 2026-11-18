@@ -36,7 +36,7 @@ Every AC of every ticket ends with a recorded result: **PASS**, **FAIL**, **N/A*
 
 A ticket is not done while any AC is FAIL or NOT RUN without an owner decision written in `ac-results.md`. The current prompts already verify ACs (Prompt B) and file reports; writing `ac-results.md` and updating `ac-log.md` was added to the local prompts, skills and plugin copies in Phase 0 (Prompt B step 5, Prompt 5 sections 8.e-8.f, FE section 9.5). Feature tickets then also list `docs/reports/ac-log.md` in `allowed_paths`.
 
-## Phase 0: Finish setup (1 day)
+## Phase 0: Finish setup
 - Merge mini-wms PR #1, commit the pending local changes (including the 1000-line limit) in a `setup/` PR.
 - Merge claude-plugins PR #3, tag `v0.3.0`.
 - Try `git push origin main` once and confirm it is rejected.
@@ -45,7 +45,7 @@ A ticket is not done while any AC is FAIL or NOT RUN without an owner decision w
 
 **Exit:** clean `main`, all setup merged, the AC-log format agreed, the push test recorded in `docs/learning-log.md`.
 
-## Phase 1: Product spec (plan stage, 2 to 3 days)
+## Phase 1: Product spec (plan stage)
 Claude drafts, you decide scope. Files in `docs/specs/`:
 - `product.md`: problem, users and roles (admin, warehouse clerk, viewer), modules, out of scope (including deployment), non-functional needs (local only, audit trail, performance targets).
 - Modules (one section each, numbered so tickets can cite them): Locations (warehouses, zones, bins), Products (SKU catalogue), Inventory (stock on hand, adjustments, movements), Inbound (receiving, put-away), Outbound (orders, picking, shipping), Auth (login, roles).
@@ -53,7 +53,7 @@ Claude drafts, you decide scope. Files in `docs/specs/`:
 
 **Exit:** `product.md` merged through a `chore/` PR; every module has numbered stories and ACs.
 
-## Phase 2: Design (design stage, 3 to 5 days)
+## Phase 2: Design (design stage)
 - ADRs in `docs/adr/`: `ADR-001` solution layering (Api, Application, Domain, Infrastructure, Tests); `ADR-002` EF Core + SQLite, the migration approach, and where the local `.db` file lives (git-ignored); `ADR-003` API conventions (routes, errors as ProblemDetails, validation, paging); `ADR-004` authentication and roles; `ADR-005` testing, coverage and the AC log (gates mapping 100 / pass 100 / coverage 90); `ADR-006` Angular structure (standalone components, feature folders, state, HTTP layer).
 - `docs/specs/data-model.md`: entities, keys, relationships, constraints.
 - `docs/specs/api/<module>.yaml`: OpenAPI contract per module. This is the hand-off from backend to frontend tickets.
@@ -62,13 +62,25 @@ Claude drafts, you decide scope. Files in `docs/specs/`:
 
 **Exit:** ADRs accepted; data model and contracts for the first two modules (Locations, Products) merged.
 
-## Phase 3: Scaffold (build stage, 2 to 3 days, TASK tickets)
-| Ticket | Scope | Risk | Who |
+## Phase 3: Scaffold (build stage, TASK tickets)
+Twelve small TASK tickets, one layer each (backend, frontend, contracts). Each is low risk and runs through `/start-ticket` and the editing agents. A ticket with `depends_on` stays `draft` until its dependencies are merged.
+
+| Ticket | Layer | Scope | Depends on |
 |---|---|---|---|
-| TASK-001 | .NET solution per ADR-001, health endpoint, test projects | low | agents |
-| TASK-002 | EF Core SQLite, `DbContext`, first migration, local tool manifest with `dotnet-ef` 10 | low | agents |
-| TASK-003 | Angular app per ADR-006, routing, HTTP client, test runner | low | agents |
-| TASK-004 | Frontend-backend wiring for local runs (dev proxy, CORS) | low | agents |
+| TASK-001 | backend | Solution skeleton, build configuration, architecture test, `global.json`, REPO_CONTEXT | none |
+| TASK-002 | backend | API host: health endpoint, 404 and 500 error format, CORS, port 5080 | 001 |
+| TASK-003 | backend | Test and coverage tooling, ReportGenerator, 90% gate, AC trait filter | 001 |
+| TASK-004 | backend | EF Core SQLite foundation: pragmas, audit and version handling, local `dotnet-ef` 10, test fixture | 001, 003 |
+| TASK-005 | backend | Warehouse, Zone, Bin, Product schema, first migration, `MAIN` seed | 004 |
+| TASK-006 | backend | API building blocks: paging, sorting, validation pipeline, 400 and 409 mapping | 002, 004 |
+| TASK-007 | frontend | Angular app creation, strict settings, Material, folder layout | none |
+| TASK-008 | frontend | Shell, navigation, lazy routes, not-found page | 007 |
+| TASK-009 | frontend | HTTP layer: base path, interceptors, `ApiError`, form error helper | 007 |
+| TASK-010 | frontend | Test and coverage tooling, 90% gate | 007 |
+| TASK-011 | frontend | Dev proxy and API health indicator | 002, 008 |
+| TASK-012 | contracts | Lint the OpenAPI contracts with Spectral and add ADR-003 rules | none |
+
+Tickets that can start immediately: TASK-001, TASK-007 and TASK-012.
 
 After the scaffold (you, in a `setup/` PR, because these are protected files):
 - Fill the Commands section of `REPO_CONTEXT.md` (build, test, run locally); add `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md`.
@@ -77,7 +89,7 @@ After the scaffold (you, in a `setup/` PR, because these are protected files):
 
 **Exit:** `dotnet build`, `dotnet test`, `npm test`, `npm run build` pass locally on `main`; the app runs locally against the SQLite file.
 
-## Phase 4: Prove the harness (1 day)
+## Phase 4: Prove the harness
 - Run one trivial TASK end to end (`/start-ticket`, approval, an editing agent, PR) and check that its ACs land in `ac-results.md` and `ac-log.md`.
 - Check the two open audit items: does the scope guard work inside the agents' worktrees, and how do worktree changes reach your branch? Fix before features.
 - Deliberate bad edits (A17): outside `allowed_paths`, a protected path, a secret file, a force push. Each must be blocked and appear in `.claude/state/guard-log.jsonl`.
@@ -98,12 +110,12 @@ Per module:
 
 **Exit per module:** all ACs PASS in the log, gates met, reports in `docs/reports/<ID>/`.
 
-## Phase 6: Hardening (2 to 3 days)
+## Phase 6: Hardening
 - Cross-module flows (receive, put away, pick, ship) as API tests, each linked to the ACs it proves and logged the same way.
 - `/security-review` across the codebase; fix findings by ticket.
 - Refresh the `REPO_CONTEXT.md` files and the knowledge map against the code.
 
-## Phase 7: Evaluate and close (1 day)
+## Phase 7: Evaluate and close
 One page in `docs/reports/evaluation.md`:
 - AC results from `ac-log.md`: total ACs, passed first time, passed after fixes, failed, N/A.
 - Tickets delivered by type and risk; time per ticket.

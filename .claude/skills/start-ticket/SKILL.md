@@ -17,5 +17,6 @@ Start ticket `$ARGUMENTS`. Follow these steps in order and STOP at step 6. Do no
 After the owner approves (only then):
 - Write `.claude/state/active-ticket.json` with `id`, `risk`, `allowed_paths` (copied from the ticket), so the scope guard enforces them. This file is local state and is git-ignored.
 - Run `change-implementer` with the approved plan, then `test-writer` with the acceptance criteria.
-- When both finish, list changed files, show the test results, and remind the owner to review the diff, run `/code-review`, and open the PR with the template. Delete `.claude/state/active-ticket.json` when the ticket's work is done.
+- When both finish, write `docs/reports/<ID>/ac-results.md` (one row per acceptance criterion: PASS, FAIL, N/A or NOT RUN, the proving test and the evidence, taken from the real test output; format in `docs/reports/README.md`) and add one row to `docs/reports/ac-log.md`. If those paths are not in `allowed_paths`, say so and stop.
+- Then list changed files, show the test results and the AC totals, and remind the owner to review the diff, run `/code-review`, and open the PR with the template. Delete `.claude/state/active-ticket.json` when the ticket's work is done.
 - If anything went wrong or scope had to widen, add one row to `docs/learning-log.md` proposal for the owner (do not edit it yourself; it is a shared file reviewed by PR).
