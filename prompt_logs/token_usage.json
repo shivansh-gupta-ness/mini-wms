@@ -1,19 +1,19 @@
 {
-  "generated": "2026-11-18T20:49:31.174Z",
+  "generated": "2026-11-18T21:15:05.294Z",
   "grand": {
-    "calls": 471,
-    "input": 1063,
-    "output": 538491,
-    "cacheRead": 112777276,
-    "cacheWrite": 1843905,
-    "thinking": 140424,
+    "calls": 530,
+    "input": 1195,
+    "output": 607995,
+    "cacheRead": 137298487,
+    "cacheWrite": 2006300,
+    "thinking": 161141,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 427,
+      "claude-sonnet-5-5": 482,
       "claude-opus-5-5": 12,
-      "claude-haiku-5-5": 17
+      "claude-haiku-5-5": 21
     },
-    "total": 115160735
+    "total": 139913977
   },
   "byDay": {
     "2026-11-17": {
@@ -30,18 +30,18 @@
       "total": 12236390
     },
     "2026-11-18": {
-      "calls": 375,
-      "input": 874,
-      "output": 413781,
-      "cacheRead": 101045487,
-      "cacheWrite": 1464203,
-      "thinking": 106267,
+      "calls": 434,
+      "input": 1006,
+      "output": 483285,
+      "cacheRead": 125566698,
+      "cacheWrite": 1626598,
+      "thinking": 126984,
       "models": {
-        "claude-sonnet-5-5": 346,
+        "claude-sonnet-5-5": 401,
         "claude-opus-5-5": 12,
-        "claude-haiku-5-5": 17
+        "claude-haiku-5-5": 21
       },
-      "total": 102924345
+      "total": 127677587
     }
   },
   "bySession": {
@@ -58,19 +58,19 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 470,
-      "input": 1060,
-      "output": 538264,
-      "cacheRead": 112753374,
-      "cacheWrite": 1833395,
-      "thinking": 140311,
+      "calls": 529,
+      "input": 1192,
+      "output": 607768,
+      "cacheRead": 137274585,
+      "cacheWrite": 1995790,
+      "thinking": 161028,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 427,
+        "claude-sonnet-5-5": 482,
         "claude-opus-5-5": 12,
-        "claude-haiku-5-5": 17
+        "claude-haiku-5-5": 21
       },
-      "total": 115126093
+      "total": 139879335
     }
   },
   "byPrompt": {
@@ -1111,16 +1111,100 @@
     "684bf4fe-f9e5-46b3-93d6-f0193f74589e": {
       "label": "do follow up fix",
       "time": "2026-11-18T20:48:22.078Z",
-      "calls": 2,
-      "input": 6,
-      "output": 5932,
-      "cacheRead": 1146920,
-      "cacheWrite": 3921,
+      "calls": 3,
+      "input": 8,
+      "output": 6862,
+      "cacheRead": 1724297,
+      "cacheWrite": 7364,
       "thinking": 2605,
       "models": {
-        "claude-sonnet-5-5": 2
+        "claude-sonnet-5-5": 3
       },
-      "total": 1156779
+      "total": 1738531
+    },
+    "84e1885a-3b2d-42bd-929f-facc599a2654": {
+      "label": "<command-message>start-ticket</command-message> <command-name>/start-ticket</command-name> <command-args>BUG-001</command-args>",
+      "time": "2026-11-18T20:51:35.253Z",
+      "calls": 3,
+      "input": 8,
+      "output": 1338,
+      "cacheRead": 1748363,
+      "cacheWrite": 3272,
+      "thinking": 206,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 1752981
+    },
+    "b7f5a54f-1ff7-4ac7-8863-7f69e53b27df": {
+      "label": "approve the plan, go ahead",
+      "time": "2026-11-18T20:52:18.827Z",
+      "calls": 3,
+      "input": 8,
+      "output": 6422,
+      "cacheRead": 1759674,
+      "cacheWrite": 10124,
+      "thinking": 1606,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 1776228
+    },
+    "a6bd7ce5-e5dc-4e7d-8508-ce1ed369608f": {
+      "label": "<task-notification> <task-id>a0c2b5f48cc1231e6</task-id> <tool-use-id>toolu_01FBYNyyYwUogyg9Agcxg4Hm</tool-use-id> <output-file>C:\\Users\\P7120484\\AppData\\Local\\Temp\\claude\\e458ec6a025b8ec8\\d056af0b-88c6-4c97-8f17-3c4ec23e666f\\tasks\\a0c2b5f48cc1231e6.output</output-file> <status>completed</status> <summary>Agent \"Write BUG-001 regression tests\" finished</summary> <note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note> <result>The regression tests are written and the build is clean, but AC 1 and AC 2 do not fail on the current Program.cs. They pass. AC 5 and AC 6 fail as intended, and AC 8 needs your decision. **AC 1 and AC 2 pass on the buggy code.** The ticket says they must fail. I did not change the assertions or touch Program.cs. The test setup looks right: the Origin header is sent, and the assertion checks `Access-Control-Allow-Origin` equals `http://localhost:4200`. - **404:** The CORS middleware runs for every request and adds its headers before the endpoint produces the 404. The status-code pages middleware then only writes the body, so the header stays on the response. - **500:** The same headers survive the exception handler on .NET 10. - **Consequence:** The ticket's finding 1 does not reproduce in this host setup. Only the traceId and type findings do. - **Decision for you:** With these tests, AC 8's \"at least AC 1, 2 and 5 fail\" cannot be met. Either accept that, or amend the ticket text. To find a real CORS gap, try a case where the error response is produced by something other than the normal pipeline, such as the exception handler's re-execution. I did not try that. I did not run anything beyond the build and test runs below. The branch is `worktree-agent-a0c2b5f48cc1231e6`, not `bug/BUG-001-api-error-responses-lose-cors`. I did not rename it. **AC to test table with real results on the current code** | AC | Tests | Result before the fix | |---|---|---| | 1 | `Unknown_route_with_angular_origin_is_404_problem_json_with_cors_header` | **Passed** (unexpected, see above) | | 2 | `Unhandled_exception_with_angular_origin_is_500_problem_json_with_cors_header_and_generic_title` | **Passed** (unexpected, see above) | | 3 | `Unknown_route_from_other_origin_has_no_cors_header`, `Unhandled_exception_from_other_origin_has_no_cors_header` | Passed (guards) | | 4 | `Preflight_from_angular_origin_succeeds_with_allow_origin_methods_and_headers`, `Preflight_from_other_origin_has_no_allow_origin` | Passed (guards) | | 5 | `Error_type_follows_adr_003_by_status` (6 rows) | **4 failed**: 400, 401, 403 and 409 each assert `Expected: \"&lt;validation, unauthorized, forbidden or conflict&gt;\"`, `Actual: \"error\"`. The 404 and 500 rows passed. | | 5 | `Error_status_property_equals_the_http_status` (7 rows, including 418) and `Status_without_an_adr_003_type_has_type_error` | Passed | | 6 | `Error_body_has_a_non_empty_trace_id` (6 rows) | **All 6 failed**. The message is empty because `GetProperty(\"traceId\")` throws `KeyNotFoundException` (no `traceId` in the body), which is the intended reason. | | 6 | `Error_body_has_no_detail_and_no_instance` (6 rows) and `Server_error_title_stays_generic` | Passed | | 7 | `Unknown_route_body_has_only_allowed_properties`, `Unhandled_exception_body_has_only_allowed_properties`, `Unhandled_exception_body_does_not_contain_the_exception_secret_text` | Passed, and they should stay green after the fix | | 8 | Not run by design | See the expected failures in the next section. | | 9 | `dotnet build src/backend` | 0 warnings, 0 errors | **Expected failures on the current code (10 in total)** - `Error_type_follows_adr_003_by_status` for the 400, 401, 403 and 409 rows. - `Error_body_has_a_non_empty_trace_id` for all 6 rows. **Test run:** `dotnet test src/backend` gave 36 passed and 10 failed in MiniWms.Api.Tests, and 46 passed in MiniWms.Application.Tests. I used `--no-build` for those runs. The Domain tests output was cut off by my filter, so I did not confirm it. **Changes to the existing TASK-002 tests** - I rewrote and retagged the two \"no stack trace\" tests as `BUG-001.7`, as you asked. - The 404 test is now `Unknown_route_body_has_only_allowed_properties`. It checks the allow-list only. I left out the secret-text check because that route throws nothing. - The 500 test is split into two for one behaviour per test: `Unhandled_exception_body_has_only_allowed_properties` and `Unhandled_exception_body_does_not_contain_the_exception_secret_text`. - The TASK-002.2, 002.3 and 002.4 tests are otherwise unchanged. No change is needed for the fix. **Files** - Changed: `src/backend/MiniWms.Api.Tests/Host/ApiFactory.cs`. I added `ErrorRoutesApiFactory`, which has the throwing route and `/__test/status/{code}` routes with an empty body. - Changed: `src/backend/MiniWms.Api.Tests/Host/ApiHostTests.cs`. - Created: `src/backend/MiniWms.Api.Tests/Host/ApiErrorResponseTests.cs`. Nothing was committed or pushed, and no hook blocked anything. **Worktree:** `C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-a0c2b5f48cc1231e6`</result> <usage><subagent_tokens>45325</subagent_tokens><tool_uses>13</tool_uses><duration_ms>189292</duration_ms></usage> <worktree><worktreePath>C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-a0c2b5f48cc1231e6</worktreePath></worktree> </task-notification>",
+      "time": "2026-11-18T20:56:21.393Z",
+      "calls": 6,
+      "input": 14,
+      "output": 7543,
+      "cacheRead": 3612035,
+      "cacheWrite": 12605,
+      "thinking": 3814,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 3632197
+    },
+    "6e005713-797d-4127-92b2-d7e28041a4cf": {
+      "label": "<task-notification> <task-id>a16ddef2c868e16ff</task-id> <tool-use-id>toolu_019MjhaNtgmkgpoLDjqkMzr9</tool-use-id> <output-file>C:\\Users\\P7120484\\AppData\\Local\\Temp\\claude\\e458ec6a025b8ec8\\d056af0b-88c6-4c97-8f17-3c4ec23e666f\\tasks\\a16ddef2c868e16ff.output</output-file> <status>completed</status> <summary>Agent \"Fix BUG-001 Program.cs\" finished</summary> <note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note> <result>The hook's failure doesn't reproduce in the worktree, and I haven't changed anything since my last report. I reran `dotnet test src/backend` with a full build in `C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-a16ddef2c868e16ff`. `MiniWms.Api.Tests` passed 46 of 46 and `MiniWms.Application.Tests` passed 46 of 46. `MiniWms.Domain.Tests` has no tests. The hook saw 10 of 46 failing in `MiniWms.Api.Tests` and `MiniWms.Application.Tests` passing 46 of 46. I think the hook ran against a different checkout, probably the main one. That checkout has the new regression tests but not my `Program.cs` fix, which is only in this worktree and uncommitted. That would explain exactly 10 failures in the Api tests alone. This is a guess. I can't see the hook's working directory, and I haven't read `.claude/hooks/run-tests.mjs` or the 10 failing test names. The worktree's `git status` shows my change to `src/backend/MiniWms.Api/Program.cs`. It also shows modified `prompt_logs/*` files, which I didn't touch. The harness or hooks write to them. To clear the hook, the owner can review and commit this worktree's `Program.cs` change on `bug/BUG-001-api-error-responses-lose-cors`, then rerun the Stop hook from that checkout. I haven't committed, pushed or edited any hook.</result> <usage><subagent_tokens>22272</subagent_tokens><tool_uses>5</tool_uses><duration_ms>108821</duration_ms></usage> <worktree><worktreePath>C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-a16ddef2c868e16ff</worktreePath></worktree> </task-notification>",
+      "time": "2026-11-18T21:00:02.827Z",
+      "calls": 5,
+      "input": 12,
+      "output": 7667,
+      "cacheRead": 3059520,
+      "cacheWrite": 10057,
+      "thinking": 1551,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 3077256
+    },
+    "5f69bfa3-8d6d-418d-9fcc-0e54f64fe8b6": {
+      "label": "yes, do the recommended one and resolve harness defect also",
+      "time": "2026-11-18T21:08:31.065Z",
+      "calls": 18,
+      "input": 38,
+      "output": 20590,
+      "cacheRead": 11458304,
+      "cacheWrite": 32926,
+      "thinking": 8333,
+      "models": {
+        "claude-sonnet-5-5": 18
+      },
+      "total": 11511858
+    },
+    "0aa56528-5181-497b-9fef-078315652d54": {
+      "label": "<task-notification> <task-id>afe92c5503e8016ff</task-id> <tool-use-id>toolu_01J2J9frQQmxthZuuQTrW9rp</tool-use-id> <output-file>C:\\Users\\P7120484\\AppData\\Local\\Temp\\claude\\e458ec6a025b8ec8\\d056af0b-88c6-4c97-8f17-3c4ec23e666f\\tasks\\afe92c5503e8016ff.output</output-file> <status>completed</status> <summary>Agent \"Hook cwd smoke test\" finished</summary> <note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note> <result>- pwd: `/c/Users/P7120484/Downloads/Claude_Eval/.claude/worktrees/agent-afe92c5503e8016ff` - git toplevel: `C:/Users/P7120484/Downloads/Claude_Eval/.claude/worktrees/agent-afe92c5503e8016ff` - branch: `worktree-agent-afe92c5503e8016ff` Git worked without changing PATH. I didn't edit, create or delete any files, and I didn't run dotnet.</result> <usage><subagent_tokens>14102</subagent_tokens><tool_uses>1</tool_uses><duration_ms>11907</duration_ms></usage> <worktree><worktreePath>C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-afe92c5503e8016ff</worktreePath></worktree> </task-notification>",
+      "time": "2026-11-18T21:14:15.928Z",
+      "calls": 3,
+      "input": 8,
+      "output": 3889,
+      "cacheRead": 1959831,
+      "cacheWrite": 3423,
+      "thinking": 685,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 1967151
     }
   },
   "byModel": {
@@ -1137,16 +1221,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 427,
-      "input": 984,
-      "output": 491350,
-      "cacheRead": 109844887,
-      "cacheWrite": 1418226,
-      "thinking": 124841,
+      "calls": 482,
+      "input": 1108,
+      "output": 556240,
+      "cacheRead": 134332524,
+      "cacheWrite": 1563233,
+      "thinking": 144604,
       "models": {
-        "claude-sonnet-5-5": 427
+        "claude-sonnet-5-5": 482
       },
-      "total": 111755447
+      "total": 136453105
     },
     "claude-opus-5-5": {
       "calls": 12,
@@ -1161,16 +1245,16 @@
       "total": 2029812
     },
     "claude-haiku-5-5": {
-      "calls": 17,
-      "input": 34,
-      "output": 21969,
-      "cacheRead": 211471,
-      "cacheWrite": 65420,
-      "thinking": 10200,
+      "calls": 21,
+      "input": 42,
+      "output": 26583,
+      "cacheRead": 245045,
+      "cacheWrite": 82808,
+      "thinking": 11154,
       "models": {
-        "claude-haiku-5-5": 17
+        "claude-haiku-5-5": 21
       },
-      "total": 298894
+      "total": 354478
     }
   },
   "bySubagent": {
@@ -1305,6 +1389,54 @@
         "claude-sonnet-5-5": 8
       },
       "total": 249649
+    },
+    "add6dfd45406ecedc": {
+      "calls": 4,
+      "input": 8,
+      "output": 4614,
+      "cacheRead": 33574,
+      "cacheWrite": 17388,
+      "thinking": 954,
+      "models": {
+        "claude-haiku-5-5": 4
+      },
+      "total": 55584
+    },
+    "a0c2b5f48cc1231e6": {
+      "calls": 8,
+      "input": 16,
+      "output": 13581,
+      "cacheRead": 201627,
+      "cacheWrite": 42742,
+      "thinking": 3435,
+      "models": {
+        "claude-sonnet-5-5": 8
+      },
+      "total": 257966
+    },
+    "a16ddef2c868e16ff": {
+      "calls": 6,
+      "input": 14,
+      "output": 2673,
+      "cacheRead": 98029,
+      "cacheWrite": 12590,
+      "thinking": 133,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 113306
+    },
+    "afe92c5503e8016ff": {
+      "calls": 2,
+      "input": 4,
+      "output": 257,
+      "cacheRead": 12877,
+      "cacheWrite": 13825,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 26963
     }
   },
   "byTool": {
@@ -1323,46 +1455,46 @@
       "total": 344561
     },
     "Read": {
-      "calls": 29,
-      "input": 61,
-      "output": 22131,
-      "cacheRead": 5738727,
-      "cacheWrite": 107320,
+      "calls": 39,
+      "input": 81,
+      "output": 34498,
+      "cacheRead": 9540964,
+      "cacheWrite": 153811,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 22,
-        "claude-haiku-5-5": 4
+        "claude-sonnet-5-5": 30,
+        "claude-haiku-5-5": 6
       },
-      "total": 5868239
+      "total": 9729354
     },
     "PowerShell": {
-      "calls": 64,
-      "input": 134,
-      "output": 47640,
-      "cacheRead": 6392087,
-      "cacheWrite": 543426,
+      "calls": 69,
+      "input": 146,
+      "output": 49243,
+      "cacheRead": 6526359,
+      "cacheWrite": 555813,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 4,
-        "claude-sonnet-5-5": 59,
+        "claude-sonnet-5-5": 64,
         "claude-opus-5-5": 1
       },
-      "total": 6983287
+      "total": 7131561
     },
     "Write": {
-      "calls": 36,
-      "input": 73,
-      "output": 134517,
-      "cacheRead": 6643086,
-      "cacheWrite": 114707,
+      "calls": 37,
+      "input": 75,
+      "output": 139864,
+      "cacheRead": 6670070,
+      "cacheWrite": 115895,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 34,
+        "claude-sonnet-5-5": 35,
         "claude-opus-5-5": 1
       },
-      "total": 6892383
+      "total": 6925904
     },
     "AskUserQuestion": {
       "calls": 12,
@@ -1379,58 +1511,58 @@
       "total": 2698234
     },
     "(text only)": {
-      "calls": 81,
-      "input": 167,
-      "output": 77357,
-      "cacheRead": 20814475,
-      "cacheWrite": 113644,
+      "calls": 92,
+      "input": 189,
+      "output": 87748,
+      "cacheRead": 24546947,
+      "cacheWrite": 135794,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 75,
+        "claude-sonnet-5-5": 85,
         "claude-opus-5-5": 2,
-        "claude-haiku-5-5": 3
+        "claude-haiku-5-5": 4
       },
-      "total": 21005643
+      "total": 24770678
     },
     "Bash": {
-      "calls": 185,
-      "input": 468,
-      "output": 197094,
-      "cacheRead": 56673618,
-      "cacheWrite": 568559,
+      "calls": 205,
+      "input": 520,
+      "output": 220292,
+      "cacheRead": 67883658,
+      "cacheWrite": 619939,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 179,
+        "claude-sonnet-5-5": 199,
         "claude-opus-5-5": 6
       },
-      "total": 57439739
+      "total": 68724409
     },
     "Grep": {
-      "calls": 21,
-      "input": 48,
-      "output": 9751,
-      "cacheRead": 3740186,
-      "cacheWrite": 86602,
+      "calls": 22,
+      "input": 50,
+      "output": 10038,
+      "cacheRead": 3751144,
+      "cacheWrite": 91563,
       "thinking": 0,
       "models": {
         "claude-sonnet-5-5": 16,
         "claude-opus-5-5": 1,
-        "claude-haiku-5-5": 4
+        "claude-haiku-5-5": 5
       },
-      "total": 3836587
+      "total": 3852795
     },
     "Edit": {
-      "calls": 13,
-      "input": 26,
-      "output": 8975,
-      "cacheRead": 3404786,
-      "cacheWrite": 27014,
+      "calls": 19,
+      "input": 38,
+      "output": 15746,
+      "cacheRead": 5982195,
+      "cacheWrite": 42853,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 13
+        "claude-sonnet-5-5": 19
       },
-      "total": 3440801
+      "total": 6040832
     },
     "ExitPlanMode": {
       "calls": 1,
@@ -1445,16 +1577,16 @@
       "total": 145565
     },
     "Agent": {
-      "calls": 12,
-      "input": 24,
-      "output": 16728,
-      "cacheRead": 5352886,
-      "cacheWrite": 19269,
+      "calls": 17,
+      "input": 34,
+      "output": 26268,
+      "cacheRead": 8379725,
+      "cacheWrite": 27268,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 12
+        "claude-sonnet-5-5": 17
       },
-      "total": 5388907
+      "total": 8433295
     },
     "ToolSearch": {
       "calls": 1,
@@ -1656,16 +1788,53 @@
       "total": 19035383
     },
     "BUG-001 (chore/bug-001-ticket)": {
-      "calls": 1,
-      "input": 2,
-      "output": 3082,
-      "cacheRead": 573464,
-      "cacheWrite": 3913,
-      "thinking": 74,
+      "calls": 4,
+      "input": 10,
+      "output": 5203,
+      "cacheRead": 2315485,
+      "cacheWrite": 9325,
+      "thinking": 280,
       "models": {
-        "claude-sonnet-5-5": 1
+        "claude-sonnet-5-5": 4
       },
-      "total": 580461
+      "total": 2330023
+    },
+    "BUG-001 (bug/BUG-001-api-error-responses-lose-cors)": {
+      "calls": 32,
+      "input": 72,
+      "output": 38447,
+      "cacheRead": 13619788,
+      "cacheWrite": 72782,
+      "thinking": 11506,
+      "models": {
+        "claude-haiku-5-5": 4,
+        "claude-sonnet-5-5": 28
+      },
+      "total": 13731089
+    },
+    "worktree-agent-a0c2b5f48cc1231e6": {
+      "calls": 10,
+      "input": 22,
+      "output": 17005,
+      "cacheRead": 1386359,
+      "cacheWrite": 51298,
+      "thinking": 6124,
+      "models": {
+        "claude-sonnet-5-5": 10
+      },
+      "total": 1454684
+    },
+    "setup/hook-paths-and-worktree-tests": {
+      "calls": 14,
+      "input": 30,
+      "output": 11931,
+      "cacheRead": 7773043,
+      "cacheWrite": 32903,
+      "thinking": 2881,
+      "models": {
+        "claude-sonnet-5-5": 14
+      },
+      "total": 7817907
     }
   }
 }

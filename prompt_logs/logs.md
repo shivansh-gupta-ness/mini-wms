@@ -546,6 +546,41 @@ do follow up fix
 
 **Context:** Turned the TASK-002 review findings (1 CORS lost on errors, 7 generic problem types and traceId, 8 and 9 weak tests) into tickets/BUG-001.md (status ready, 9 ACs) on chore/bug-001-ticket; PR opened so the ticket is on main before /start-ticket BUG-001. Findings 4-6 (hooks) and 10 (shared RepoLocator) deliberately out of scope.
 
+---
+
+**User:**
+/start-ticket BUG-001
+
+**Context:** Checking PR 12 merge, ticket readiness and tree, then branching and scouting.
+
+---
+
+**User:**
+approve the plan, go ahead (BUG-001, sent before the scout brief was shown)
+
+**Context:** ticket-scout brief for BUG-001 not back yet. Approval noted; will proceed when the brief arrives unless it raises an owner decision or widens scope.
+
+---
+
+**User (outcome):**
+approve the plan, go ahead (BUG-001 continued)
+
+**Context:** BUG-001 run tests-first: test-writer regression tests (36 tests), before-fix run recorded (10 fail: AC5 types and AC6 traceId), implementer fixed Program.cs (traceId, type per status, UseCors first), after: 92 tests pass, build 0/0, gate passes. AC1-4 passed before the fix: review finding 1 (CORS lost on errors) does not reproduce on .NET 10. AC8 as written FAILS (needs owner decision). ac-results.md and ac-log row written (8 PASS, 1 FAIL). Uncommitted on bug/BUG-001-api-error-responses-lose-cors.
+
+---
+
+**User:**
+yes, do the recommended one and resolve harness defect also
+
+**Context:** Amended BUG-001 AC 8 and observed-behaviour item 1 (owner decision), AC results now 9 PASS; committing and opening the BUG-001 PR, then fixing the two harness defects in a separate setup PR (hook paths via CLAUDE_PROJECT_DIR; run-tests in the agent worktree).
+
+---
+
+**User (outcome):**
+yes, do the recommended one and resolve harness defect also (continued)
+
+**Context:** BUG-001 PR 13 opened and ticket done. Harness defects fixed on setup/hook-paths-and-worktree-tests: hook commands now use "$CLAUDE_PROJECT_DIR" with shell bash (9 commands); run-tests tests the hook input cwd (agent worktree) via workRoot and logs hook-log.jsonl; 63 hook tests pass; a real agent run confirmed the hook input cwd is the worktree.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---

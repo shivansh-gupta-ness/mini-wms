@@ -3,16 +3,24 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { readInput, root, isEditingAgent, block } from './lib.mjs';
+import { readInput, mainRoot, workRoot, isEditingAgent, block } from './lib.mjs';
 
 const input = readInput();
 if (input.stop_hook_active) process.exit(0); // avoid loops
 if (!isEditingAgent(input)) process.exit(0);
 
+// Test the folder the agent worked in (its worktree), not the main checkout, which does not have the agent's changes yet.
+const base = workRoot(input);
+try { // small trace for the learning loop: which folder the tests were judged in
+  const dir = path.join(mainRoot(), '.claude', 'state');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.appendFileSync(path.join(dir, 'hook-log.jsonl'), JSON.stringify({ t: new Date().toISOString(), hook: 'run-tests', agent: input.agent_type, inputCwd: input.cwd || null, testedIn: base }) + '\n');
+} catch { /* logging must never break a hook */ }
+
 const dotnet = fs.existsSync('C:\\Program Files\\dotnet\\dotnet.exe') ? 'C:\\Program Files\\dotnet\\dotnet.exe' : 'dotnet';
-const changed = (() => { try { return execFileSync('git', ['status', '--porcelain'], { cwd: root(), encoding: 'utf8' }); } catch { return ''; } })();
-const be = path.join(root(), 'src', 'backend');
-const fe = path.join(root(), 'src', 'frontend');
+const changed = (() => { try { return execFileSync('git', ['status', '--porcelain'], { cwd: base, encoding: 'utf8' }); } catch { return ''; } })();
+const be = path.join(base, 'src', 'backend');
+const fe = path.join(base, 'src', 'frontend');
 const failures = [];
 const tail = (e) => String(e.stdout || e.message).split('\n').filter((l) => /error|fail/i.test(l)).slice(0, 25).join('\n');
 
