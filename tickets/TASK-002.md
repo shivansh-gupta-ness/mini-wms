@@ -2,7 +2,7 @@
 id: TASK-002
 type: task
 title: API host: health endpoint, error handling and CORS
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
