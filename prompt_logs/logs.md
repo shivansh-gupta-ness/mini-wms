@@ -265,6 +265,27 @@ when unit testing will be done here?
 
 **Context:** Explanation of where unit tests run in the roadmap and pipeline. No file changes.
 
+---
+
+**User (pasted terminal output):**
+The valid direct-main test was rejected by GitHub (GH013: pull request required, pr-guard check expected).
+
+**Context:** Control confirmed. Logged in docs/learning-log.md on chore/phase0-signoff; local main realigned with origin/main. Phase 0 complete.
+
+---
+
+**User:**
+Yes, start with phase 1
+
+**Context:** Drafted docs/specs/product.md (6 modules, 22 stories, 68 ACs, NFRs, role matrix, open decisions). Branch renamed chore/phase1-product-spec. Not committed; awaiting owner review.
+
+---
+
+**User:**
+one warehouse and whole number quantities only for rest take recommended one
+
+**Context:** Applied decisions to docs/specs/product.md: single warehouse (auto-created), zone types, system-chosen bins oldest first from Storage zones, whole numbers; other defaults kept; decisions table in section 9.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---

@@ -1,27 +1,27 @@
 # Token Usage Report
 
-Generated: 2026-11-18T17:48:45.125Z  
-Source: 1 transcript folder(s) matching prefix `c--Users-P7120484-Downloads-Claude-Eval`  
+Generated: 2026-11-18T18:09:50.528Z  
+Source: 1 transcript folder(s) matching prefix `C--Users-P7120484-Downloads-Claude-Eval`  
 Notes: counts come from the API usage recorded in Claude Code transcripts, deduplicated per API message. "Total" = input + output + cache read + cache write. "Thinking" is already inside Output. Cost is not estimated; apply your own rates.
 
 ## Grand total
 
 | Scope | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| All sessions | claude-sonnet-5-5 (144), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 171 | 371 | 200,990 | 50,284 | 20,701,593 | 1,218,711 | 22,121,665 |
+| All sessions | claude-sonnet-5-5 (162), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 189 | 417 | 222,827 | 54,393 | 24,260,928 | 1,243,374 | 25,727,546 |
 
 ## By day
 
 | Day | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | 2026-11-17 | claude-sonnet-5-5 (81), claude-sonnet-4-6 (15) | 96 | 189 | 124,710 | 34,157 | 11,731,789 | 379,702 | 12,236,390 |
-| 2026-11-18 | claude-sonnet-5-5 (63), claude-opus-5-5 (12) | 75 | 182 | 76,280 | 16,127 | 8,969,804 | 839,009 | 9,885,275 |
+| 2026-11-18 | claude-sonnet-5-5 (81), claude-opus-5-5 (12) | 93 | 228 | 98,117 | 20,236 | 12,529,139 | 863,672 | 13,491,156 |
 
 ## By session
 
 | Session | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (144), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 170 | 368 | 200,763 | 50,171 | 20,677,691 | 1,208,201 | 22,087,023 |
+| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (162), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 188 | 414 | 222,600 | 54,280 | 24,237,026 | 1,232,864 | 25,692,904 |
 | c65f4548-f0b0-4be8-a353-eb589f45bc26 | claude-sonnet-4-6 (1) | 1 | 3 | 227 | 113 | 23,902 | 10,510 | 34,642 |
 
 ## By prompt (main conversation, chronological)
@@ -57,13 +57,19 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 | 27 · 15:57:07 · <command-name>/model</command-name> <command-message>model</command-message> <command-args | claude-opus-5-5 (9) | 9 | 18 | 16,610 | 2,348 | 1,208,656 | 278,646 | 1,503,930 |
 | 28 · 17:42:24 · when unit testing will be done here? | claude-opus-5-5 (2) | 2 | 4 | 1,234 | 266 | 347,191 | 1,437 | 349,866 |
 | 29 · 17:46:29 · save this plan and start with phase 0 | claude-opus-5-5 (1) | 1 | 4 | 660 | 482 | 175,339 | 13 | 176,016 |
-| 30 · 17:46:35 · <command-name>/model</command-name> <command-message>model</command-message> <command-args | claude-sonnet-5-5 (6) | 6 | 12 | 7,583 | 1,834 | 931,746 | 153,990 | 1,093,331 |
+| 30 · 17:46:35 · <command-name>/model</command-name> <command-message>model</command-message> <command-args | claude-sonnet-5-5 (8) | 8 | 16 | 10,063 | 1,973 | 1,304,849 | 158,993 | 1,473,921 |
+| 31 · 17:54:22 · check whether phase 0 is completed. And i consider prposed rodemap. | claude-sonnet-5-5 (3) | 3 | 8 | 2,134 | 478 | 574,977 | 2,481 | 579,600 |
+| 32 · 17:58:07 · <pasted_content id="d44c"> UCRT64 ~/Downloads/Claude_Eval (setup/pipeline-skills-and-local | claude-sonnet-5-5 (3) | 3 | 8 | 1,493 | 232 | 585,273 | 1,831 | 588,605 |
+| 33 · 18:03:02 · git push origin main Enumerating objects: 1, done. Counting objects: 100% (1/1), done. Wri | claude-sonnet-5-5 (3) | 3 | 6 | 1,546 | 550 | 590,757 | 1,875 | 594,184 |
+| 34 · 18:03:50 · Yes, start with phase 1 | claude-sonnet-5-5 (4) | 4 | 10 | 8,895 | 1,037 | 804,681 | 8,731 | 822,317 |
+| 35 · 18:08:45 · one warehouse and whole number quantities only for rest take recommended one | claude-sonnet-5-5 (2) | 2 | 6 | 4,651 | 1,673 | 416,797 | 4,736 | 426,190 |
+| 36 · 18:09:43 · yes do it | claude-sonnet-5-5 (1) | 1 | 4 | 638 | 0 | 213,747 | 6 | 214,395 |
 
 ## By model
 
 | Model | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| claude-sonnet-5-5 | claude-sonnet-5-5 (144) | 144 | 326 | 175,818 | 44,901 | 17,980,675 | 858,452 | 19,015,271 |
+| claude-sonnet-5-5 | claude-sonnet-5-5 (162) | 162 | 372 | 197,655 | 49,010 | 21,540,010 | 883,115 | 22,621,152 |
 | claude-opus-5-5 | claude-opus-5-5 (12) | 12 | 26 | 18,504 | 3,096 | 1,731,186 | 280,096 | 2,029,812 |
 | claude-sonnet-4-6 | claude-sonnet-4-6 (15) | 15 | 19 | 6,668 | 2,287 | 989,732 | 80,163 | 1,076,582 |
 
@@ -75,9 +81,9 @@ _No subagent usage recorded yet._
 
 | Tool | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
+| Bash | claude-sonnet-5-5 (52), claude-opus-5-5 (6) | 58 | 148 | 70,669 | 0 | 7,771,643 | 324,816 | 8,167,276 |
 | PowerShell | claude-sonnet-5-5 (41), claude-sonnet-4-6 (4), claude-opus-5-5 (1) | 46 | 98 | 40,000 | 0 | 5,647,605 | 507,162 | 6,194,865 |
-| Bash | claude-sonnet-5-5 (40), claude-opus-5-5 (6) | 46 | 114 | 52,701 | 0 | 5,401,416 | 310,388 | 5,764,619 |
-| (text only) | claude-sonnet-5-5 (22), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 25 | 51 | 21,532 | 0 | 3,139,400 | 32,914 | 3,193,897 |
+| (text only) | claude-sonnet-5-5 (28), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 31 | 63 | 25,401 | 0 | 4,328,508 | 43,149 | 4,397,121 |
 | Write | claude-sonnet-5-5 (15), claude-sonnet-4-6 (1), claude-opus-5-5 (1) | 17 | 33 | 61,045 | 0 | 2,172,454 | 68,546 | 2,302,078 |
 | Grep | claude-sonnet-5-5 (11), claude-opus-5-5 (1) | 12 | 28 | 5,275 | 0 | 1,762,947 | 53,917 | 1,822,167 |
 | Read | claude-sonnet-5-5 (7), claude-sonnet-4-6 (3) | 10 | 19 | 9,218 | 0 | 1,207,056 | 48,095 | 1,264,388 |
@@ -90,7 +96,9 @@ _No subagent usage recorded yet._
 
 | Branch | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| setup/pipeline-skills-and-local-prompts | claude-sonnet-5-5 (67), claude-opus-5-5 (12) | 79 | 190 | 79,964 | 16,858 | 9,894,234 | 843,301 | 10,817,689 |
-| main | claude-sonnet-5-5 (41) | 41 | 82 | 58,401 | 17,158 | 6,963,256 | 200,553 | 7,222,292 |
+| setup/pipeline-skills-and-local-prompts | claude-sonnet-5-5 (75), claude-opus-5-5 (12) | 87 | 210 | 86,071 | 17,707 | 11,427,587 | 852,616 | 12,366,484 |
+| main | claude-sonnet-5-5 (43) | 43 | 86 | 59,431 | 17,708 | 7,356,668 | 201,386 | 7,617,571 |
 | HEAD | claude-sonnet-5-5 (36), claude-sonnet-4-6 (15) | 51 | 99 | 62,625 | 16,268 | 3,844,103 | 174,857 | 4,081,684 |
+| chore/phase1-product-spec | claude-sonnet-5-5 (6) | 6 | 16 | 13,152 | 1,785 | 1,236,322 | 13,461 | 1,262,951 |
+| chore/phase0-signoff | claude-sonnet-5-5 (2) | 2 | 6 | 1,548 | 925 | 396,248 | 1,054 | 398,856 |
 
