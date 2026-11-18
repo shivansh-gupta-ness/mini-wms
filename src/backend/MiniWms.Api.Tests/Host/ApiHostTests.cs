@@ -44,21 +44,20 @@ public class ApiHostTests
         Assert.Equal("not-found", json.GetProperty("type").GetString());
     }
 
+    // BUG-001 AC7: assert the structure of the body (allow-list), not substrings.
+    private static readonly string[] AllowedErrorProperties = ["type", "title", "status", "traceId", "errors"];
+
     [Fact]
-    [Trait("AC", "TASK-002.2")]
-    public async Task Unknown_route_body_has_no_detail_and_no_stack_trace()
+    [Trait("AC", "BUG-001.7")]
+    public async Task Unknown_route_body_has_only_allowed_properties()
     {
         using var factory = new ApiFactory();
         using var client = factory.CreateClient();
 
         using var response = await client.GetAsync("/api/v1/does-not-exist");
-        var body = await response.Content.ReadAsStringAsync();
-        var json = JsonDocument.Parse(body).RootElement;
+        var json = await ReadJson(response);
 
-        Assert.False(json.TryGetProperty("detail", out _));
-        Assert.DoesNotContain(" at ", body, StringComparison.Ordinal);
-        Assert.DoesNotContain("StackTrace", body, StringComparison.Ordinal);
-        Assert.DoesNotContain("Exception", body, StringComparison.Ordinal);
+        Assert.All(json.EnumerateObject().Select(p => p.Name), name => Assert.Contains(name, AllowedErrorProperties));
     }
 
     // AC3: an unhandled exception is a generic 500 problem+json.
@@ -80,21 +79,29 @@ public class ApiHostTests
     }
 
     [Fact]
-    [Trait("AC", "TASK-002.3")]
-    public async Task Unhandled_exception_body_has_no_detail_and_no_exception_text()
+    [Trait("AC", "BUG-001.7")]
+    public async Task Unhandled_exception_body_has_only_allowed_properties()
+    {
+        using var factory = new ThrowingApiFactory();
+        using var client = factory.CreateClient();
+
+        using var response = await client.GetAsync(ThrowingApiFactory.ThrowPath);
+        var json = await ReadJson(response);
+
+        Assert.All(json.EnumerateObject().Select(p => p.Name), name => Assert.Contains(name, AllowedErrorProperties));
+    }
+
+    [Fact]
+    [Trait("AC", "BUG-001.7")]
+    public async Task Unhandled_exception_body_does_not_contain_the_exception_secret_text()
     {
         using var factory = new ThrowingApiFactory();
         using var client = factory.CreateClient();
 
         using var response = await client.GetAsync(ThrowingApiFactory.ThrowPath);
         var body = await response.Content.ReadAsStringAsync();
-        var json = JsonDocument.Parse(body).RootElement;
 
-        Assert.False(json.TryGetProperty("detail", out _));
         Assert.DoesNotContain(ThrowingApiFactory.SecretText, body, StringComparison.Ordinal);
-        Assert.DoesNotContain("InvalidOperationException", body, StringComparison.Ordinal);
-        Assert.DoesNotContain("StackTrace", body, StringComparison.Ordinal);
-        Assert.DoesNotContain(" at ", body, StringComparison.Ordinal);
     }
 
     // AC4: CORS allows only the Angular dev server.

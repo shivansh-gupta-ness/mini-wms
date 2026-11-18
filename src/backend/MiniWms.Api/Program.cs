@@ -16,28 +16,30 @@ builder.Services.AddProblemDetails(options =>
         problem.Extensions.Clear();
         problem.Detail = null;
         problem.Instance = null;
+        problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
 
-        switch (problem.Status)
+        problem.Type = problem.Status switch
         {
-            case StatusCodes.Status500InternalServerError:
-                problem.Type = "error";
-                problem.Title = "An unexpected error occurred.";
-                break;
-            case StatusCodes.Status404NotFound:
-                problem.Type = "not-found";
-                problem.Title = "Not Found";
-                break;
-            default:
-                problem.Type = "error";
-                break;
+            StatusCodes.Status400BadRequest => "validation",
+            StatusCodes.Status401Unauthorized => "unauthorized",
+            StatusCodes.Status403Forbidden => "forbidden",
+            StatusCodes.Status404NotFound => "not-found",
+            StatusCodes.Status409Conflict => "conflict",
+            _ => "error",
+        };
+
+        if (problem.Status == StatusCodes.Status500InternalServerError)
+        {
+            problem.Title = "An unexpected error occurred.";
         }
     });
 
 var app = builder.Build();
 
+// CORS must wrap the error handlers so error responses keep their CORS headers.
+app.UseCors(AngularDevCorsPolicy);
 app.UseExceptionHandler();
 app.UseStatusCodePages();
-app.UseCors(AngularDevCorsPolicy);
 
 // Every module registers through its own MapXxxEndpoints extension, called here.
 app.MapHealthEndpoints();
