@@ -1,18 +1,18 @@
 {
-  "generated": "2026-11-18T18:24:24.879Z",
+  "generated": "2026-11-18T18:31:18.673Z",
   "grand": {
-    "calls": 206,
-    "input": 457,
-    "output": 254929,
-    "cacheRead": 28214175,
-    "cacheWrite": 1273042,
-    "thinking": 60408,
+    "calls": 211,
+    "input": 469,
+    "output": 258344,
+    "cacheRead": 29490217,
+    "cacheWrite": 1279443,
+    "thinking": 61140,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 179,
+      "claude-sonnet-5-5": 184,
       "claude-opus-5-5": 12
     },
-    "total": 29742603
+    "total": 31028473
   },
   "byDay": {
     "2026-11-17": {
@@ -29,17 +29,17 @@
       "total": 12236390
     },
     "2026-11-18": {
-      "calls": 110,
-      "input": 268,
-      "output": 130219,
-      "cacheRead": 16482386,
-      "cacheWrite": 893340,
-      "thinking": 26251,
+      "calls": 115,
+      "input": 280,
+      "output": 133634,
+      "cacheRead": 17758428,
+      "cacheWrite": 899741,
+      "thinking": 26983,
       "models": {
-        "claude-sonnet-5-5": 98,
+        "claude-sonnet-5-5": 103,
         "claude-opus-5-5": 12
       },
-      "total": 17506213
+      "total": 18792083
     }
   },
   "bySession": {
@@ -56,18 +56,18 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 205,
-      "input": 454,
-      "output": 254702,
-      "cacheRead": 28190273,
-      "cacheWrite": 1262532,
-      "thinking": 60295,
+      "calls": 210,
+      "input": 466,
+      "output": 258117,
+      "cacheRead": 29466315,
+      "cacheWrite": 1268933,
+      "thinking": 61027,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 179,
+        "claude-sonnet-5-5": 184,
         "claude-opus-5-5": 12
       },
-      "total": 29707961
+      "total": 30993831
     }
   },
   "byPrompt": {
@@ -600,6 +600,20 @@
         "claude-sonnet-5-5": 7
       },
       "total": 1739910
+    },
+    "5c526f80-4a66-4b45-a335-956775f26cf1": {
+      "label": "I have merged pr3 already, and delete the existing local folder of dev_prompts from here and its content, And, update wherever is needed",
+      "time": "2026-11-18T18:27:52.326Z",
+      "calls": 5,
+      "input": 12,
+      "output": 3415,
+      "cacheRead": 1276042,
+      "cacheWrite": 6401,
+      "thinking": 732,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 1285870
     }
   },
   "byModel": {
@@ -616,16 +630,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 179,
-      "input": 412,
-      "output": 229757,
-      "cacheRead": 25493257,
-      "cacheWrite": 912783,
-      "thinking": 55025,
+      "calls": 184,
+      "input": 424,
+      "output": 233172,
+      "cacheRead": 26769299,
+      "cacheWrite": 919184,
+      "thinking": 55757,
       "models": {
-        "claude-sonnet-5-5": 179
+        "claude-sonnet-5-5": 184
       },
-      "total": 26636209
+      "total": 27922079
     },
     "claude-opus-5-5": {
       "calls": 12,
@@ -725,17 +739,17 @@
       "total": 5333864
     },
     "Bash": {
-      "calls": 69,
-      "input": 174,
-      "output": 84033,
-      "cacheRead": 10351971,
-      "cacheWrite": 347684,
+      "calls": 74,
+      "input": 186,
+      "output": 87448,
+      "cacheRead": 11628013,
+      "cacheWrite": 354085,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 63,
+        "claude-sonnet-5-5": 68,
         "claude-opus-5-5": 6
       },
-      "total": 10783862
+      "total": 12069732
     },
     "Grep": {
       "calls": 12,
@@ -851,16 +865,16 @@
       "total": 1899401
     },
     "setup/prompts-in-claude": {
-      "calls": 5,
-      "input": 10,
-      "output": 3792,
-      "cacheRead": 1238894,
-      "cacheWrite": 8026,
-      "thinking": 522,
+      "calls": 10,
+      "input": 22,
+      "output": 7207,
+      "cacheRead": 2514936,
+      "cacheWrite": 14427,
+      "thinking": 1254,
       "models": {
-        "claude-sonnet-5-5": 5
+        "claude-sonnet-5-5": 10
       },
-      "total": 1250722
+      "total": 2536592
     }
   }
 }

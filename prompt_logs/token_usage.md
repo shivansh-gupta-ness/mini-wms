@@ -1,27 +1,27 @@
 # Token Usage Report
 
-Generated: 2026-11-18T18:24:24.864Z  
-Source: 1 transcript folder(s) matching prefix `c--Users-P7120484-Downloads-Claude-Eval`  
+Generated: 2026-11-18T18:31:18.658Z  
+Source: 1 transcript folder(s) matching prefix `C--Users-P7120484-Downloads-Claude-Eval`  
 Notes: counts come from the API usage recorded in Claude Code transcripts, deduplicated per API message. "Total" = input + output + cache read + cache write. "Thinking" is already inside Output. Cost is not estimated; apply your own rates.
 
 ## Grand total
 
 | Scope | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| All sessions | claude-sonnet-5-5 (179), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 206 | 457 | 254,929 | 60,408 | 28,214,175 | 1,273,042 | 29,742,603 |
+| All sessions | claude-sonnet-5-5 (184), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 211 | 469 | 258,344 | 61,140 | 29,490,217 | 1,279,443 | 31,028,473 |
 
 ## By day
 
 | Day | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | 2026-11-17 | claude-sonnet-5-5 (81), claude-sonnet-4-6 (15) | 96 | 189 | 124,710 | 34,157 | 11,731,789 | 379,702 | 12,236,390 |
-| 2026-11-18 | claude-sonnet-5-5 (98), claude-opus-5-5 (12) | 110 | 268 | 130,219 | 26,251 | 16,482,386 | 893,340 | 17,506,213 |
+| 2026-11-18 | claude-sonnet-5-5 (103), claude-opus-5-5 (12) | 115 | 280 | 133,634 | 26,983 | 17,758,428 | 899,741 | 18,792,083 |
 
 ## By session
 
 | Session | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (179), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 205 | 454 | 254,702 | 60,295 | 28,190,273 | 1,262,532 | 29,707,961 |
+| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (184), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 210 | 466 | 258,117 | 61,027 | 29,466,315 | 1,268,933 | 30,993,831 |
 | c65f4548-f0b0-4be8-a353-eb589f45bc26 | claude-sonnet-4-6 (1) | 1 | 3 | 227 | 113 | 23,902 | 10,510 | 34,642 |
 
 ## By prompt (main conversation, chronological)
@@ -66,12 +66,13 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 | 36 · 18:09:43 · yes do it | claude-sonnet-5-5 (3) | 3 | 8 | 1,255 | 0 | 642,265 | 1,215 | 644,743 |
 | 37 · 18:12:07 · Yes, i merged it, confirm it once. if phase1 is completed then start with phase 2 | claude-sonnet-5-5 (8) | 8 | 20 | 24,987 | 3,477 | 1,800,931 | 18,861 | 1,844,799 |
 | 38 · 18:21:15 · And, i want to have prompts folder inside .claude folder like we have in claude-plugin rep | claude-sonnet-5-5 (7) | 7 | 16 | 6,498 | 2,538 | 1,723,798 | 9,598 | 1,739,910 |
+| 39 · 18:27:52 · I have merged pr3 already, and delete the existing local folder of dev_prompts from here a | claude-sonnet-5-5 (5) | 5 | 12 | 3,415 | 732 | 1,276,042 | 6,401 | 1,285,870 |
 
 ## By model
 
 | Model | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| claude-sonnet-5-5 | claude-sonnet-5-5 (179) | 179 | 412 | 229,757 | 55,025 | 25,493,257 | 912,783 | 26,636,209 |
+| claude-sonnet-5-5 | claude-sonnet-5-5 (184) | 184 | 424 | 233,172 | 55,757 | 26,769,299 | 919,184 | 27,922,079 |
 | claude-opus-5-5 | claude-opus-5-5 (12) | 12 | 26 | 18,504 | 3,096 | 1,731,186 | 280,096 | 2,029,812 |
 | claude-sonnet-4-6 | claude-sonnet-4-6 (15) | 15 | 19 | 6,668 | 2,287 | 989,732 | 80,163 | 1,076,582 |
 
@@ -83,7 +84,7 @@ _No subagent usage recorded yet._
 
 | Tool | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| Bash | claude-sonnet-5-5 (63), claude-opus-5-5 (6) | 69 | 174 | 84,033 | 0 | 10,351,971 | 347,684 | 10,783,862 |
+| Bash | claude-sonnet-5-5 (68), claude-opus-5-5 (6) | 74 | 186 | 87,448 | 0 | 11,628,013 | 354,085 | 12,069,732 |
 | PowerShell | claude-sonnet-5-5 (41), claude-sonnet-4-6 (4), claude-opus-5-5 (1) | 46 | 98 | 40,000 | 0 | 5,647,605 | 507,162 | 6,194,865 |
 | (text only) | claude-sonnet-5-5 (32), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 35 | 71 | 27,540 | 0 | 5,259,425 | 46,828 | 5,333,864 |
 | Write | claude-sonnet-5-5 (17), claude-sonnet-4-6 (1), claude-opus-5-5 (1) | 19 | 39 | 77,644 | 0 | 2,614,456 | 71,667 | 2,763,806 |
@@ -101,8 +102,8 @@ _No subagent usage recorded yet._
 | setup/pipeline-skills-and-local-prompts | claude-sonnet-5-5 (75), claude-opus-5-5 (12) | 87 | 210 | 86,071 | 17,707 | 11,427,587 | 852,616 | 12,366,484 |
 | main | claude-sonnet-5-5 (43) | 43 | 86 | 59,431 | 17,708 | 7,356,668 | 201,386 | 7,617,571 |
 | HEAD | claude-sonnet-5-5 (36), claude-sonnet-4-6 (15) | 51 | 99 | 62,625 | 16,268 | 3,844,103 | 174,857 | 4,081,684 |
+| setup/prompts-in-claude | claude-sonnet-5-5 (10) | 10 | 22 | 7,207 | 1,254 | 2,514,936 | 14,427 | 2,536,592 |
 | chore/phase1-product-spec | claude-sonnet-5-5 (10) | 10 | 26 | 17,051 | 4,546 | 2,095,666 | 15,142 | 2,127,885 |
 | chore/phase2-design | claude-sonnet-5-5 (8) | 8 | 20 | 24,411 | 2,732 | 1,855,009 | 19,961 | 1,899,401 |
-| setup/prompts-in-claude | claude-sonnet-5-5 (5) | 5 | 10 | 3,792 | 522 | 1,238,894 | 8,026 | 1,250,722 |
 | chore/phase0-signoff | claude-sonnet-5-5 (2) | 2 | 6 | 1,548 | 925 | 396,248 | 1,054 | 398,856 |
 
