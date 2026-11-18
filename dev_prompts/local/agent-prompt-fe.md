@@ -1,7 +1,7 @@
 # Angular UI Development Agent (local adaptation)
 
-> **LOCAL ADAPTATION** of `dev_prompts/agent-prompt-FE-v1 1.md` (the original is unchanged). Owner-approved substitutions:
-> ticket system = `tickets/<ID>.md` instead of Jira (config key `TICKET_ID` is now `TICKET_ID`); specs = `docs/`; all paths repo-relative
+> **LOCAL ADAPTATION** of `dev_prompts/original/agent-prompt-FE-v1 1.md` (the original is unchanged). Owner-approved substitutions:
+> ticket system = `tickets/<ID>.md` instead of Jira (config key `JIRA_STORY` is now `TICKET_ID`); specs = `docs/`; all paths repo-relative
 > (UI code lives in `src/frontend`); git via the `git` CLI instead of the git MCP. Run it as the `run-feature-fe` skill, after `/start-ticket`
 > has created the branch and the owner approved the plan. Harness rules still apply: stay inside the ticket's `allowed_paths`, no network
 > commands, stage only (never commit, push or create branches).
@@ -630,6 +630,11 @@ half-staged change leaves the next agent with a context that disagrees with the 
 
 ### 9.3 Repository context update
 
+**Local harness rule.** Only a context file that is not protected and lies inside the ticket's `allowed_paths` may be edited
+(normally `src/frontend/REPO_CONTEXT.md`). The root `REPO_CONTEXT.md` is protected: read it, never edit it. If the file you
+would update is protected, outside `allowed_paths` or does not exist yet, do not edit it; list the exact proposed change in
+the final report as "Context changes proposed" for the owner to apply in a separate PR.
+
 Skip this section only if `CONTEXT_UPDATE_ENABLED` is `false`, or `REPO_CONTEXT_PATH` is
 `<not-provided>`, or you modified no files. Say which applies in the final report.
 
@@ -680,6 +685,12 @@ document too.
 
 ### 9.5 Final report
 
+**AC results log (local harness rule).** Before printing the report, write `docs/reports/<TICKET_ID>/ac-results.md` and append one row to `docs/reports/ac-log.md`
+(create it with the header `| Date | Ticket | Module | ACs | PASS | FAIL | N/A | NOT RUN | Mapping % | Pass % | Coverage % | PR |` if missing; leave PR blank). One table row per acceptance
+criterion of `tickets/<TICKET_ID>.md`: `AC #` | `AC text` | `Result` | `Spec / test that proves it` | `Evidence` | `Date`. Result is exactly one of PASS, FAIL, N/A (with the reason) or NOT RUN (with the reason),
+taken from the real build and test output, never from memory. End with `Totals: PASS x, FAIL y, N/A z, NOT RUN w`. Use `-` for the gate columns that do not apply to a frontend ticket.
+Stage both files. If they are not inside `allowed_paths`, STOP and ask the owner to add them. A ticket is not done while any AC is FAIL or NOT RUN without a written owner decision.
+
 ```
 =========================================
 COMPLETE
@@ -714,6 +725,10 @@ CONTEXT DOCUMENT
 DISCOVERY
 - Answered from context : <count of checklist items>
 - Required a file read  : <count>, and which - each one is a context gap
+
+AC RESULTS
+- File   : docs/reports/<TICKET_ID>/ac-results.md
+- Totals : PASS <x>, FAIL <y>, N/A <z>, NOT RUN <w>
 
 STAGED (not committed)
 - <path>

@@ -1,10 +1,10 @@
 # Feature Pipeline — Master Runner Prompt (backend, local adaptation)
 
-> **LOCAL ADAPTATION** of `dev_prompts/run-feature-BE-v1 1.md` (the original is unchanged). Owner-approved substitutions:
-> ticket system = `tickets/<ID>.md` (FEAT-001 / BUG-001 / TASK-001) instead of ticket; specs/ADRs = `docs/` instead of Confluence;
-> QA cases = `docs/qa/<ID>.md` instead of QA-case; reports = `docs/reports/<ID>/` (committed in the PR) instead of a report filing;
+> **LOCAL ADAPTATION** of `dev_prompts/original/run-feature-BE-v1 1.md` (the original is unchanged). Owner-approved substitutions:
+> ticket system = `tickets/<ID>.md` (FEAT-001 / BUG-001 / TASK-001) instead of Jira; specs/ADRs = `docs/` instead of Confluence;
+> QA cases = `docs/qa/<ID>.md` instead of AgileTest; reports = `docs/reports/<ID>/` (committed in the PR) instead of a Jira attachment;
 > all paths are repo-relative (code lives under `src/`); git via the `git` CLI instead of GitHub MCP tools; branch `<feat|bug|task>/<ID>-<slug>` from `main`.
-> Harness rules still apply: stay inside the ticket's `allowed_paths`; no network commands; stage only, never commit or push.
+> Harness rules still apply: stay inside the ticket's `allowed_paths`; no network commands; stage only, never commit, push or create branches (`/start-ticket` creates the branch; the branch gate only verifies it).
 > Run it as the `run-feature-be` skill, or paste this file as a message. The pipeline definition is `dev_prompts/local/per-ticket-feature-prompts.md`.
 
 > **How to use this file:**
@@ -124,6 +124,14 @@ must leave the context matching the code.
 
 At the end of **every prompt that modified files** (A, 2, 3, 4, B), after the file edits are
 complete and before the staging step.
+
+### Rule 0 — Which context files may be edited (local harness rule)
+
+Only a context file that is **not protected** and lies **inside the ticket's `allowed_paths`** may be edited (normally
+`src/backend/REPO_CONTEXT.md`). The root `REPO_CONTEXT.md` is protected: read it, never edit it. If the file you would
+update is protected, outside `allowed_paths`, or does not exist yet, do not edit it: list the exact proposed change under
+"Context changes proposed" in the STOP REPORT and the Story Summary so the owner can apply it in a separate PR.
+Rules 1-6 below apply only to files that Rule 0 allows.
 
 ### Rule 1 — Incremental only, never regenerate
 
@@ -271,7 +279,7 @@ START_FROM_PROMPT = "A"
 
 # ── Branch override (only used when START_FROM_PROMPT != "A") ──────────────────
 # If the branch was already created in a prior session, paste its exact name here.
-# The agent will check it out instead of running the branch-creation gate (Prompt A §0).
+# The agent will check it out instead of the branch gate (Prompt A §0).
 # Leave blank on a fresh run.
 EXISTING_BRANCH   = ""
 
@@ -321,7 +329,7 @@ than a repo-wide search when the context falls short.
    - Skip all prompts with an identifier that comes before `START_FROM_PROMPT` in the
      execution order: A → 2 → 3 → 4 → B → 5.8.
    - If `EXISTING_BRANCH` is non-empty, check it out (`git switch <branch>`) instead
-     of running the branch-creation gate (Prompt A §0). Confirm with `git rev-parse --abbrev-ref HEAD`.
+     of the branch gate (Prompt A §0). Confirm with `git rev-parse --abbrev-ref HEAD`.
    - If `EXISTING_BRANCH` is blank, assume the branch is already checked out. Confirm with
      `current_branch`; if it does not match `<WORK_BRANCH_PREFIX><STORY_KEY>-*`, STOP and ask
      the human which branch to use.
@@ -403,6 +411,7 @@ Ticket   : tickets/<STORY_KEY>.md
 
 Prompts run  : A, 2, 3, 4, B, 5.8
 Reports      : <count> files filed under docs/reports/<STORY_KEY>/ (<comma-separated names>)
+AC results   : PASS <x>, FAIL <y>, N/A <z>, NOT RUN <w> (docs/reports/<STORY_KEY>/ac-results.md; roll-up row added to docs/reports/ac-log.md)
 Tests added  : <count> new [Fact]/[Theory] methods across all services
 Gates        : PASS / NOT READY / NEEDS HUMAN INTERVENTION
 

@@ -8,7 +8,7 @@ IDs count up per type. Copy the matching file from `_templates/` and fill every 
 | `owner` | A named person. Required. pr-guard fails without it |
 | `component` | A key from `docs/knowledge-map.yaml` |
 | `risk` | low, medium, high or blocked (matches the component) |
-| `allowed_paths` | Flow-style list of globs the change may touch, e.g. `[src/backend/**/Inventory/**]` |
+| `allowed_paths` | Flow-style list of globs the change may touch, e.g. `[src/backend/**/Inventory/**]`. Feature tickets run through `/run-feature-*` must also list `tickets/<ID>.md`, `docs/reports/<ID>/**` and `docs/reports/ac-log.md` (the pipeline appends a `## Delivery` section, files reports and adds an AC-log row) |
 | `docs` | Spec or ADR files under `docs/` the ticket relies on |
 | `status` | draft, ready, in-progress, in-review, done |
 

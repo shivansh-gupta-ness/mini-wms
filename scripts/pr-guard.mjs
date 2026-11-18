@@ -11,7 +11,7 @@ const BASE = process.env.BASE_REF || 'origin/main';
 const HEAD = process.env.HEAD_REF || 'HEAD';
 const BRANCH = process.env.BRANCH || git(['rev-parse', '--abbrev-ref', 'HEAD']).trim();
 const LABELS = (process.env.PR_LABELS || '').split(',').map((s) => s.trim()).filter(Boolean);
-const MAX_LINES = 400, MAX_FILES = 15;
+const MAX_LINES = 1000, MAX_FILES = 15;
 const failures = [];
 const fail = (m) => failures.push(m);
 

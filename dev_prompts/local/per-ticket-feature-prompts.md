@@ -1,10 +1,10 @@
 # Per-Ticket Feature Implementation & Validation Prompts (local adaptation)
 
-> **LOCAL ADAPTATION** of `dev_prompts/new-per_ticket_feature_prompts 3.md` (the original is unchanged). Owner-approved substitutions:
-> ticket system = `tickets/<ID>.md` (FEAT-001 / BUG-001 / TASK-001) instead of the ticket; specs/ADRs = `docs/` instead of Confluence;
-> QA cases = `docs/qa/<ID>.md` instead of QA-case; reports = `docs/reports/<ID>/` (committed in the PR) instead of a the ticket attachment;
+> **LOCAL ADAPTATION** of `dev_prompts/original/new-per_ticket_feature_prompts 3.md` (the original is unchanged). Owner-approved substitutions:
+> ticket system = `tickets/<ID>.md` (FEAT-001 / BUG-001 / TASK-001) instead of Jira; specs/ADRs = `docs/` instead of Confluence;
+> QA cases = `docs/qa/<ID>.md` instead of AgileTest; reports = `docs/reports/<ID>/` (committed in the PR) instead of a Jira attachment;
 > all paths are repo-relative (code lives under `src/`); git via the `git` CLI instead of GitHub MCP tools; branch `<feat|bug|task>/<ID>-<slug>` from `main`.
-> Harness rules still apply: stay inside the ticket's `allowed_paths`; no network commands; stage only, never commit or push.
+> Harness rules still apply: stay inside the ticket's `allowed_paths`; no network commands; stage only, never commit, push or create branches (`/start-ticket` creates the branch; the branch gate only verifies it).
 > Worked examples at the bottom are illustrative; project names such as CoreService/OrderService are placeholders.
 
 > A five-step pipeline to run per ticket **when the microservice code is already migrated**
@@ -80,7 +80,7 @@ QA_TEST_REFERENCES     = """
 BASE_BRANCH            = "main"
 WORK_BRANCH_PREFIX     = "<feat|bug|task>/"   # by ticket type: FEAT -> feat/, BUG -> bug/, TASK -> task/
 # Branch name is computed as <WORK_BRANCH_PREFIX><STORY_KEY>-<slug>.
-# The slug is derived from the ticket title. Prompt A shows the candidate and asks you to confirm.
+# The branch is created by /start-ticket; Prompt A only verifies it matches this pattern.
 
 # Gates (mirror the TRD defaults)
 MAPPING_THRESHOLD      = 100      # % QA test references covered by >= 1 UT
@@ -128,33 +128,21 @@ Implement the feature or change described in STORY_KEY across the services liste
 SERVICE_PATHS. The code is already migrated; this story adds new functionality or modifies
 existing behaviour on top of the current codebase. No legacy code lookup is needed.
 
-0. BRANCH-CREATION GATE (runs BEFORE any file edit).
+0. BRANCH GATE (runs BEFORE any file edit). VERIFY ONLY: this prompt never creates a branch.
+   `/start-ticket` owns branch creation (owner-approved local change; the original prompt created the branch in 0.d).
 
-   0.a Run `git status --porcelain` and `git rev-parse --abbrev-ref HEAD` in the repository root.
-       If the working tree is dirty, STOP and ask the user how to handle the uncommitted work —
+   0.a Run `git status --porcelain -- . ":!prompt_logs"` and `git rev-parse --abbrev-ref HEAD` in the repository root.
+       `prompt_logs/` changes every turn and is ignored. If the working tree is otherwise dirty, STOP and ask the user how to handle the uncommitted work —
        never auto-stash or auto-commit unrelated changes. If clean, proceed.
 
-   0.b If `/start-ticket` already created and checked out the branch (current branch matches `<feat|bug|task>/<STORY_KEY>-*`),
-       record it, skip 0.c-0.d and go to 0.e. Otherwise compute the short slug from the `title` in `tickets/<STORY_KEY>.md`.
-       Lower-case it, strip punctuation, replace whitespace runs with `-`, drop any leading component prefix
-       (e.g. drop `inventory-` from `Inventory | Add Low Stock Flag`), and truncate to 40 characters.
-       The slug must be kebab-case `[a-z0-9-]+`.
-       Example:
-         STORY_KEY = `FEAT-001`, title = `Inventory | Add Low Stock Flag`
-           → slug  = `add-low-stock-flag`
-           → branch = `feat/FEAT-001-add-low-stock-flag`   (prefix: feat for FEAT, bug for BUG, task for TASK)
+   0.b The current branch must match `<feat|bug|task>/<STORY_KEY>-*`
+       (prefix: feat for FEAT, bug for BUG, task for TASK; example: `feat/FEAT-001-add-low-stock-flag`).
+       If it matches, record it and go to 0.c.
+       If it does not match, STOP and tell the user: "Run `/start-ticket <STORY_KEY>` first; it creates and checks out the branch."
+       Do NOT create, rename or switch branches, and do not fall back to another branch.
 
-   0.c Show the candidate branch name to the user verbatim and ask them to confirm or override the slug
-       before creating the branch. Do NOT silently pick a slug.
-
-   0.d Create the branch locally from BASE_BRANCH: `git switch -c <final-branch-name> <BASE_BRANCH>`.
-       Do NOT push; the owner pushes. (If the owner wants BASE_BRANCH refreshed first, they run `git fetch` themselves.)
-
-   0.e Confirm the checkout: `git rev-parse --abbrev-ref HEAD` must report the branch. If creation failed for any reason
-       (branch already exists, BASE_BRANCH not found), STOP and surface the error — do not fall back to another branch.
-
-   0.f Record the branch decision in the scope-resolution trail (step 5): BASE_BRANCH, slug source (ticket title),
-       final branch name, and the confirmation.
+   0.c Record the branch decision in the scope-resolution trail (step 5): BASE_BRANCH, final branch name,
+       and that it was created by `/start-ticket`.
 
 1. Determine scope from the ticket and developer technical notes.
 
@@ -326,7 +314,9 @@ MAX_FIX_ITERATIONS is reached.
 3. If any gate fails, enter a fix loop:
    a. Read the actual failure output; classify the root cause (code defect / missing mock /
       wrong test / data-setup / missing validation).
-   b. Propose a fix; apply it within story scope only.
+   b. Propose a fix; apply it within story scope only. Route by root cause: test-side causes (wrong test,
+      missing mock, data-setup, missing test) are fixed by the test-writing agent; code defects and missing
+      validation are fixed by the implementing agent. The test-writing agent never edits production code.
    c. Re-run tests + coverage; log the iteration (failure, root cause, fix, files changed, result).
    d. Repeat until all gates pass or MAX_FIX_ITERATIONS is hit, then STOP and escalate.
 
@@ -381,7 +371,7 @@ MAX_FIX_ITERATIONS is reached.
 ## PROMPT B — Cross-Service AC Verification
 
 ```
-Verify that the implementation from Prompt A satisfies every the ticket AC and that the cross-service
+Verify that the implementation from Prompt A satisfies every ticket AC and that the cross-service
 contracts across SERVICE_PATHS are consistent. There is no legacy baseline to diff — the oracle
 is the ticket ACs and the Target Contract from Prompt A.
 
@@ -428,6 +418,11 @@ is the ticket ACs and the Target Contract from Prompt A.
      (with file + line citations for both sides), and any items flagged for human verification.
    - Fix iteration log (gap description, change made, files changed, result per iteration).
    - Final status: PASS / NOT READY / NEEDS HUMAN INTERVENTION.
+   - AC RESULTS LOG (local harness rule): every AC ends with a recorded result. Write `docs/reports/STORY_KEY/ac-results.md` from the real test
+     output above (never from memory) as a table with one row per AC: `AC #` | `AC text` | `Result` | `Test(s) that prove it` | `Evidence` (test run / report file) | `Date`.
+     Result is exactly one of PASS, FAIL, N/A (with the reason) or NOT RUN (with the reason). Map the table above as: SATISFIED -> PASS;
+     PARTIAL and NOT SATISFIED -> FAIL; N/A -> N/A; anything not exercised -> NOT RUN. Add a final line `Totals: PASS x, FAIL y, N/A z, NOT RUN w`.
+     A ticket is not done while any AC is FAIL or NOT RUN without a written owner decision in this file.
    This output replaces the equivalence report from Prompt 5 §6. Cite it as "AC Verification
    Report (Prompt B)" in the Story Summary produced in Prompt 5 §7.
 
@@ -493,8 +488,11 @@ After producing the summary, file the reports (local replacement for the origina
 
 **§8.d** Stage `docs/reports/<STORY_KEY>/` explicitly with the source changes (list files individually; never `git add .`). Do NOT delete the local reports.
 
-**§8.e** Append a `## Delivery` section to `tickets/<STORY_KEY>.md`: the report file list, the gate status and the PR checklist. Stage the ticket file.
-  The ticket's `allowed_paths` must include `docs/reports/<STORY_KEY>/**`; if it does not, STOP and ask the owner to add it.
+**§8.e** Append a `## Delivery` section to `tickets/<STORY_KEY>.md`: the report file list, a link to `docs/reports/<STORY_KEY>/ac-results.md` with its Totals line, the gate status and the PR checklist. Stage the ticket file.
+
+**§8.f** Append one row to the roll-up `docs/reports/ac-log.md` (create it with the header below if it is missing): `Date | Ticket | Module | ACs | PASS | FAIL | N/A | NOT RUN | Mapping % | Pass % | Coverage % | PR`. Counts come from `ac-results.md`; the gate numbers come from Prompt 4; leave PR blank (the owner fills it when the PR is open). Stage the file. If `ac-log.md` is not in the ticket's `allowed_paths`, STOP and ask the owner to add it.
+`| Date | Ticket | Module | ACs | PASS | FAIL | N/A | NOT RUN | Mapping % | Pass % | Coverage % | PR |`
+  The ticket's `allowed_paths` must include `docs/reports/<STORY_KEY>/**` and `docs/reports/ac-log.md`; if it does not, STOP and ask the owner to add it.
 
 **Why the reports are in the repo:** there is no external ticket system. The ticket file and `docs/reports/<STORY_KEY>/` are the single
 source of truth for ticket-level artefacts, reviewed with the code in the PR.

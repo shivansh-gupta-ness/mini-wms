@@ -6,7 +6,7 @@ status: draft
 owner: shivansh-gupta-ness
 component: 
 risk: medium
-allowed_paths: []
+allowed_paths: [tickets/FEAT-000.md, docs/reports/FEAT-000/**, docs/reports/ac-log.md]
 docs: []
 parent: 
 depends_on: []
@@ -23,4 +23,5 @@ Why this is needed and for whom.
 - 
 
 ## Notes and links
+- Replace FEAT-000 in `allowed_paths` with this ticket's ID, then add the code and test paths. The pipeline appends a `## Delivery` section to this file and files reports in `docs/reports/<ID>/`, and appends a row to `docs/reports/ac-log.md`, so all three must stay listed.
 - Spec: docs/
