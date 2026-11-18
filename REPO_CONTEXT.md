@@ -14,7 +14,7 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 | `src/frontend/` | Angular app | not scaffolded yet |
 | `tickets/` | Local tickets (replaces Jira): `FEAT-001.md`, `BUG-001.md`, `TASK-001.md` | active |
 | `docs/` | Specs, ADRs, knowledge map (replaces Confluence) | active |
-| `dev_prompts/` | Original feature-pipeline prompts (never edited); adapted copies in `dev_prompts/local/` | active |
+| `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited); adapted copies in `dev_prompts/local/` | active |
 | `prompt_logs/` | `logs.md` (every user prompt) and `token_usage.md` (token report) | active |
 | `.claude/` | Agents, skills, settings, hooks (the harness) | active |
 | `.github/` | CODEOWNERS, PR template, `pr-guard` workflow | active |
@@ -23,12 +23,15 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 ## How work flows
 1. A ticket file in `tickets/` has an owner, a component, risk, acceptance criteria and `allowed_paths`.
 2. `/start-ticket <ID>` runs `ticket-scout`, shows a one-page brief and a plan, and waits for the owner's approval.
-3. After approval `change-implementer` and `test-writer` edit in a worktree, only inside `allowed_paths`.
+3. After approval `change-implementer` and `test-writer` edit in a worktree, only inside `allowed_paths`. Feature tickets run through the
+   stack pipeline skills `/run-feature-be` or `/run-feature-fe` (built from `dev_prompts/local/`), which call those two agents per stage and add the
+   gates (mapping 100, pass 100, coverage 90) and STOP rules. Small BUG/TASK tickets use the agents directly. A feature that spans layers or
+   repos is one ticket per layer/repo, linked by `parent:` / `depends_on:`; the API contract in `docs/specs/` is the hand-off.
 4. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR.
 5. `pr-guard` (required check) and a Code Owner review must pass before merge. Nobody pushes to `main`.
 
 Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Harness or doc-only changes use `chore/` or `setup/`.
-PR limits: at most 400 changed lines and 15 files.
+PR limits: at most 1000 changed lines and 15 files.
 
 ## Autonomy by risk (`docs/knowledge-map.yaml` sets the value per component)
 low and medium: agent edits after plan approval. high: agent reads and proposes, a person leads the edit.

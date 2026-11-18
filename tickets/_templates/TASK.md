@@ -8,6 +8,8 @@ component:
 risk: low
 allowed_paths: []
 docs: []
+parent: 
+depends_on: []
 ---
 
 ## Description

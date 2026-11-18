@@ -8,6 +8,8 @@ component:
 risk: medium
 allowed_paths: []
 docs: []
+parent: 
+depends_on: []
 found_in: 
 linked_pr: 
 ---

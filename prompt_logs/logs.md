@@ -121,6 +121,150 @@ continue from where you left
 
 **Context:** Session was interrupted while writing harness hooks; resuming setup (hooks, agents, skill, plugin repo, GitHub repo + ruleset, adapted dev_prompts).
 
-**Tokens:** 1,282,006 total (in 18 · out 12,698 [thinking 1,146] · cache-read 1,150,952 · cache-write 118,338) · 9 API calls · **Model:** claude-sonnet-5-5 (9)
+**Tokens:** 8,154,706 total (in 90 · out 62,085 [thinking 17,889] · cache-read 7,887,686 · cache-write 204,845) · 45 API calls · **Model:** claude-sonnet-5-5 (45)
+
+---
+## Prompt 11 — 2026-11-17
+**User:**
+is change implementer and test-writer are conflicting with new-per_ticket_feature and run-feature-BE-v1? ask clarifying question which agents/skills are going to be used and when?
+
+**Context:** Rejected the plugin PR step to ask about overlap. Confirmed yes, overlap with dev_prompts pipeline (branch/scope, implementation, tests, gates, STOP, context maintenance). Asked which design to use.
+
+**Tokens:** pending (not in a transcript yet; refreshed at the end of the turn)
+
+---
+## Prompt 12 — 2026-11-17 (answers to pipeline questions)
+**User:** Ticket read: tickets/<ID>.md. Jira upload replacement: docs/reports/<ID>/. Paths/QA: "go with the first option" (repo-relative paths, QA as docs/qa/<ID>.md), "also enable change-implementer and test-writer in plugin". Pipeline design: "since a feature could span across multiple repo and each repo can have its own agents/skills to enforce their criteria also, then what is recommended?". Plugin scope: "Ship in the plugin too".
+
+**Context:** Adopted layered design: shared plugin (ticket-scout, change-implementer, test-writer, start-ticket) + per-repo pipeline skills (run-feature-be, run-feature-fe) built from adapted dev_prompts, per-repo hooks/context; cross-repo features = one ticket per repo linked by parent/depends_on. Editing agents shipped in plugin v0.2.0 (PR opened).
+
+**Tokens:** n/a — answered inside the previous prompt's turn (AskUserQuestion); counted there.
+
+---
+## Prompt 13 — 2026-11-18
+**User:**
+I want to know what agents, skills and plugins are getting utilized and when it will be invoked?
+
+**Context:** Question about the inventory and invocation timing of agents, skills, plugins, hooks. Answered from the current repo setup (no file changes).
+
+**Tokens:** 477,425 total (in 4 · out 2,073 [thinking 39] · cache-read 265,860 · cache-write 209,488) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
+
+---
+## Prompt 14 — 2026-11-18
+**User:**
+how the skills run-feature-be and run-feature-fe are different/similar from my local adopted dev prompts
+
+**Context:** Explanation request (skills vs dev_prompts/local copies). No file changes.
+
+---
+
+**User:**
+i have moved original prompts inside original folder do changes wherever needed.
+
+**Context:** Repoint references from dev_prompts/ to dev_prompts/original/ (REPO_CONTEXT.md, README.md, local prompt headers).
+
+---
+
+**User:**
+yes do both
+
+**Context:** Made BE Prompt A branch gate verify-only (no branch creation); skills already require /start-ticket.
+
+---
+
+**User:**
+create a GUIDE.md file containing, all the infos related to agents, skills, plugins and when they will be invoked?
+
+**Context:** Created GUIDE.md at repo root (skills, agents, hooks, GitHub checks, plugins, invocation cheat sheet).
+
+---
+
+**User:**
+make a .md file describing how adopted prompts are different from the original promts and give the reference of that file in GUIDE.md file
+
+**Context:** Added docs/prompt-adaptation.md (original vs local prompts) and linked it from GUIDE.md; fixed garbled substitution wording in the three local headers.
+
+---
+
+**User:**
+verify agents, and skills are aligned and ready for spec driven development
+
+**Context:** Read-only audit of agents, skills, hooks, prompts, knowledge map; findings reported, no changes.
+
+---
+
+**User:**
+Fix 1, 5, 6 and 7 (small edits to the skills, prompts and templates). do only this, for rest i will inform letter
+
+**Context:** Applied audit fixes 1 (ignore prompt_logs in dirty-tree checks), 5 (Stage 4 fix routing), 6 (ticket file + reports in allowed_paths), 7 (context maintenance limited to editable context files); documented in docs/prompt-adaptation.md.
+
+---
+
+**User:**
+push latest plugins in github
+
+**Context:** Synced start-ticket fix into claude-plugins, pushed feat/editing-agents (PR #1 updated). Nothing merged or tagged.
+
+---
+
+**User:**
+do first one
+
+**Context:** Shipped run-feature-be/fe skills and the three adapted prompts in claude-plugins (v0.3.0, PR #2 on feat/pipeline-skills); updated GUIDE.md plugin section.
+
+---
+
+**User:**
+yes, open the PR to main
+
+**Context:** Opened claude-plugins PR from feat/pipeline-skills to main (PR #2 had merged into feat/editing-agents only).
+
+---
+
+**User:**
+how to tag?
+
+**Context:** Explanation of tagging v0.3.0 on claude-plugins after PR #3 merges. No file changes.
+
+---
+
+**User:**
+I have enabled wsl2, can you check whether the sandbox functionality is available or not?
+
+**Context:** WSL2 enabled but no Linux distro installed; sandbox not available. User chose to skip it. No repo changes.
+
+---
+
+**User:**
+I am doing monitored spec driven development of Mini Warehouse Management System (production grade app but will not deploy) to evaluate claude code in .net, sqlite for browser and angular. How can i do it according to mention plan in claude code adoption
+
+**Context:** Advice mapping the adoption plan to the Mini WMS build. No file changes.
+
+---
+
+**User:**
+Generate a phase wise plan for me to do spec driven development here and check whether i have sqlite or not
+
+**Context:** Checked toolchain (no sqlite3 CLI; DB Browser for SQLite 3.13.1; EF Core bundles SQLite). Wrote docs/sdd-roadmap.md.
+
+---
+
+**User (rejection notes on the roadmap write):**
+I don't want to deploy it anywhere, it should log whether acceptence criteria was successful or not
+
+Increase the PR limit to 1000 lines and when you are doing testing
+
+**Answers:** 1000 lines for all PRs (tests counted); keep 15 files.
+
+**Context:** pr-guard MAX_LINES 400 -> 1000 (REPO_CONTEXT.md, GUIDE.md updated); docs/sdd-roadmap.md written with no-deploy rule and an acceptance-criteria log.
+
+---
+
+**User:**
+when unit testing will be done here?
+
+**Context:** Explanation of where unit tests run in the roadmap and pipeline. No file changes.
+
+**Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---

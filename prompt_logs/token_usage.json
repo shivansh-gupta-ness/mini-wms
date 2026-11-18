@@ -1,31 +1,45 @@
 {
-  "generated": "2026-11-17T15:48:48.586Z",
+  "generated": "2026-11-18T17:48:45.138Z",
   "grand": {
-    "calls": 60,
-    "input": 117,
-    "output": 75323,
-    "cacheRead": 4995055,
-    "cacheWrite": 293195,
-    "thinking": 17414,
+    "calls": 171,
+    "input": 371,
+    "output": 200990,
+    "cacheRead": 20701593,
+    "cacheWrite": 1218711,
+    "thinking": 50284,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 45
+      "claude-sonnet-5-5": 144,
+      "claude-opus-5-5": 12
     },
-    "total": 5363690
+    "total": 22121665
   },
   "byDay": {
     "2026-11-17": {
-      "calls": 60,
-      "input": 117,
-      "output": 75323,
-      "cacheRead": 4995055,
-      "cacheWrite": 293195,
-      "thinking": 17414,
+      "calls": 96,
+      "input": 189,
+      "output": 124710,
+      "cacheRead": 11731789,
+      "cacheWrite": 379702,
+      "thinking": 34157,
       "models": {
         "claude-sonnet-4-6": 15,
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 81
       },
-      "total": 5363690
+      "total": 12236390
+    },
+    "2026-11-18": {
+      "calls": 75,
+      "input": 182,
+      "output": 76280,
+      "cacheRead": 8969804,
+      "cacheWrite": 839009,
+      "thinking": 16127,
+      "models": {
+        "claude-sonnet-5-5": 63,
+        "claude-opus-5-5": 12
+      },
+      "total": 9885275
     }
   },
   "bySession": {
@@ -42,17 +56,18 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 59,
-      "input": 114,
-      "output": 75096,
-      "cacheRead": 4971153,
-      "cacheWrite": 282685,
-      "thinking": 17301,
+      "calls": 170,
+      "input": 368,
+      "output": 200763,
+      "cacheRead": 20677691,
+      "cacheWrite": 1208201,
+      "thinking": 50171,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 144,
+        "claude-opus-5-5": 12
       },
-      "total": 5329048
+      "total": 22087023
     }
   },
   "byPrompt": {
@@ -155,16 +170,324 @@
     "0c35e7d2-9dd4-4431-94a3-e9dcecf47766": {
       "label": "continue from where you left",
       "time": "2026-11-17T15:44:13.471Z",
+      "calls": 45,
+      "input": 90,
+      "output": 62085,
+      "cacheRead": 7887686,
+      "cacheWrite": 204845,
+      "thinking": 17889,
+      "models": {
+        "claude-sonnet-5-5": 45
+      },
+      "total": 8154706
+    },
+    "7b89d623-a055-48e3-a16e-f1460a6c9e31": {
+      "label": "I want to know what agents, skills and plugins are getting utilized and when it will be invoked?",
+      "time": "2026-11-18T08:41:49.697Z",
+      "calls": 2,
+      "input": 4,
+      "output": 2073,
+      "cacheRead": 265860,
+      "cacheWrite": 209488,
+      "thinking": 39,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 477425
+    },
+    "8b060ffd-67f8-49d1-b7f0-d67d559a272b": {
+      "label": "how the skills run-feature-be and run-feature-fe are different/similar from my local adopted dev prompts",
+      "time": "2026-11-18T09:00:21.787Z",
+      "calls": 2,
+      "input": 6,
+      "output": 1565,
+      "cacheRead": 479325,
+      "cacheWrite": 465,
+      "thinking": 62,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 481361
+    },
+    "ae275286-25b2-4da0-96fd-f8c4288bc474": {
+      "label": "i have moved original prompts inside original folder do changes wherever needed.",
+      "time": "2026-11-18T10:01:46.362Z",
+      "calls": 3,
+      "input": 6,
+      "output": 1447,
+      "cacheRead": 149849,
+      "cacheWrite": 30503,
+      "thinking": 168,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 181805
+    },
+    "f49b3373-b71f-4a7f-903d-e7796abfa8d7": {
+      "label": "Backend: run-feature-be runs run-feature-be.md, which loads per-ticket-feature-prompts.md. The stages are still A → 2 → 3 → 4 → B → 5§7-8. what is A 2 3 4 B here, i didn't understand",
+      "time": "2026-11-18T11:21:08.800Z",
+      "calls": 2,
+      "input": 6,
+      "output": 924,
+      "cacheRead": 90630,
+      "cacheWrite": 34582,
+      "thinking": 36,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 126142
+    },
+    "2b57090e-138d-4a83-a262-f4ffcf4f6794": {
+      "label": "One conflict to watch The prompts forbid creating branches and committing. The skills respect that, because /start-ticket creates the branch. If you run a prompt directly without /start-ticket, the BE prompt's step 0.d creates the branch itself, but the FE prompt can't. how should i resolve this conflict?",
+      "time": "2026-11-18T11:34:08.977Z",
+      "calls": 2,
+      "input": 6,
+      "output": 1000,
+      "cacheRead": 127511,
+      "cacheWrite": 1018,
+      "thinking": 156,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 129535
+    },
+    "cdc0566d-1107-4b87-892b-476b75869a14": {
+      "label": "yes do both",
+      "time": "2026-11-18T11:44:56.260Z",
+      "calls": 5,
+      "input": 12,
+      "output": 2779,
+      "cacheRead": 341128,
+      "cacheWrite": 6364,
+      "thinking": 170,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 350283
+    },
+    "66c36b13-7e37-43be-8bd3-6b7fa81087ed": {
+      "label": "create a GUIDE.md file containing, all the infos related to agents, skills, plugins and when they will be invoked?",
+      "time": "2026-11-18T11:47:08.105Z",
+      "calls": 2,
+      "input": 6,
+      "output": 4980,
+      "cacheRead": 144576,
+      "cacheWrite": 4569,
+      "thinking": 249,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 154131
+    },
+    "87acc231-2f44-4c47-907d-81a67cf2fa67": {
+      "label": "make a .md file describing how adopted prompts are different from the original promts and give the reference of that file in GUIDE.md file",
+      "time": "2026-11-18T14:47:24.116Z",
+      "calls": 6,
+      "input": 14,
+      "output": 5843,
+      "cacheRead": 460937,
+      "cacheWrite": 66798,
+      "thinking": 483,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 533592
+    },
+    "63f227a6-6c66-4381-8a1e-db57cb9a8c5a": {
+      "label": "verify agents, and skills are aligned and ready for spec driven development",
+      "time": "2026-11-18T15:04:17.159Z",
+      "calls": 5,
+      "input": 12,
+      "output": 6116,
+      "cacheRead": 518478,
+      "cacheWrite": 17579,
+      "thinking": 3055,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 542185
+    },
+    "44df8f44-cd10-47f8-b589-da98c7d25ee4": {
+      "label": "Fix 1, 5, 6 and 7 (small edits to the skills, prompts and templates). do only this, for rest i will inform letter",
+      "time": "2026-11-18T15:11:02.145Z",
+      "calls": 6,
+      "input": 14,
+      "output": 7124,
+      "cacheRead": 716259,
+      "cacheWrite": 10608,
+      "thinking": 2073,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 734005
+    },
+    "25778ffd-999d-4a06-8eaf-9788a08400da": {
+      "label": "push latest plugins in github",
+      "time": "2026-11-18T15:14:07.554Z",
+      "calls": 4,
+      "input": 10,
+      "output": 2053,
+      "cacheRead": 509351,
+      "cacheWrite": 2161,
+      "thinking": 554,
+      "models": {
+        "claude-sonnet-5-5": 4
+      },
+      "total": 513575
+    },
+    "3a2e9e63-33c6-4a83-b4ec-933a50155869": {
+      "label": "I can see, skills are not properly bundled inside plugin why \"run-feature-be and run-feature-fe are still not in the plugin, as noted in the guide.\"?",
+      "time": "2026-11-18T15:17:36.067Z",
+      "calls": 1,
+      "input": 4,
+      "output": 1124,
+      "cacheRead": 129456,
+      "cacheWrite": 54,
+      "thinking": 441,
+      "models": {
+        "claude-sonnet-5-5": 1
+      },
+      "total": 130638
+    },
+    "77d6a230-7f8c-46b5-9839-829015ee01a5": {
+      "label": "do first one",
+      "time": "2026-11-18T15:19:45.311Z",
+      "calls": 4,
+      "input": 10,
+      "output": 4820,
+      "cacheRead": 531213,
+      "cacheWrite": 6534,
+      "thinking": 1257,
+      "models": {
+        "claude-sonnet-5-5": 4
+      },
+      "total": 542577
+    },
+    "1a9d82f5-6647-4e39-8b26-a7ca0d8dc455": {
+      "label": "did you pushed those changes in claude-plugins",
+      "time": "2026-11-18T15:30:17.021Z",
+      "calls": 3,
+      "input": 8,
+      "output": 900,
+      "cacheRead": 414428,
+      "cacheWrite": 1302,
+      "thinking": 88,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 416638
+    },
+    "ab555dd6-0400-4d41-a782-6d6278da4633": {
+      "label": "yes, open the PR to main",
+      "time": "2026-11-18T15:33:08.201Z",
+      "calls": 2,
+      "input": 6,
+      "output": 840,
+      "cacheRead": 279139,
+      "cacheWrite": 555,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 280540
+    },
+    "b278eedb-9f4c-419c-8dd3-f922f8722962": {
+      "label": "how to tag?",
+      "time": "2026-11-18T15:36:12.296Z",
+      "calls": 2,
+      "input": 6,
+      "output": 760,
+      "cacheRead": 280963,
+      "cacheWrite": 775,
+      "thinking": 64,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 282504
+    },
+    "3b9aa7ce-5eb8-4e49-9035-fd3bbac72524": {
+      "label": "I have enabled wsl2, can you check whether the sandbox functionality is available or not?",
+      "time": "2026-11-18T15:49:36.037Z",
+      "calls": 3,
+      "input": 6,
+      "output": 2402,
+      "cacheRead": 428217,
+      "cacheWrite": 4495,
+      "thinking": 754,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 435120
+    },
+    "3bc36f2b-6c9c-40f5-8b45-479dad230302": {
+      "label": "I am doing monitored spec driven development of Mini Warehouse Management System (production grade app but will not deploy) to evaluate claude code in .net, sqlite for browser and angular. How can i do it according to mention plan in claude code adoption",
+      "time": "2026-11-18T15:54:46.968Z",
+      "calls": 3,
+      "input": 8,
+      "output": 3443,
+      "cacheRead": 439552,
+      "cacheWrite": 7073,
+      "thinking": 1548,
+      "models": {
+        "claude-sonnet-5-5": 3
+      },
+      "total": 450076
+    },
+    "779bf392-52f1-4031-9681-006146320c50": {
+      "label": "<command-name>/model</command-name> <command-message>model</command-message> <command-args>opus</command-args>",
+      "time": "2026-11-18T15:57:07.806Z",
       "calls": 9,
       "input": 18,
-      "output": 12698,
-      "cacheRead": 1150952,
-      "cacheWrite": 118338,
-      "thinking": 1146,
+      "output": 16610,
+      "cacheRead": 1208656,
+      "cacheWrite": 278646,
+      "thinking": 2348,
       "models": {
-        "claude-sonnet-5-5": 9
+        "claude-opus-5-5": 9
       },
-      "total": 1282006
+      "total": 1503930
+    },
+    "53bd9e8b-8154-4cae-870f-d76e2afa69b2": {
+      "label": "when unit testing will be done here?",
+      "time": "2026-11-18T17:42:24.798Z",
+      "calls": 2,
+      "input": 4,
+      "output": 1234,
+      "cacheRead": 347191,
+      "cacheWrite": 1437,
+      "thinking": 266,
+      "models": {
+        "claude-opus-5-5": 2
+      },
+      "total": 349866
+    },
+    "56a63c50-0c96-4df1-aa30-abd3ba828c7a": {
+      "label": "save this plan and start with phase 0",
+      "time": "2026-11-18T17:46:29.213Z",
+      "calls": 1,
+      "input": 4,
+      "output": 660,
+      "cacheRead": 175339,
+      "cacheWrite": 13,
+      "thinking": 482,
+      "models": {
+        "claude-opus-5-5": 1
+      },
+      "total": 176016
+    },
+    "23e0faa2-ae44-455e-bcea-4eb69b16c7a5": {
+      "label": "<command-name>/model</command-name> <command-message>model</command-message> <command-args>sonnet</command-args>",
+      "time": "2026-11-18T17:46:35.843Z",
+      "calls": 6,
+      "input": 12,
+      "output": 7583,
+      "cacheRead": 931746,
+      "cacheWrite": 153990,
+      "thinking": 1834,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 1093331
     }
   },
   "byModel": {
@@ -181,16 +504,28 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 45,
-      "input": 98,
-      "output": 68655,
-      "cacheRead": 4005323,
-      "cacheWrite": 213032,
-      "thinking": 15127,
+      "calls": 144,
+      "input": 326,
+      "output": 175818,
+      "cacheRead": 17980675,
+      "cacheWrite": 858452,
+      "thinking": 44901,
       "models": {
-        "claude-sonnet-5-5": 45
+        "claude-sonnet-5-5": 144
       },
-      "total": 4287108
+      "total": 19015271
+    },
+    "claude-opus-5-5": {
+      "calls": 12,
+      "input": 26,
+      "output": 18504,
+      "cacheRead": 1731186,
+      "cacheWrite": 280096,
+      "thinking": 3096,
+      "models": {
+        "claude-opus-5-5": 12
+      },
+      "total": 2029812
     }
   },
   "bySubagent": {},
@@ -209,93 +544,99 @@
       "total": 193732
     },
     "Read": {
-      "calls": 4,
-      "input": 5,
-      "output": 743,
-      "cacheRead": 204175,
-      "cacheWrite": 30661,
+      "calls": 10,
+      "input": 19,
+      "output": 9218,
+      "cacheRead": 1207056,
+      "cacheWrite": 48095,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 1
+        "claude-sonnet-5-5": 7
       },
-      "total": 235584
+      "total": 1264388
     },
     "PowerShell": {
-      "calls": 26,
-      "input": 56,
-      "output": 17777,
-      "cacheRead": 2184068,
-      "cacheWrite": 137279,
+      "calls": 46,
+      "input": 98,
+      "output": 40000,
+      "cacheRead": 5647605,
+      "cacheWrite": 507162,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 4,
-        "claude-sonnet-5-5": 22
+        "claude-sonnet-5-5": 41,
+        "claude-opus-5-5": 1
       },
-      "total": 2339180
+      "total": 6194865
     },
     "Write": {
-      "calls": 12,
-      "input": 23,
-      "output": 44514,
-      "cacheRead": 1307828,
-      "cacheWrite": 49701,
+      "calls": 17,
+      "input": 33,
+      "output": 61045,
+      "cacheRead": 2172454,
+      "cacheWrite": 68546,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 11
+        "claude-sonnet-5-5": 15,
+        "claude-opus-5-5": 1
       },
-      "total": 1402066
+      "total": 2302078
     },
     "AskUserQuestion": {
-      "calls": 4,
-      "input": 5,
-      "output": 2614,
-      "cacheRead": 336406,
-      "cacheWrite": 4386,
+      "calls": 8,
+      "input": 13,
+      "output": 6488,
+      "cacheRead": 831706,
+      "cacheWrite": 152745,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 1
+        "claude-sonnet-5-5": 4,
+        "claude-opus-5-5": 1
       },
-      "total": 343411
+      "total": 990952
     },
     "(text only)": {
-      "calls": 4,
-      "input": 7,
-      "output": 2372,
-      "cacheRead": 320909,
-      "cacheWrite": 5686,
+      "calls": 25,
+      "input": 51,
+      "output": 21532,
+      "cacheRead": 3139400,
+      "cacheWrite": 32914,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 3
+        "claude-sonnet-5-5": 22,
+        "claude-opus-5-5": 2
       },
-      "total": 328974
+      "total": 3193897
     },
     "Bash": {
-      "calls": 2,
-      "input": 4,
-      "output": 3618,
-      "cacheRead": 107190,
-      "cacheWrite": 16383,
+      "calls": 46,
+      "input": 114,
+      "output": 52701,
+      "cacheRead": 5401416,
+      "cacheWrite": 310388,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 2
+        "claude-sonnet-5-5": 40,
+        "claude-opus-5-5": 6
       },
-      "total": 127195
+      "total": 5764619
     },
     "Grep": {
-      "calls": 2,
-      "input": 4,
-      "output": 521,
-      "cacheRead": 138429,
-      "cacheWrite": 5192,
+      "calls": 12,
+      "input": 28,
+      "output": 5275,
+      "cacheRead": 1762947,
+      "cacheWrite": 53917,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 2
+        "claude-sonnet-5-5": 11,
+        "claude-opus-5-5": 1
       },
-      "total": 144146
+      "total": 1822167
     },
     "Edit": {
       "calls": 2,
@@ -308,6 +649,18 @@
         "claude-sonnet-5-5": 2
       },
       "total": 249402
+    },
+    "ExitPlanMode": {
+      "calls": 1,
+      "input": 2,
+      "output": 1567,
+      "cacheRead": 142959,
+      "cacheWrite": 1037,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 1
+      },
+      "total": 145565
     }
   },
   "byBranch": {
@@ -325,16 +678,29 @@
       "total": 4081684
     },
     "main": {
-      "calls": 9,
-      "input": 18,
-      "output": 12698,
-      "cacheRead": 1150952,
-      "cacheWrite": 118338,
-      "thinking": 1146,
+      "calls": 41,
+      "input": 82,
+      "output": 58401,
+      "cacheRead": 6963256,
+      "cacheWrite": 200553,
+      "thinking": 17158,
       "models": {
-        "claude-sonnet-5-5": 9
+        "claude-sonnet-5-5": 41
       },
-      "total": 1282006
+      "total": 7222292
+    },
+    "setup/pipeline-skills-and-local-prompts": {
+      "calls": 79,
+      "input": 190,
+      "output": 79964,
+      "cacheRead": 9894234,
+      "cacheWrite": 843301,
+      "thinking": 16858,
+      "models": {
+        "claude-sonnet-5-5": 67,
+        "claude-opus-5-5": 12
+      },
+      "total": 10817689
     }
   }
 }

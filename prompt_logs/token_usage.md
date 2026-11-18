@@ -1,26 +1,27 @@
 # Token Usage Report
 
-Generated: 2026-11-17T15:48:48.572Z  
-Source: 1 transcript folder(s) matching prefix `C--Users-P7120484-Downloads-Claude-Eval`  
+Generated: 2026-11-18T17:48:45.125Z  
+Source: 1 transcript folder(s) matching prefix `c--Users-P7120484-Downloads-Claude-Eval`  
 Notes: counts come from the API usage recorded in Claude Code transcripts, deduplicated per API message. "Total" = input + output + cache read + cache write. "Thinking" is already inside Output. Cost is not estimated; apply your own rates.
 
 ## Grand total
 
 | Scope | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| All sessions | claude-sonnet-5-5 (45), claude-sonnet-4-6 (15) | 60 | 117 | 75,323 | 17,414 | 4,995,055 | 293,195 | 5,363,690 |
+| All sessions | claude-sonnet-5-5 (144), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 171 | 371 | 200,990 | 50,284 | 20,701,593 | 1,218,711 | 22,121,665 |
 
 ## By day
 
 | Day | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| 2026-11-17 | claude-sonnet-5-5 (45), claude-sonnet-4-6 (15) | 60 | 117 | 75,323 | 17,414 | 4,995,055 | 293,195 | 5,363,690 |
+| 2026-11-17 | claude-sonnet-5-5 (81), claude-sonnet-4-6 (15) | 96 | 189 | 124,710 | 34,157 | 11,731,789 | 379,702 | 12,236,390 |
+| 2026-11-18 | claude-sonnet-5-5 (63), claude-opus-5-5 (12) | 75 | 182 | 76,280 | 16,127 | 8,969,804 | 839,009 | 9,885,275 |
 
 ## By session
 
 | Session | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (45), claude-sonnet-4-6 (14) | 59 | 114 | 75,096 | 17,301 | 4,971,153 | 282,685 | 5,329,048 |
+| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (144), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 170 | 368 | 200,763 | 50,171 | 20,677,691 | 1,208,201 | 22,087,023 |
 | c65f4548-f0b0-4be8-a353-eb589f45bc26 | claude-sonnet-4-6 (1) | 1 | 3 | 227 | 113 | 23,902 | 10,510 | 34,642 |
 
 ## By prompt (main conversation, chronological)
@@ -34,13 +35,36 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 | 5 · 11:01:33 · gh login done, continue setup | claude-sonnet-5-5 (9) | 9 | 20 | 10,623 | 3,427 | 541,729 | 25,468 | 577,840 |
 | 6 · 11:39:17 · go ahead with this format and also do this - prompt_logs/logs.md to carry a one-line token | claude-sonnet-5-5 (2) | 2 | 6 | 3,806 | 2,858 | 162,726 | 689 | 167,227 |
 | 7 · 12:00:28 · I want to rename the Claude_Eval folder to MiniWMS folder. And remove existing MiniWMS fol | claude-sonnet-5-5 (12) | 12 | 26 | 29,638 | 5,859 | 1,277,232 | 29,365 | 1,336,261 |
-| 8 · 15:44:13 · continue from where you left | claude-sonnet-5-5 (9) | 9 | 18 | 12,698 | 1,146 | 1,150,952 | 118,338 | 1,282,006 |
+| 8 · 15:44:13 · continue from where you left | claude-sonnet-5-5 (45) | 45 | 90 | 62,085 | 17,889 | 7,887,686 | 204,845 | 8,154,706 |
+| 9 · 08:41:49 · I want to know what agents, skills and plugins are getting utilized and when it will be in | claude-sonnet-5-5 (2) | 2 | 4 | 2,073 | 39 | 265,860 | 209,488 | 477,425 |
+| 10 · 09:00:21 · how the skills run-feature-be and run-feature-fe are different/similar from my local adopt | claude-sonnet-5-5 (2) | 2 | 6 | 1,565 | 62 | 479,325 | 465 | 481,361 |
+| 11 · 10:01:46 · i have moved original prompts inside original folder do changes wherever needed. | claude-sonnet-5-5 (3) | 3 | 6 | 1,447 | 168 | 149,849 | 30,503 | 181,805 |
+| 12 · 11:21:08 · Backend: run-feature-be runs run-feature-be.md, which loads per-ticket-feature-prompts.md. | claude-sonnet-5-5 (2) | 2 | 6 | 924 | 36 | 90,630 | 34,582 | 126,142 |
+| 13 · 11:34:08 · One conflict to watch The prompts forbid creating branches and committing. The skills resp | claude-sonnet-5-5 (2) | 2 | 6 | 1,000 | 156 | 127,511 | 1,018 | 129,535 |
+| 14 · 11:44:56 · yes do both | claude-sonnet-5-5 (5) | 5 | 12 | 2,779 | 170 | 341,128 | 6,364 | 350,283 |
+| 15 · 11:47:08 · create a GUIDE.md file containing, all the infos related to agents, skills, plugins and wh | claude-sonnet-5-5 (2) | 2 | 6 | 4,980 | 249 | 144,576 | 4,569 | 154,131 |
+| 16 · 14:47:24 · make a .md file describing how adopted prompts are different from the original promts and  | claude-sonnet-5-5 (6) | 6 | 14 | 5,843 | 483 | 460,937 | 66,798 | 533,592 |
+| 17 · 15:04:17 · verify agents, and skills are aligned and ready for spec driven development | claude-sonnet-5-5 (5) | 5 | 12 | 6,116 | 3,055 | 518,478 | 17,579 | 542,185 |
+| 18 · 15:11:02 · Fix 1, 5, 6 and 7 (small edits to the skills, prompts and templates). do only this, for re | claude-sonnet-5-5 (6) | 6 | 14 | 7,124 | 2,073 | 716,259 | 10,608 | 734,005 |
+| 19 · 15:14:07 · push latest plugins in github | claude-sonnet-5-5 (4) | 4 | 10 | 2,053 | 554 | 509,351 | 2,161 | 513,575 |
+| 20 · 15:17:36 · I can see, skills are not properly bundled inside plugin why "run-feature-be and run-featu | claude-sonnet-5-5 (1) | 1 | 4 | 1,124 | 441 | 129,456 | 54 | 130,638 |
+| 21 · 15:19:45 · do first one | claude-sonnet-5-5 (4) | 4 | 10 | 4,820 | 1,257 | 531,213 | 6,534 | 542,577 |
+| 22 · 15:30:17 · did you pushed those changes in claude-plugins | claude-sonnet-5-5 (3) | 3 | 8 | 900 | 88 | 414,428 | 1,302 | 416,638 |
+| 23 · 15:33:08 · yes, open the PR to main | claude-sonnet-5-5 (2) | 2 | 6 | 840 | 0 | 279,139 | 555 | 280,540 |
+| 24 · 15:36:12 · how to tag? | claude-sonnet-5-5 (2) | 2 | 6 | 760 | 64 | 280,963 | 775 | 282,504 |
+| 25 · 15:49:36 · I have enabled wsl2, can you check whether the sandbox functionality is available or not? | claude-sonnet-5-5 (3) | 3 | 6 | 2,402 | 754 | 428,217 | 4,495 | 435,120 |
+| 26 · 15:54:46 · I am doing monitored spec driven development of Mini Warehouse Management System (producti | claude-sonnet-5-5 (3) | 3 | 8 | 3,443 | 1,548 | 439,552 | 7,073 | 450,076 |
+| 27 · 15:57:07 · <command-name>/model</command-name> <command-message>model</command-message> <command-args | claude-opus-5-5 (9) | 9 | 18 | 16,610 | 2,348 | 1,208,656 | 278,646 | 1,503,930 |
+| 28 · 17:42:24 · when unit testing will be done here? | claude-opus-5-5 (2) | 2 | 4 | 1,234 | 266 | 347,191 | 1,437 | 349,866 |
+| 29 · 17:46:29 · save this plan and start with phase 0 | claude-opus-5-5 (1) | 1 | 4 | 660 | 482 | 175,339 | 13 | 176,016 |
+| 30 · 17:46:35 · <command-name>/model</command-name> <command-message>model</command-message> <command-args | claude-sonnet-5-5 (6) | 6 | 12 | 7,583 | 1,834 | 931,746 | 153,990 | 1,093,331 |
 
 ## By model
 
 | Model | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| claude-sonnet-5-5 | claude-sonnet-5-5 (45) | 45 | 98 | 68,655 | 15,127 | 4,005,323 | 213,032 | 4,287,108 |
+| claude-sonnet-5-5 | claude-sonnet-5-5 (144) | 144 | 326 | 175,818 | 44,901 | 17,980,675 | 858,452 | 19,015,271 |
+| claude-opus-5-5 | claude-opus-5-5 (12) | 12 | 26 | 18,504 | 3,096 | 1,731,186 | 280,096 | 2,029,812 |
 | claude-sonnet-4-6 | claude-sonnet-4-6 (15) | 15 | 19 | 6,668 | 2,287 | 989,732 | 80,163 | 1,076,582 |
 
 ## By subagent / sidechain
@@ -51,20 +75,22 @@ _No subagent usage recorded yet._
 
 | Tool | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| PowerShell | claude-sonnet-5-5 (22), claude-sonnet-4-6 (4) | 26 | 56 | 17,777 | 0 | 2,184,068 | 137,279 | 2,339,180 |
-| Write | claude-sonnet-5-5 (11), claude-sonnet-4-6 (1) | 12 | 23 | 44,514 | 0 | 1,307,828 | 49,701 | 1,402,066 |
-| AskUserQuestion | claude-sonnet-4-6 (3), claude-sonnet-5-5 (1) | 4 | 5 | 2,614 | 0 | 336,406 | 4,386 | 343,411 |
-| (text only) | claude-sonnet-5-5 (3), claude-sonnet-4-6 (1) | 4 | 7 | 2,372 | 0 | 320,909 | 5,686 | 328,974 |
+| PowerShell | claude-sonnet-5-5 (41), claude-sonnet-4-6 (4), claude-opus-5-5 (1) | 46 | 98 | 40,000 | 0 | 5,647,605 | 507,162 | 6,194,865 |
+| Bash | claude-sonnet-5-5 (40), claude-opus-5-5 (6) | 46 | 114 | 52,701 | 0 | 5,401,416 | 310,388 | 5,764,619 |
+| (text only) | claude-sonnet-5-5 (22), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 25 | 51 | 21,532 | 0 | 3,139,400 | 32,914 | 3,193,897 |
+| Write | claude-sonnet-5-5 (15), claude-sonnet-4-6 (1), claude-opus-5-5 (1) | 17 | 33 | 61,045 | 0 | 2,172,454 | 68,546 | 2,302,078 |
+| Grep | claude-sonnet-5-5 (11), claude-opus-5-5 (1) | 12 | 28 | 5,275 | 0 | 1,762,947 | 53,917 | 1,822,167 |
+| Read | claude-sonnet-5-5 (7), claude-sonnet-4-6 (3) | 10 | 19 | 9,218 | 0 | 1,207,056 | 48,095 | 1,264,388 |
+| AskUserQuestion | claude-sonnet-5-5 (4), claude-sonnet-4-6 (3), claude-opus-5-5 (1) | 8 | 13 | 6,488 | 0 | 831,706 | 152,745 | 990,952 |
 | Edit | claude-sonnet-5-5 (2) | 2 | 4 | 1,406 | 0 | 246,339 | 1,653 | 249,402 |
-| Read | claude-sonnet-4-6 (3), claude-sonnet-5-5 (1) | 4 | 5 | 743 | 0 | 204,175 | 30,661 | 235,584 |
 | Glob | claude-sonnet-4-6 (3), claude-sonnet-5-5 (1) | 4 | 9 | 1,758 | 0 | 149,711 | 42,254 | 193,732 |
-| Grep | claude-sonnet-5-5 (2) | 2 | 4 | 521 | 0 | 138,429 | 5,192 | 144,146 |
-| Bash | claude-sonnet-5-5 (2) | 2 | 4 | 3,618 | 0 | 107,190 | 16,383 | 127,195 |
+| ExitPlanMode | claude-sonnet-5-5 (1) | 1 | 2 | 1,567 | 0 | 142,959 | 1,037 | 145,565 |
 
 ## By branch / ticket
 
 | Branch | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
+| setup/pipeline-skills-and-local-prompts | claude-sonnet-5-5 (67), claude-opus-5-5 (12) | 79 | 190 | 79,964 | 16,858 | 9,894,234 | 843,301 | 10,817,689 |
+| main | claude-sonnet-5-5 (41) | 41 | 82 | 58,401 | 17,158 | 6,963,256 | 200,553 | 7,222,292 |
 | HEAD | claude-sonnet-5-5 (36), claude-sonnet-4-6 (15) | 51 | 99 | 62,625 | 16,268 | 3,844,103 | 174,857 | 4,081,684 |
-| main | claude-sonnet-5-5 (9) | 9 | 18 | 12,698 | 1,146 | 1,150,952 | 118,338 | 1,282,006 |
 
