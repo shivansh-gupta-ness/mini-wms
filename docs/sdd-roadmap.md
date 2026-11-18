@@ -40,7 +40,7 @@ A ticket is not done while any AC is FAIL or NOT RUN without an owner decision w
 - Merge mini-wms PR #1, commit the pending local changes (including the 1000-line limit) in a `setup/` PR.
 - Merge claude-plugins PR #3, tag `v0.3.0`.
 - Try `git push origin main` once and confirm it is rejected.
-- Add the AC-log step to `dev_prompts/local/` and the run-feature skills (and the plugin copies); create `docs/reports/ac-log.md` with its header row.
+- Add the AC-log step to the adapted prompts (now `.claude/prompts/`) and the run-feature skills (and the plugin copies); create `docs/reports/ac-log.md` with its header row.
 - Decide the test frameworks (proposal: xUnit, Angular's default runner) and the coverage tool.
 
 **Exit:** clean `main`, all setup merged, the AC-log format agreed, the push test recorded in `docs/learning-log.md`.

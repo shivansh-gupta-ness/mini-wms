@@ -1,18 +1,18 @@
 {
-  "generated": "2026-11-18T18:16:36.862Z",
+  "generated": "2026-11-18T18:31:18.673Z",
   "grand": {
-    "calls": 198,
-    "input": 439,
-    "output": 247462,
-    "cacheRead": 26251024,
-    "cacheWrite": 1261330,
-    "thinking": 57870,
+    "calls": 211,
+    "input": 469,
+    "output": 258344,
+    "cacheRead": 29490217,
+    "cacheWrite": 1279443,
+    "thinking": 61140,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 171,
+      "claude-sonnet-5-5": 184,
       "claude-opus-5-5": 12
     },
-    "total": 27760255
+    "total": 31028473
   },
   "byDay": {
     "2026-11-17": {
@@ -29,17 +29,17 @@
       "total": 12236390
     },
     "2026-11-18": {
-      "calls": 102,
-      "input": 250,
-      "output": 122752,
-      "cacheRead": 14519235,
-      "cacheWrite": 881628,
-      "thinking": 23713,
+      "calls": 115,
+      "input": 280,
+      "output": 133634,
+      "cacheRead": 17758428,
+      "cacheWrite": 899741,
+      "thinking": 26983,
       "models": {
-        "claude-sonnet-5-5": 90,
+        "claude-sonnet-5-5": 103,
         "claude-opus-5-5": 12
       },
-      "total": 15523865
+      "total": 18792083
     }
   },
   "bySession": {
@@ -56,18 +56,18 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 197,
-      "input": 436,
-      "output": 247235,
-      "cacheRead": 26227122,
-      "cacheWrite": 1250820,
-      "thinking": 57757,
+      "calls": 210,
+      "input": 466,
+      "output": 258117,
+      "cacheRead": 29466315,
+      "cacheWrite": 1268933,
+      "thinking": 61027,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 171,
+        "claude-sonnet-5-5": 184,
         "claude-opus-5-5": 12
       },
-      "total": 27725613
+      "total": 30993831
     }
   },
   "byPrompt": {
@@ -576,16 +576,44 @@
     "08211ab8-77ed-4a43-845c-99b17c3d3fe9": {
       "label": "Yes, i merged it, confirm it once. if phase1 is completed then start with phase 2",
       "time": "2026-11-18T18:12:07.904Z",
-      "calls": 7,
-      "input": 18,
-      "output": 24018,
-      "cacheRead": 1561578,
-      "cacheWrite": 16747,
+      "calls": 8,
+      "input": 20,
+      "output": 24987,
+      "cacheRead": 1800931,
+      "cacheWrite": 18861,
       "thinking": 3477,
+      "models": {
+        "claude-sonnet-5-5": 8
+      },
+      "total": 1844799
+    },
+    "70b07916-4705-4095-88f0-1cb66dc7cc9e": {
+      "label": "And, i want to have prompts folder inside .claude folder like we have in claude-plugin repo",
+      "time": "2026-11-18T18:21:15.010Z",
+      "calls": 7,
+      "input": 16,
+      "output": 6498,
+      "cacheRead": 1723798,
+      "cacheWrite": 9598,
+      "thinking": 2538,
       "models": {
         "claude-sonnet-5-5": 7
       },
-      "total": 1602361
+      "total": 1739910
+    },
+    "5c526f80-4a66-4b45-a335-956775f26cf1": {
+      "label": "I have merged pr3 already, and delete the existing local folder of dev_prompts from here and its content, And, update wherever is needed",
+      "time": "2026-11-18T18:27:52.326Z",
+      "calls": 5,
+      "input": 12,
+      "output": 3415,
+      "cacheRead": 1276042,
+      "cacheWrite": 6401,
+      "thinking": 732,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 1285870
     }
   },
   "byModel": {
@@ -602,16 +630,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 171,
-      "input": 394,
-      "output": 222290,
-      "cacheRead": 23530106,
-      "cacheWrite": 901071,
-      "thinking": 52487,
+      "calls": 184,
+      "input": 424,
+      "output": 233172,
+      "cacheRead": 26769299,
+      "cacheWrite": 919184,
+      "thinking": 55757,
       "models": {
-        "claude-sonnet-5-5": 171
+        "claude-sonnet-5-5": 184
       },
-      "total": 24653861
+      "total": 27922079
     },
     "claude-opus-5-5": {
       "calls": 12,
@@ -697,31 +725,31 @@
       "total": 990952
     },
     "(text only)": {
-      "calls": 33,
-      "input": 67,
-      "output": 25868,
-      "cacheRead": 4769406,
-      "cacheWrite": 43346,
+      "calls": 35,
+      "input": 71,
+      "output": 27540,
+      "cacheRead": 5259425,
+      "cacheWrite": 46828,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 30,
+        "claude-sonnet-5-5": 32,
         "claude-opus-5-5": 2
       },
-      "total": 4838687
+      "total": 5333864
     },
     "Bash": {
-      "calls": 63,
-      "input": 160,
-      "output": 78238,
-      "cacheRead": 8878839,
-      "cacheWrite": 339454,
+      "calls": 74,
+      "input": 186,
+      "output": 87448,
+      "cacheRead": 11628013,
+      "cacheWrite": 354085,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 57,
+        "claude-sonnet-5-5": 68,
         "claude-opus-5-5": 6
       },
-      "total": 9296691
+      "total": 12069732
     },
     "Grep": {
       "calls": 12,
@@ -825,16 +853,28 @@
       "total": 2127885
     },
     "chore/phase2-design": {
-      "calls": 5,
-      "input": 12,
-      "output": 20736,
-      "cacheRead": 1130752,
-      "cacheWrite": 16275,
-      "thinking": 716,
+      "calls": 8,
+      "input": 20,
+      "output": 24411,
+      "cacheRead": 1855009,
+      "cacheWrite": 19961,
+      "thinking": 2732,
       "models": {
-        "claude-sonnet-5-5": 5
+        "claude-sonnet-5-5": 8
       },
-      "total": 1167775
+      "total": 1899401
+    },
+    "setup/prompts-in-claude": {
+      "calls": 10,
+      "input": 22,
+      "output": 7207,
+      "cacheRead": 2514936,
+      "cacheWrite": 14427,
+      "thinking": 1254,
+      "models": {
+        "claude-sonnet-5-5": 10
+      },
+      "total": 2536592
     }
   }
 }

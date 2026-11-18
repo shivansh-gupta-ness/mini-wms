@@ -39,8 +39,8 @@ All skills live in `.claude/skills/<name>/SKILL.md`. All three below are manual:
 | Skill | You type | When to use | What it does |
 |---|---|---|---|
 | `start-ticket` | `/start-ticket FEAT-001` | First step of every ticket | Checks the ID and that the ticket is `ready`, checks the tree is clean, creates the branch, runs `ticket-scout`, shows the brief and plan, then stops for your approval. After approval it writes `.claude/state/active-ticket.json` and starts the editing agents. |
-| `run-feature-be` | `/run-feature-be FEAT-001 [resume stage]` | Backend feature ticket, after approval | Runs `dev_prompts/local/run-feature-be.md` (which loads `per-ticket-feature-prompts.md`). Stages A, 2, 3, 4, B, 5 sections 7-8, each ending in a STOP REPORT. |
-| `run-feature-fe` | `/run-feature-fe FEAT-002 [A or B]` | Frontend feature ticket, after approval | Runs `dev_prompts/local/agent-prompt-fe.md` (Flow A or B). Needs the API contract in `docs/specs/` if the ticket has `depends_on`. |
+| `run-feature-be` | `/run-feature-be FEAT-001 [resume stage]` | Backend feature ticket, after approval | Runs `.claude/prompts/run-feature-be.md` (which loads `per-ticket-feature-prompts.md`). Stages A, 2, 3, 4, B, 5 sections 7-8, each ending in a STOP REPORT. |
+| `run-feature-fe` | `/run-feature-fe FEAT-002 [A or B]` | Frontend feature ticket, after approval | Runs `.claude/prompts/agent-prompt-fe.md` (Flow A or B). Needs the API contract in `docs/specs/` if the ticket has `depends_on`. |
 
 Preconditions for both pipeline skills: `/start-ticket` was run and approved, the ticket's component and `allowed_paths` match the stack, risk is low or medium, the branch is `<feat|bug|task>/<ID>-*`, the tree is clean.
 
@@ -57,7 +57,7 @@ Preconditions for both pipeline skills: `/start-ticket` was run and approved, th
 
 B also writes `docs/reports/<ID>/ac-results.md`: every acceptance criterion with PASS, FAIL, N/A or NOT RUN and the evidence. The frontend pipeline writes the same file in its final report.
 
-The prompts hold the pipeline logic. The skills only add the preconditions, the config filled in from the ticket, and the agent hand-offs. Originals are in `dev_prompts/original/`; the adapted copies in `dev_prompts/local/` are what run. For exactly what was changed and why, see [docs/prompt-adaptation.md](docs/prompt-adaptation.md).
+The prompts hold the pipeline logic. The skills only add the preconditions, the config filled in from the ticket, and the agent hand-offs. Originals are in `dev_prompts/original/`. The skills run the adapted prompts in `.claude/prompts/`, which mirrors the plugin's `prompts/` folder. For exactly what was changed and why, see [docs/prompt-adaptation.md](docs/prompt-adaptation.md).
 
 ### Built-in skills you also use
 
@@ -122,8 +122,8 @@ Plugins are a way to reuse the skills and agents in other repositories.
 
 Limits to know:
 - Plugin agents ignore `hooks`, `mcpServers` and `permissionMode`. Each repo must keep its own guards in its `.claude/settings.json`.
-- The plugin's `run-feature-*` skills read their prompts from the plugin (`${CLAUDE_PLUGIN_ROOT}/prompts`). Installed plugin skills are namespaced (`/core:run-feature-be`); this repo's own `.claude/skills/` versions use `dev_prompts/local/`.
-- The repo and plugin copies of the agents, skills and prompts are duplicated. Change both, or the plugin drifts. The plugin copies of the prompts use `<PLUGIN_PROMPTS>/` in place of `dev_prompts/local/`.
+- The plugin's `run-feature-*` skills read their prompts from the plugin (`${CLAUDE_PLUGIN_ROOT}/prompts`). Installed plugin skills are namespaced (`/core:run-feature-be`); this repo's own `.claude/skills/` versions use `.claude/prompts/`.
+- The repo and plugin copies of the agents, skills and prompts are duplicated. Change both, or the plugin drifts. The plugin copies of the prompts use `<PLUGIN_PROMPTS>/` in place of `.claude/prompts/`. In this repo, edit `.claude/prompts/` (the only adapted copy), then sync the plugin.
 
 Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/plugin`.
 

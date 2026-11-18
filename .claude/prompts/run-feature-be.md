@@ -5,7 +5,7 @@
 > QA cases = `docs/qa/<ID>.md` instead of AgileTest; reports = `docs/reports/<ID>/` (committed in the PR) instead of a Jira attachment;
 > all paths are repo-relative (code lives under `src/`); git via the `git` CLI instead of GitHub MCP tools; branch `<feat|bug|task>/<ID>-<slug>` from `main`.
 > Harness rules still apply: stay inside the ticket's `allowed_paths`; no network commands; stage only, never commit, push or create branches (`/start-ticket` creates the branch; the branch gate only verifies it).
-> Run it as the `run-feature-be` skill, or paste this file as a message. The pipeline definition is `dev_prompts/local/per-ticket-feature-prompts.md`.
+> Run it as the `run-feature-be` skill, or paste this file as a message. The pipeline definition is `.claude/prompts/per-ticket-feature-prompts.md`.
 
 > **How to use this file:**
 > 1. Fill in the `## Configuration` block below for your story.
@@ -260,7 +260,7 @@ EXTERNAL_GATE_COVERAGE_FORMAT  = "cobertura"
 EXTERNAL_GATE_REPORT_OUTPUT    = "TestResults/<STORY_KEY>/external-gate"
 
 # ── Pipeline document (do not change) ─────────────────────────────────────────
-PIPELINE_DOC_PATH      = "dev_prompts/local/per-ticket-feature-prompts.md"
+PIPELINE_DOC_PATH      = ".claude/prompts/per-ticket-feature-prompts.md"
 
 # ── Report filing (do not change) ─────────────────────────────────────────────
 REPORTS_PATH           = "docs/reports/<STORY_KEY>"   # replaces the report filing helper
@@ -305,7 +305,7 @@ Read this entire file first, then follow the steps below exactly.
 
 ### Step 0 — Load the pipeline definition
 
-Read `PIPELINE_DOC_PATH` (`dev_prompts/local/per-ticket-feature-prompts.md`) in full.
+Read `PIPELINE_DOC_PATH` (`.claude/prompts/per-ticket-feature-prompts.md`) in full.
 That document defines Prompts A, 2, 3, 4, B, and 5 §7-8.
 The configuration values above override the placeholder values in the pipeline document.
 The global rules in the pipeline document apply throughout this run.
@@ -390,7 +390,7 @@ Q2: <exact question text — if more than one>
 ### How to resume
 
 1. Answer the question(s) above.
-2. Open `dev_prompts/local/run-feature-be.md` (or re-run the `run-feature-be` skill).
+2. Open `.claude/prompts/run-feature-be.md` (or re-run the `run-feature-be` skill).
 3. Set `START_FROM_PROMPT = "<letter/number that stopped>"`.
 4. Set `EXISTING_BRANCH = "<branch name shown above>"`.
 5. Paste your answers into `RESUME_ANSWERS` using the Q/A format shown.
