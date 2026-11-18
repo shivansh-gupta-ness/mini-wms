@@ -286,6 +286,20 @@ one warehouse and whole number quantities only for rest take recommended one
 
 **Context:** Applied decisions to docs/specs/product.md: single warehouse (auto-created), zone types, system-chosen bins oldest first from Storage zones, whole numbers; other defaults kept; decisions table in section 9.
 
+---
+
+**User:**
+yes do it
+
+**Context:** Committed and pushed chore/phase1-product-spec; opened mini-wms PR #2 (Phase 1 spec + Phase 0 sign-off).
+
+---
+
+**User:**
+Yes, i merged it, confirm it once. if phase1 is completed then start with phase 2
+
+**Context:** Confirmed PR #2 merged (spec on main, 68 ACs). Phase 2 drafted on chore/phase2-design: ADR-001..006, data-model.md, api/locations.yaml, api/products.yaml, ui.md. All LOC and PRD ACs map to contract operations.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
