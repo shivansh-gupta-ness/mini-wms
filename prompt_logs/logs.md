@@ -335,6 +335,20 @@ we should have atleast 10 tickets and remove the no. of days needed for each pha
 
 **Context:** Expanded Phase 3 to 12 TASK tickets (6 backend, 5 frontend, 1 contracts) with dependencies; added api-contracts knowledge-map component; removed day estimates from docs/sdd-roadmap.md.
 
+---
+
+**User:**
+/start-ticket (no ticket ID given; TASK-001.md open in the IDE)
+
+**Context:** Step 1 failed: empty ID. Stopped and asked for the ID.
+
+---
+
+**User:**
+Update the pr limit to 1000 lines and 30 files at every place. I approve the plan, use 10.0.300 and src/backend/.editorconfig
+
+**Context:** PR limit set to 1000 lines / 30 files (pr-guard.mjs, REPO_CONTEXT.md, GUIDE.md, roadmap, ADR-005) on setup/pr-limit-30-files. TASK-001 plan approved with SDK 10.0.300 and src/backend/.editorconfig.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
