@@ -2,7 +2,7 @@
 id: TASK-001
 type: task
 title: Backend solution skeleton and build configuration
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
