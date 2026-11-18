@@ -52,6 +52,16 @@
         "hooks": [{ "type": "command", "command": "node .claude/hooks/format.mjs" }]
       }
     ],
+    "WorktreeCreate": [
+      {
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/worktree-create.mjs" }]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/worktree-remove.mjs" }]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

@@ -1,19 +1,19 @@
 {
-  "generated": "2026-11-18T18:51:49.733Z",
+  "generated": "2026-11-18T19:23:16.172Z",
   "grand": {
-    "calls": 243,
-    "input": 549,
-    "output": 311456,
-    "cacheRead": 37737183,
-    "cacheWrite": 1352027,
-    "thinking": 74740,
+    "calls": 312,
+    "input": 697,
+    "output": 386514,
+    "cacheRead": 61713778,
+    "cacheWrite": 1473910,
+    "thinking": 103606,
     "models": {
       "claude-sonnet-4-6": 15,
-      "claude-sonnet-5-5": 212,
+      "claude-sonnet-5-5": 281,
       "claude-opus-5-5": 12,
       "claude-haiku-5-5": 4
     },
-    "total": 39401215
+    "total": 63574899
   },
   "byDay": {
     "2026-11-17": {
@@ -30,18 +30,18 @@
       "total": 12236390
     },
     "2026-11-18": {
-      "calls": 147,
-      "input": 360,
-      "output": 186746,
-      "cacheRead": 26005394,
-      "cacheWrite": 972325,
-      "thinking": 40583,
+      "calls": 216,
+      "input": 508,
+      "output": 261804,
+      "cacheRead": 49981989,
+      "cacheWrite": 1094208,
+      "thinking": 69449,
       "models": {
-        "claude-sonnet-5-5": 131,
+        "claude-sonnet-5-5": 200,
         "claude-opus-5-5": 12,
         "claude-haiku-5-5": 4
       },
-      "total": 27164825
+      "total": 51338509
     }
   },
   "bySession": {
@@ -58,19 +58,19 @@
       "total": 34642
     },
     "d056af0b-88c6-4c97-8f17-3c4ec23e666f": {
-      "calls": 242,
-      "input": 546,
-      "output": 311229,
-      "cacheRead": 37713281,
-      "cacheWrite": 1341517,
-      "thinking": 74627,
+      "calls": 311,
+      "input": 694,
+      "output": 386287,
+      "cacheRead": 61689876,
+      "cacheWrite": 1463400,
+      "thinking": 103493,
       "models": {
         "claude-sonnet-4-6": 14,
-        "claude-sonnet-5-5": 212,
+        "claude-sonnet-5-5": 281,
         "claude-opus-5-5": 12,
         "claude-haiku-5-5": 4
       },
-      "total": 39366573
+      "total": 63540257
     }
   },
   "byPrompt": {
@@ -719,16 +719,72 @@
     "08c4870a-3748-4d47-8ae2-c2ab853db083": {
       "label": "Update the pr limit to 1000 lines and 30 files at every place. I approve the plan, use 10.0.300 and src/backend/.editorconfig",
       "time": "2026-11-18T18:51:13.305Z",
-      "calls": 4,
-      "input": 10,
-      "output": 3021,
-      "cacheRead": 1286231,
-      "cacheWrite": 4021,
-      "thinking": 1303,
+      "calls": 27,
+      "input": 56,
+      "output": 34712,
+      "cacheRead": 9178918,
+      "cacheWrite": 43555,
+      "thinking": 13573,
       "models": {
-        "claude-sonnet-5-5": 4
+        "claude-sonnet-5-5": 27
       },
-      "total": 1293283
+      "total": 9257241
+    },
+    "bb1e6279-241a-4f62-a557-f82fd94dfff7": {
+      "label": "did you fixed allowed path comparison problem?",
+      "time": "2026-11-18T19:03:52.482Z",
+      "calls": 2,
+      "input": 6,
+      "output": 1463,
+      "cacheRead": 731099,
+      "cacheWrite": 861,
+      "thinking": 647,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 733429
+    },
+    "f833b7ee-1aee-4ce6-8dd5-112398ca992a": {
+      "label": "fix both and i want worktree isolation",
+      "time": "2026-11-18T19:07:52.081Z",
+      "calls": 6,
+      "input": 16,
+      "output": 6986,
+      "cacheRead": 2234676,
+      "cacheWrite": 12880,
+      "thinking": 4494,
+      "models": {
+        "claude-sonnet-5-5": 6
+      },
+      "total": 2254558
+    },
+    "225a56e2-7415-4964-8843-7842bca6dddd": {
+      "label": "yes go ahead acc to plan",
+      "time": "2026-11-18T19:10:54.344Z",
+      "calls": 20,
+      "input": 42,
+      "output": 24018,
+      "cacheRead": 8002600,
+      "cacheWrite": 33738,
+      "thinking": 8522,
+      "models": {
+        "claude-sonnet-5-5": 20
+      },
+      "total": 8060398
+    },
+    "0cc4ad6c-a00a-404c-81ce-fb31c7078a8b": {
+      "label": "<task-notification> <task-id>ac95bbb1beb0cd0f8</task-id> <tool-use-id>toolu_01EzN3QjHh4djRaqm5jmvmiY</tool-use-id> <output-file>C:\\Users\\P7120484\\AppData\\Local\\Temp\\claude\\e458ec6a025b8ec8\\d056af0b-88c6-4c97-8f17-3c4ec23e666f\\tasks\\ac95bbb1beb0cd0f8.output</output-file> <status>completed</status> <summary>Agent \"Worktree guard smoke test\" finished</summary> <note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note> <result>1. Write `src/backend/MiniWms.Domain/Common/SMOKE.txt`: allowed. The file was created. 2. Write `README-SMOKE.md`: blocked. The message was \"scope-guard blocked: README-SMOKE.md is outside SMOKE-001 allowed_paths [src/backend/MiniWms.Domain/Common/**]. Stop and ask the owner to widen scope.\" 3. Write `.claude/SMOKE.txt`: blocked. The message was \"scope-guard blocked: .claude/SMOKE.txt is a protected path (harness, shared context, CI or logs). Ask the owner.\" Working directory: `C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-ac95bbb1beb0cd0f8`</result> <usage><subagent_tokens>15072</subagent_tokens><tool_uses>3</tool_uses><duration_ms>27761</duration_ms></usage> <worktree><worktreePath>C:\\Users\\P7120484\\Downloads\\Claude_Eval\\.claude\\worktrees\\agent-ac95bbb1beb0cd0f8</worktreePath></worktree> </task-notification>",
+      "time": "2026-11-18T19:19:22.442Z",
+      "calls": 12,
+      "input": 26,
+      "output": 9237,
+      "cacheRead": 5051836,
+      "cacheWrite": 14824,
+      "thinking": 2933,
+      "models": {
+        "claude-sonnet-5-5": 12
+      },
+      "total": 5075923
     }
   },
   "byModel": {
@@ -745,16 +801,16 @@
       "total": 1076582
     },
     "claude-sonnet-5-5": {
-      "calls": 212,
-      "input": 496,
-      "output": 278850,
-      "cacheRead": 34988130,
-      "cacheWrite": 977334,
-      "thinking": 65376,
+      "calls": 281,
+      "input": 644,
+      "output": 353908,
+      "cacheRead": 58964725,
+      "cacheWrite": 1099217,
+      "thinking": 94242,
       "models": {
-        "claude-sonnet-5-5": 212
+        "claude-sonnet-5-5": 281
       },
-      "total": 36244810
+      "total": 60418494
     },
     "claude-opus-5-5": {
       "calls": 12,
@@ -793,6 +849,30 @@
         "claude-haiku-5-5": 4
       },
       "total": 50011
+    },
+    "abf345fda689a9fc3": {
+      "calls": 4,
+      "input": 8,
+      "output": 958,
+      "cacheRead": 41312,
+      "cacheWrite": 14765,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 4
+      },
+      "total": 57043
+    },
+    "ac95bbb1beb0cd0f8": {
+      "calls": 2,
+      "input": 4,
+      "output": 705,
+      "cacheRead": 22385,
+      "cacheWrite": 5281,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 28375
     }
   },
   "byTool": {
@@ -811,113 +891,113 @@
       "total": 217016
     },
     "Read": {
-      "calls": 11,
-      "input": 21,
-      "output": 9434,
-      "cacheRead": 1207056,
-      "cacheWrite": 54804,
+      "calls": 16,
+      "input": 31,
+      "output": 14131,
+      "cacheRead": 3176078,
+      "cacheWrite": 62618,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 7,
+        "claude-sonnet-5-5": 12,
         "claude-haiku-5-5": 1
       },
-      "total": 1271315
+      "total": 3252858
     },
     "PowerShell": {
-      "calls": 46,
-      "input": 98,
-      "output": 40000,
-      "cacheRead": 5647605,
-      "cacheWrite": 507162,
+      "calls": 47,
+      "input": 100,
+      "output": 41533,
+      "cacheRead": 5979025,
+      "cacheWrite": 508326,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 4,
-        "claude-sonnet-5-5": 41,
+        "claude-sonnet-5-5": 42,
         "claude-opus-5-5": 1
       },
-      "total": 6194865
+      "total": 6528984
     },
     "Write": {
-      "calls": 21,
-      "input": 43,
-      "output": 90663,
-      "cacheRead": 3159843,
-      "cacheWrite": 84527,
+      "calls": 30,
+      "input": 61,
+      "output": 115290,
+      "cacheRead": 6026743,
+      "cacheWrite": 103254,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 19,
+        "claude-sonnet-5-5": 28,
         "claude-opus-5-5": 1
       },
-      "total": 3335076
+      "total": 6245348
     },
     "AskUserQuestion": {
-      "calls": 8,
-      "input": 13,
-      "output": 6488,
-      "cacheRead": 831706,
-      "cacheWrite": 152745,
+      "calls": 9,
+      "input": 15,
+      "output": 7478,
+      "cacheRead": 1161341,
+      "cacheWrite": 154530,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 3,
-        "claude-sonnet-5-5": 4,
+        "claude-sonnet-5-5": 5,
         "claude-opus-5-5": 1
       },
-      "total": 990952
+      "total": 1323364
     },
     "(text only)": {
-      "calls": 43,
-      "input": 89,
-      "output": 40411,
-      "cacheRead": 7326764,
-      "cacheWrite": 53762,
+      "calls": 49,
+      "input": 101,
+      "output": 43059,
+      "cacheRead": 8874393,
+      "cacheWrite": 59857,
       "thinking": 0,
       "models": {
         "claude-sonnet-4-6": 1,
-        "claude-sonnet-5-5": 39,
+        "claude-sonnet-5-5": 45,
         "claude-opus-5-5": 2,
         "claude-haiku-5-5": 1
       },
-      "total": 7421026
+      "total": 8977410
     },
     "Bash": {
-      "calls": 91,
-      "input": 232,
-      "output": 111820,
-      "cacheRead": 16619735,
-      "cacheWrite": 391141,
+      "calls": 122,
+      "input": 300,
+      "output": 139286,
+      "cacheRead": 27375700,
+      "cacheWrite": 446354,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 85,
+        "claude-sonnet-5-5": 116,
         "claude-opus-5-5": 6
       },
-      "total": 17122928
+      "total": 27961640
     },
     "Grep": {
-      "calls": 13,
-      "input": 32,
-      "output": 5806,
-      "cacheRead": 2076749,
-      "cacheWrite": 57128,
+      "calls": 17,
+      "input": 40,
+      "output": 7083,
+      "cacheRead": 3679832,
+      "cacheWrite": 64718,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 12,
+        "claude-sonnet-5-5": 16,
         "claude-opus-5-5": 1
       },
-      "total": 2139715
+      "total": 3751673
     },
     "Edit": {
-      "calls": 2,
-      "input": 4,
-      "output": 1406,
-      "cacheRead": 246339,
-      "cacheWrite": 1653,
+      "calls": 7,
+      "input": 14,
+      "output": 4353,
+      "cacheRead": 2239342,
+      "cacheWrite": 13096,
       "thinking": 0,
       "models": {
-        "claude-sonnet-5-5": 2
+        "claude-sonnet-5-5": 7
       },
-      "total": 249402
+      "total": 2256805
     },
     "ExitPlanMode": {
       "calls": 1,
@@ -932,16 +1012,40 @@
       "total": 145565
     },
     "Agent": {
+      "calls": 5,
+      "input": 10,
+      "output": 3975,
+      "cacheRead": 1787612,
+      "cacheWrite": 5850,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 5
+      },
+      "total": 1797447
+    },
+    "ToolSearch": {
       "calls": 1,
-      "input": 2,
-      "output": 249,
-      "cacheRead": 312170,
-      "cacheWrite": 934,
+      "input": 4,
+      "output": 2888,
+      "cacheRead": 367038,
+      "cacheWrite": 14,
       "thinking": 0,
       "models": {
         "claude-sonnet-5-5": 1
       },
-      "total": 313355
+      "total": 369944
+    },
+    "WebSearch": {
+      "calls": 2,
+      "input": 6,
+      "output": 2259,
+      "cacheRead": 737458,
+      "cacheWrite": 7122,
+      "thinking": 0,
+      "models": {
+        "claude-sonnet-5-5": 2
+      },
+      "total": 746845
     }
   },
   "byBranch": {
@@ -1044,17 +1148,17 @@
       "total": 4714107
     },
     "TASK-001 (task/TASK-001-backend-solution-skeleton)": {
-      "calls": 11,
-      "input": 26,
-      "output": 13662,
-      "cacheRead": 2247985,
-      "cacheWrite": 21536,
-      "thinking": 5482,
+      "calls": 44,
+      "input": 100,
+      "output": 58070,
+      "cacheRead": 13866388,
+      "cacheWrite": 79825,
+      "thinking": 26508,
       "models": {
-        "claude-sonnet-5-5": 7,
+        "claude-sonnet-5-5": 40,
         "claude-haiku-5-5": 4
       },
-      "total": 2283209
+      "total": 14004383
     },
     "setup/pr-limit-30-files": {
       "calls": 1,
@@ -1067,6 +1171,18 @@
         "claude-sonnet-5-5": 1
       },
       "total": 325570
+    },
+    "setup/worktree-fixes": {
+      "calls": 36,
+      "input": 74,
+      "output": 30650,
+      "cacheRead": 12358192,
+      "cacheWrite": 63594,
+      "thinking": 7840,
+      "models": {
+        "claude-sonnet-5-5": 36
+      },
+      "total": 12452510
     }
   }
 }

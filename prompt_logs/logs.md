@@ -338,16 +338,37 @@ we should have atleast 10 tickets and remove the no. of days needed for each pha
 ---
 
 **User:**
-/start-ticket (no ticket ID given; TASK-001.md open in the IDE)
+(fix the issue) answer to the agent-start choice
 
-**Context:** Step 1 failed: empty ID. Stopped and asked for the ID.
+**Context:** change-implementer worktree refused twice (path-form check); retried with capital-C cwd, same result. Removed the two stale worktrees and branches. Implemented TASK-001 in the main session under the scope guard: global.json 10.0.300, 7 projects, build files, REPO_CONTEXT, 14 tests (14 pass), ac-results.md and ac-log row. Placeholders trimmed to stay under the 30-file limit.
 
 ---
 
 **User:**
-Update the pr limit to 1000 lines and 30 files at every place. I approve the plan, use 10.0.300 and src/backend/.editorconfig
+did you fixed allowed path comparison problem?
 
-**Context:** PR limit set to 1000 lines / 30 files (pr-guard.mjs, REPO_CONTEXT.md, GUIDE.md, roadmap, ADR-005) on setup/pr-limit-30-files. TASK-001 plan approved with SDK 10.0.300 and src/backend/.editorconfig.
+**Context:** Answered: not fixed, worked around; harness path check is outside the repo; hook path handling in worktrees untested.
+
+---
+
+**User:**
+fix both and i want worktree isolation
+
+**Context:** Researched: known Claude Code bug (drive-letter case in the worktree safety check, issue 91618); WorktreeCreate hook is the documented lever. Owner asked what a worktree is and whether the plan mentions it; answered (plan lines 137, 232, 362, 426, 436, 525-526). Waiting for go-ahead; no changes made.
+
+---
+
+**User (interrupting the research):**
+first tell me what is worktree, what are we trying to achieve with the help of it. And, Is it mentioned in our plan anywhere?
+
+**Context:** Explained; see the previous entry.
+
+---
+
+**User:**
+yes go ahead acc to plan
+
+**Context:** Fixed both path problems keeping worktree isolation: WorktreeCreate/WorktreeRemove hooks (uppercase-drive worktree path, baseline snapshot), worktree-aware lib.mjs, worktree-apply hand-off (prompt_logs excluded), start-ticket hand-off step, 51 hook tests (temp dirs). Verified with two real agent runs: worktree accepted; in-scope edit allowed, out-of-scope and protected edits blocked; changes carried back. Branch setup/worktree-fixes.
 
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
