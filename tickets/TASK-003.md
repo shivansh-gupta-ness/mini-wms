@@ -1,37 +1,33 @@
 ---
 id: TASK-003
 type: task
-title: Angular app skeleton
-status: ready
+title: Backend test and coverage tooling with 90% gate
+status: draft
 owner: shivansh-gupta-ness
-component: frontend-platform
+component: backend-platform
 risk: low
-allowed_paths: [src/frontend/**, tickets/TASK-003.md, docs/reports/TASK-003/**, docs/reports/ac-log.md]
-docs: [docs/adr/ADR-006-angular-structure.md, docs/adr/ADR-005-testing-coverage-and-ac-log.md, docs/specs/ui.md]
+allowed_paths: [src/backend/**, .config/dotnet-tools.json, tickets/TASK-003.md, docs/reports/TASK-003/**, docs/reports/ac-log.md]
+docs: [docs/adr/ADR-005-testing-coverage-and-ac-log.md]
 parent: 
-depends_on: []
+depends_on: [TASK-001]
 ---
 
 ## Description
-Create the Angular app in `src/frontend` as ADR-006 describes: standalone components, strict TypeScript, the folder layout, Angular Material, the application shell with navigation, the HTTP interceptors and the test runner. No module screens yet. Record the Angular and CLI versions used and which test runner the CLI chose, in `src/frontend/REPO_CONTEXT.md`.
+Add the coverage tooling ADR-005 requires: coverlet in the test projects, ReportGenerator as a local tool, one documented command that runs the tests with coverage and prints the numbers, and a gate that fails below 90% line coverage. Set `status: ready` after TASK-001 is merged.
 
 ## Acceptance criteria
-1. Given `src/frontend`, when `npm ci` and `npm run build` run, then the build succeeds with no errors and strict TypeScript and strict templates are on.
-2. Given the folder layout in ADR-006, when the app is opened, then `core/`, `shared/` and `features/` exist under `src/app/`, with an empty lazy-loaded route for each of locations, products, inventory, inbound, outbound and auth.
-3. Given the app is running, when it loads, then the shell shows the top bar, the left navigation in the order from `docs/specs/ui.md` section 1 (only for modules that have a route) and a content area.
-4. Given an HTTP response with `application/problem+json`, when the error interceptor handles it, then it produces a typed `ApiError` carrying `status`, `title`, `detail` and the field `errors`, and a unit test proves it.
-5. Given a request, when it is sent, then the base path `/api/v1` is used and, once a session exists, the token interceptor adds the bearer token (a test proves both).
-6. Given the API returns field errors, when a form helper applies them, then each message appears on its matching form control, and a unit test proves it.
-7. Given `npm test`, when it runs, then all tests pass, coverage is reported, and each test that proves an AC above starts with its ID, for example `it('TASK-003.4 maps problem+json to ApiError', ...)`.
-8. Given the shell, when it is navigated with the keyboard only, then every navigation item and button is reachable and shows a visible focus, and every control has a label (NFR-6).
-9. Given `src/frontend/REPO_CONTEXT.md`, when read, then it lists the Angular and CLI versions, the test runner, the folder layout, and the build, test and run commands (under 80 lines).
+1. Given `.config/dotnet-tools.json`, when `dotnet tool restore` runs, then ReportGenerator is installed from the local manifest.
+2. Given the three test projects, when `dotnet test src/backend --collect:"XPlat Code Coverage"` runs, then a Cobertura coverage file is produced for each.
+3. Given the coverage files, when the documented report command runs, then a text summary with per-assembly line coverage is written under `TestResults/` (git-ignored) and printed.
+4. Given coverage scope, when the report is built, then migrations, `Program.cs` and generated code are excluded and only Domain, Application and Api are counted (ADR-005).
+5. Given line coverage below 90%, when the gate command runs, then it exits non-zero and names the shortfall; at or above 90% it exits zero.
+6. Given the ACs convention, when a test carries `[Trait("AC", "<id>")]`, then running `dotnet test --filter "AC=<id>"` runs exactly the tests for that AC.
+7. Given `src/backend/REPO_CONTEXT.md`, when read, then the test, coverage and gate commands are listed.
 
 ## Out of scope
-- Any module screen (Locations, Products and so on).
-- Talking to the real API (TASK-004 does the proxy and the health indicator).
-- End-to-end browser tests.
+- Frontend coverage (TASK-010).
+- A CI workflow (none exists by design).
+- The AC-to-test mapping script (owner change in `scripts/`).
 
 ## Notes and links
-- `docs/adr/ADR-006-angular-structure.md`, `docs/specs/ui.md`.
-- Create the app with `npx @angular/cli@<current stable> new`, then add Angular Material. Do not add other UI or state libraries.
 - Record AC results in `docs/reports/TASK-003/ac-results.md` and one row in `docs/reports/ac-log.md`.

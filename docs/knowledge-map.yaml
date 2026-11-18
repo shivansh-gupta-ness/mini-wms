@@ -29,6 +29,14 @@ frontend-platform:
   owners: [shivansh-gupta-ness]
   risk: low
 
+api-contracts:
+  components: [API Contracts]
+  code_paths: [docs/specs/api/**]
+  docs: [docs/adr/ADR-003-api-conventions.md, docs/specs/product.md]
+  protected_paths: []
+  owners: [shivansh-gupta-ness]
+  risk: low
+
 # Add the module components (locations, products, ...) once their code exists, one per component:
 # inventory:   code_paths [src/backend/**/Inventory/**, src/frontend/**/inventory/**]            risk: medium
 # inbound:     receiving / put-away                                                                risk: medium

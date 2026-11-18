@@ -321,6 +321,20 @@ merged it, check it. if completed, go ahead with next phase
 
 **Context:** Verified PRs 1-4 merged and Phase 2 content on main. Phase 3 prep on setup/phase3-scaffold-tickets: TASK-001..004 tickets, backend-platform and frontend-platform knowledge-map components (+ .gitkeep in src/backend and src/frontend), start-ticket now writes ac-results.md + ac-log row, roadmap rows updated.
 
+---
+
+**User:**
+is there only 4 tickets in phase 3?
+
+**Context:** Explained the 4 tickets and the gaps (coverage tooling, contract lint, AC mapping script, central packages).
+
+---
+
+**User:**
+we should have atleast 10 tickets and remove the no. of days needed for each phase from roadmap file
+
+**Context:** Expanded Phase 3 to 12 TASK tickets (6 backend, 5 frontend, 1 contracts) with dependencies; added api-contracts knowledge-map component; removed day estimates from docs/sdd-roadmap.md.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
