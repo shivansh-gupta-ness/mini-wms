@@ -29,4 +29,6 @@ Build the shared pieces every module endpoint will use, once: paged and sorted l
 - Authorization.
 
 ## Notes and links
+- **Open owner decision before this ticket is readied (found 2026-11-19 while analysing the tickets).** AC 5 expects a business-rule 409 to carry the exception message as `detail` (the UI spec shows the 409 `detail` in a banner, `docs/specs/ui.md` section 2). BUG-001 (merged) clears `detail` on every error body in `Program.cs` and its tests (`BUG-001.6`, `BUG-001.7`) require no `detail` and an allow-list of `type`, `title`, `status`, `traceId` and `errors`. Both cannot hold. Suggested resolution: keep `detail` only for 4xx responses whose text is written by our own code (validation and business rules), never for 5xx and never for exception text; then adjust the BUG-001 customizer and its allow-list test accordingly and update ADR-003, which still says every error has `detail`.
+- BUG-001 already delivers the problem `type` by status and the `traceId`; this ticket adds the shared pieces on top (paging, sorting, validation, domain exceptions), so AC 4 to 6 should reuse that customizer, not replace it.
 - Record AC results in `docs/reports/TASK-006/ac-results.md` and one row in `docs/reports/ac-log.md`.

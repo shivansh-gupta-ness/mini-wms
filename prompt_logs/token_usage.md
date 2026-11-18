@@ -1,6 +1,6 @@
 # Token Usage Report
 
-Generated: 2026-11-18T21:15:05.280Z  
+Generated: 2026-11-18T21:20:00.628Z  
 Source: 1 transcript folder(s) matching prefix `C--Users-P7120484-Downloads-Claude-Eval`  
 Notes: counts come from the API usage recorded in Claude Code transcripts, deduplicated per API message. "Total" = input + output + cache read + cache write. "Thinking" is already inside Output. Cost is not estimated; apply your own rates.
 
@@ -8,20 +8,20 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 
 | Scope | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| All sessions | claude-sonnet-5-5 (482), claude-haiku-5-5 (21), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 530 | 1,195 | 607,995 | 161,141 | 137,298,487 | 2,006,300 | 139,913,977 |
+| All sessions | claude-sonnet-5-5 (489), claude-haiku-5-5 (21), claude-sonnet-4-6 (15), claude-opus-5-5 (12) | 537 | 1,211 | 619,059 | 166,446 | 141,936,610 | 2,018,562 | 144,575,442 |
 
 ## By day
 
 | Day | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | 2026-11-17 | claude-sonnet-5-5 (81), claude-sonnet-4-6 (15) | 96 | 189 | 124,710 | 34,157 | 11,731,789 | 379,702 | 12,236,390 |
-| 2026-11-18 | claude-sonnet-5-5 (401), claude-haiku-5-5 (21), claude-opus-5-5 (12) | 434 | 1,006 | 483,285 | 126,984 | 125,566,698 | 1,626,598 | 127,677,587 |
+| 2026-11-18 | claude-sonnet-5-5 (408), claude-haiku-5-5 (21), claude-opus-5-5 (12) | 441 | 1,022 | 494,349 | 132,289 | 130,204,821 | 1,638,860 | 132,339,052 |
 
 ## By session
 
 | Session | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (482), claude-haiku-5-5 (21), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 529 | 1,192 | 607,768 | 161,028 | 137,274,585 | 1,995,790 | 139,879,335 |
+| d056af0b-88c6-4c97-8f17-3c4ec23e666f | claude-sonnet-5-5 (489), claude-haiku-5-5 (21), claude-sonnet-4-6 (14), claude-opus-5-5 (12) | 536 | 1,208 | 618,832 | 166,333 | 141,912,708 | 2,008,052 | 144,540,800 |
 | c65f4548-f0b0-4be8-a353-eb589f45bc26 | claude-sonnet-4-6 (1) | 1 | 3 | 227 | 113 | 23,902 | 10,510 | 34,642 |
 
 ## By prompt (main conversation, chronological)
@@ -108,13 +108,14 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 | 78 · 20:56:21 · <task-notification> <task-id>a0c2b5f48cc1231e6</task-id> <tool-use-id>toolu_01FBYNyyYwUogy | claude-sonnet-5-5 (6) | 6 | 14 | 7,543 | 3,814 | 3,612,035 | 12,605 | 3,632,197 |
 | 79 · 21:00:02 · <task-notification> <task-id>a16ddef2c868e16ff</task-id> <tool-use-id>toolu_019MjhaNtgmkgp | claude-sonnet-5-5 (5) | 5 | 12 | 7,667 | 1,551 | 3,059,520 | 10,057 | 3,077,256 |
 | 80 · 21:08:31 · yes, do the recommended one and resolve harness defect also | claude-sonnet-5-5 (18) | 18 | 38 | 20,590 | 8,333 | 11,458,304 | 32,926 | 11,511,858 |
-| 81 · 21:14:15 · <task-notification> <task-id>afe92c5503e8016ff</task-id> <tool-use-id>toolu_01J2J9frQQmxth | claude-sonnet-5-5 (3) | 3 | 8 | 3,889 | 685 | 1,959,831 | 3,423 | 1,967,151 |
+| 81 · 21:14:15 · <task-notification> <task-id>afe92c5503e8016ff</task-id> <tool-use-id>toolu_01J2J9frQQmxth | claude-sonnet-5-5 (4) | 4 | 10 | 4,960 | 685 | 2,615,871 | 5,689 | 2,626,530 |
+| 82 · 21:17:32 · analyze and make next tasks ready | claude-sonnet-5-5 (6) | 6 | 14 | 9,993 | 5,305 | 3,982,083 | 9,996 | 4,002,086 |
 
 ## By model
 
 | Model | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| claude-sonnet-5-5 | claude-sonnet-5-5 (482) | 482 | 1,108 | 556,240 | 144,604 | 134,332,524 | 1,563,233 | 136,453,105 |
+| claude-sonnet-5-5 | claude-sonnet-5-5 (489) | 489 | 1,124 | 567,304 | 149,909 | 138,970,647 | 1,575,495 | 141,114,570 |
 | claude-opus-5-5 | claude-opus-5-5 (12) | 12 | 26 | 18,504 | 3,096 | 1,731,186 | 280,096 | 2,029,812 |
 | claude-sonnet-4-6 | claude-sonnet-4-6 (15) | 15 | 19 | 6,668 | 2,287 | 989,732 | 80,163 | 1,076,582 |
 | claude-haiku-5-5 | claude-haiku-5-5 (21) | 21 | 42 | 26,583 | 11,154 | 245,045 | 82,808 | 354,478 |
@@ -143,13 +144,13 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 
 | Tool | Model (API calls) | API calls | Input | Output | of which thinking | Cache read | Cache write | Total |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| Bash | claude-sonnet-5-5 (199), claude-opus-5-5 (6) | 205 | 520 | 220,292 | 0 | 67,883,658 | 619,939 | 68,724,409 |
-| (text only) | claude-sonnet-5-5 (85), claude-haiku-5-5 (4), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 92 | 189 | 87,748 | 0 | 24,546,947 | 135,794 | 24,770,678 |
-| Read | claude-sonnet-5-5 (30), claude-haiku-5-5 (6), claude-sonnet-4-6 (3) | 39 | 81 | 34,498 | 0 | 9,540,964 | 153,811 | 9,729,354 |
+| Bash | claude-sonnet-5-5 (202), claude-opus-5-5 (6) | 208 | 528 | 227,810 | 0 | 69,870,814 | 624,030 | 70,723,182 |
+| (text only) | claude-sonnet-5-5 (86), claude-haiku-5-5 (4), claude-opus-5-5 (2), claude-sonnet-4-6 (1) | 93 | 191 | 88,819 | 0 | 25,202,987 | 138,060 | 25,430,057 |
+| Read | claude-sonnet-5-5 (32), claude-haiku-5-5 (6), claude-sonnet-4-6 (3) | 41 | 85 | 35,701 | 0 | 10,870,125 | 158,728 | 11,064,639 |
 | Agent | claude-sonnet-5-5 (17) | 17 | 34 | 26,268 | 0 | 8,379,725 | 27,268 | 8,433,295 |
 | PowerShell | claude-sonnet-5-5 (64), claude-sonnet-4-6 (4), claude-opus-5-5 (1) | 69 | 146 | 49,243 | 0 | 6,526,359 | 555,813 | 7,131,561 |
 | Write | claude-sonnet-5-5 (35), claude-sonnet-4-6 (1), claude-opus-5-5 (1) | 37 | 75 | 139,864 | 0 | 6,670,070 | 115,895 | 6,925,904 |
-| Edit | claude-sonnet-5-5 (19) | 19 | 38 | 15,746 | 0 | 5,982,195 | 42,853 | 6,040,832 |
+| Edit | claude-sonnet-5-5 (20) | 20 | 40 | 17,018 | 0 | 6,647,961 | 43,841 | 6,708,860 |
 | Grep | claude-sonnet-5-5 (16), claude-haiku-5-5 (5), claude-opus-5-5 (1) | 22 | 50 | 10,038 | 0 | 3,751,144 | 91,563 | 3,852,795 |
 | AskUserQuestion | claude-sonnet-5-5 (8), claude-sonnet-4-6 (3), claude-opus-5-5 (1) | 12 | 21 | 10,697 | 0 | 2,530,575 | 156,941 | 2,698,234 |
 | WebSearch | claude-sonnet-5-5 (2) | 2 | 6 | 2,259 | 0 | 737,458 | 7,122 | 746,845 |
@@ -167,11 +168,12 @@ Notes: counts come from the API usage recorded in Claude Code transcripts, dedup
 | BUG-001 (bug/BUG-001-api-error-responses-lose-cors) | claude-sonnet-5-5 (28), claude-haiku-5-5 (4) | 32 | 72 | 38,447 | 11,506 | 13,619,788 | 72,782 | 13,731,089 |
 | TASK-002 (task/TASK-002-api-host-health-endpoint) | claude-sonnet-5-5 (43), claude-haiku-5-5 (6) | 49 | 112 | 46,952 | 10,915 | 12,331,030 | 167,519 | 12,545,613 |
 | setup/pipeline-skills-and-local-prompts | claude-sonnet-5-5 (75), claude-opus-5-5 (12) | 87 | 210 | 86,071 | 17,707 | 11,427,587 | 852,616 | 12,366,484 |
-| setup/hook-paths-and-worktree-tests | claude-sonnet-5-5 (14) | 14 | 30 | 11,931 | 2,881 | 7,773,043 | 32,903 | 7,817,907 |
+| setup/hook-paths-and-worktree-tests | claude-sonnet-5-5 (17) | 17 | 38 | 17,781 | 6,667 | 9,747,927 | 38,199 | 9,803,945 |
 | main | claude-sonnet-5-5 (43) | 43 | 86 | 59,431 | 17,708 | 7,356,668 | 201,386 | 7,617,571 |
 | setup/phase3-scaffold-tickets | claude-sonnet-5-5 (16) | 16 | 42 | 33,479 | 4,465 | 4,635,292 | 45,294 | 4,714,107 |
 | HEAD | claude-sonnet-5-5 (36), claude-sonnet-4-6 (15) | 51 | 99 | 62,625 | 16,268 | 3,844,103 | 174,857 | 4,081,684 |
 | setup/prompts-in-claude | claude-sonnet-5-5 (14) | 14 | 32 | 12,407 | 4,841 | 3,556,155 | 17,854 | 3,586,448 |
+| chore/tickets-ready-004 | claude-sonnet-5-5 (4) | 4 | 8 | 5,214 | 1,519 | 2,663,239 | 6,966 | 2,675,427 |
 | BUG-001 (chore/bug-001-ticket) | claude-sonnet-5-5 (4) | 4 | 10 | 5,203 | 280 | 2,315,485 | 9,325 | 2,330,023 |
 | chore/phase1-product-spec | claude-sonnet-5-5 (10) | 10 | 26 | 17,051 | 4,546 | 2,095,666 | 15,142 | 2,127,885 |
 | chore/phase2-design | claude-sonnet-5-5 (8) | 8 | 20 | 24,411 | 2,732 | 1,855,009 | 19,961 | 1,899,401 |

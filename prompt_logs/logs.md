@@ -581,6 +581,17 @@ yes, do the recommended one and resolve harness defect also (continued)
 
 **Context:** BUG-001 PR 13 opened and ticket done. Harness defects fixed on setup/hook-paths-and-worktree-tests: hook commands now use "$CLAUDE_PROJECT_DIR" with shell bash (9 commands); run-tests tests the hook input cwd (agent worktree) via workRoot and logs hook-log.jsonl; 63 hook tests pass; a real agent run confirmed the hook input cwd is the worktree.
 
+---
+
+**User:**
+analyze and make next tasks ready
+
+**Context:** Analysing ticket dependencies against merged PRs to find which draft tickets are unblocked.
+
+---
+
+**Context (outcome):** Analysed the ticket graph: only TASK-004 is unblocked (deps 001 and 003 merged); 005 and 006 wait for 004, 008-010 wait for 007, 011 waits for 002 and 008. TASK-004 set to ready with two additions (extend the existing tool manifest; AC 9: existing Api tests must use a temp database) and notes. TASK-006 stays draft with a note on an open decision (409 detail vs BUG-001). Chore PR opened.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
