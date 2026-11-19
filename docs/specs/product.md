@@ -229,6 +229,7 @@ Deployment, hosting, CI/CD release steps, multi-tenant or multi-company use, bar
 | 4 | Who chooses bins when allocating an order? | The system, oldest stock first, from Storage zones only |
 | 5 | Roles | Three: Admin, Clerk, Viewer (no Supervisor) |
 | 6 | Quantity type | **Whole numbers only** in version 1 |
+| 7 | Which modules are built in this evaluation? | **Locations only**, API and screens (2026-11-19). The Products, Inventory, Inbound, Outbound and Auth sections stay as the design; their acceptance criteria are not implemented or run in this evaluation, and their ids stay in the contracts and the AC coverage check |
 
 ## 10. Traceability
 

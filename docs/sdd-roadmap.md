@@ -110,6 +110,8 @@ Per module:
 
 **Exit per module:** all ACs PASS in the log, gates met, reports in `docs/reports/<ID>/`.
 
+**Scope decision (owner, 2026-11-19).** This evaluation delivers one module end to end: **Locations**, API (FEAT-001, PR 37) and Angular screens (FEAT-001, second PR). Phase 5 is complete when that second PR is merged and the FEAT-001 criteria 1 to 27 are in the AC log with real results. Products, Inventory, Inbound, Outbound and Auth are not built in this evaluation; their specs, data model and contracts stay in the repository as the design, their acceptance criteria are not run, and `product.md` says so (section 9, decision 7). Consequences: the Locations paths that need stock (LOC-2.2) and the Admin role criteria are proven with fakes or marked N/A; Phase 6 is limited to hardening what exists (no cross-module flows); Phase 7 summarises the tickets delivered (TASK-001 to TASK-012, BUG-001, FEAT-001).
+
 ## Phase 6: Hardening
 - Cross-module flows (receive, put away, pick, ship) as API tests, each linked to the ACs it proves and logged the same way.
 - `/security-review` across the codebase; fix findings by ticket.
