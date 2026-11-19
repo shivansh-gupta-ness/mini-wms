@@ -2,7 +2,7 @@
 id: TASK-005
 type: task
 title: Locations and Products schema, first migration and warehouse seed
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -24,9 +24,14 @@ Add the entities, EF configurations and the first migration for the first two mo
 6. Given the entities, when business rules are tested, then the invariants for zone type, active flags and reorder level in the data model are enforced in Domain, with unit tests.
 7. Given the tests, when they run, then all pass with `[Trait("AC", "TASK-005.<n>")]` on those proving the ACs above.
 
+8. Given `AppDbContext`, when the first migration is created with the local `dotnet-ef` (`dotnet tool run dotnet-ef migrations add`), then the migration and model snapshot are committed under `src/backend/MiniWms.Infrastructure/Migrations/`, and the model has no pending changes.
+
 ## Out of scope
 - Endpoints or use cases for Locations and Products (module tickets).
 - Tables for later modules.
 
 ## Notes and links
+- TASK-004 stores `DateTimeOffset` as binary and sets audit fields and `Version` centrally; new entities derive from `AuditableEntity`. Tests use the temporary-database fixture in `MiniWms.Api.Tests/Persistence`, never `App_Data/miniwms.db`.
+- Seeding runs at startup in Development only, like the migration, and must be idempotent.
+- Keep the PR within the limits (2000 lines, 60 files); if the first migration is large, say so in the brief.
 - Record AC results in `docs/reports/TASK-005/ac-results.md` and one row in `docs/reports/ac-log.md`.

@@ -22,7 +22,7 @@ The frontend depends on the API contract in `docs/specs/api/`. Consistent conven
 { "items": [], "page": 1, "pageSize": 25, "totalItems": 0 }
 ```
 
-**Errors:** every error is `application/problem+json` (RFC 9457) with `type`, `title`, `status`, `detail` and, for validation, an `errors` object keyed by field name:
+**Errors:** every error is `application/problem+json` (RFC 9457) with `type`, `title`, `status`, `traceId` and, for validation, an `errors` object keyed by field name. `detail` is present only on 4xx responses whose text our own code wrote (validation and business-rule messages, for example the 409 `detail` the UI shows in a banner). It is never sent on a 5xx and never carries raw exception text, so an unexpected error cannot leak internals (decided 2026-11-19, resolving the TASK-006 / BUG-001 conflict):
 ```json
 { "type": "validation", "title": "Validation failed", "status": 400, "errors": { "sku": ["SKU is required."] } }
 ```
