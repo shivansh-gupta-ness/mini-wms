@@ -10,4 +10,4 @@ Results are PASS, FAIL, N/A or NOT RUN, always from real test output. A ticket i
 | 2026-11-19 | TASK-003 | backend-platform | 7 | 7 | 0 | 0 | 0 | 85.7 | 100 | 100 | #11 |
 | 2026-11-19 | BUG-001 | backend-platform | 9 | 9 | 0 | 0 | 0 | 77.8 | 100 | 100 | #13 |
 | 2026-11-19 | TASK-004 | backend-platform | 9 | 9 | 0 | 0 | 0 | 88.9 | 100 | 100 | #16 |
-| 2026-11-19 | TASK-005 | backend-platform | 8 | 8 | 0 | 0 | 0 | 100 | 100 | 100 | - |
+| 2026-11-19 | TASK-005 | backend-platform | 8 | 8 | 0 | 0 | 0 | 100 | 100 | 100 | #21 |
