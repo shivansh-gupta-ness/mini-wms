@@ -177,6 +177,21 @@ check('remove: the throwaway branch is gone', !git(['branch', '--list', 'worktre
 const outside = hook('worktree-remove.mjs', { worktree_path: path.join(tmp, 'somewhere-else') }, G, G);
 check('remove: refuses to touch a folder outside .claude\\worktrees', outside.status === 0 && fs.existsSync(tmp));
 
+// apply --remove: removes the worktree and its branch, never follows a node_modules junction, and exits 0
+const created2 = hook('worktree-create.mjs', { name: 'agent-t2', cwd: G }, G, G);
+const wt2 = created2.stdout.trim();
+const keep = path.join(tmp, 'keep-modules');
+fs.mkdirSync(keep, { recursive: true });
+fs.writeFileSync(path.join(keep, 'pkg.txt'), 'must survive\n');
+fs.symlinkSync(keep, path.join(wt2, 'node_modules'), 'junction');
+fs.writeFileSync(path.join(wt2, 'agent2.txt'), 'two\n');
+const rem = spawnSync('node', [path.join(HOOKS, 'worktree-apply.mjs'), wt2, '--remove'], { cwd: G, encoding: 'utf8', env: { ...process.env, PATH: ENV_PATH } });
+check('apply --remove: exits 0', rem.status === 0, rem.status !== 0 ? rem.stderr : '');
+check('apply --remove: the change was applied', text(path.join(G, 'agent2.txt')) === 'two\n');
+check('apply --remove: the worktree folder is gone', !fs.existsSync(wt2));
+check('apply --remove: the throwaway branch is gone', !git(['branch', '--list', 'worktree-agent-t2']).trim());
+check('apply --remove: the junction target was not deleted', fs.existsSync(path.join(keep, 'pkg.txt')));
+
 console.log('-- hook folder for tests (workRoot): the agent worktree, not the main checkout');
 process.env.CLAUDE_PROJECT_DIR = P;
 const lib = await import(pathToFileURL(path.join(HOOKS, 'lib.mjs')).href);

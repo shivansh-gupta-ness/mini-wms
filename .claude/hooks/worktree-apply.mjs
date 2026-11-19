@@ -18,6 +18,45 @@ if (!wt || !/[\\/]\.claude[\\/]worktrees[\\/]/i.test(wt)) {
   process.exit(2);
 }
 
+const sleep = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+
+// A junction or symlink (for example node_modules) is unlinked, never followed, before the folder is removed.
+function unlinkLinks(dir) {
+  for (const rel of ['node_modules', path.join('src', 'frontend', 'node_modules')]) {
+    const p = path.join(dir, rel);
+    try {
+      if (fs.lstatSync(p).isSymbolicLink()) { try { fs.rmdirSync(p); } catch { fs.unlinkSync(p); } }
+    } catch { /* not there */ }
+  }
+}
+
+function removeWorktree(main, dir, branch) {
+  try { execFileSync('dotnet', ['build-server', 'shutdown'], { stdio: 'ignore', timeout: 30000 }); } catch { /* dotnet not on PATH or nothing to stop */ }
+  unlinkLinks(dir);
+  let lastError = '';
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      git(['worktree', 'remove', '--force', dir], main);
+      lastError = '';
+      break;
+    } catch (e) {
+      lastError = (e.stderr || e.message || e).toString().trim();
+      if (!fs.existsSync(dir)) { lastError = ''; break; }
+      if (attempt < 4) sleep(1000 * attempt);
+    }
+  }
+  if (lastError) { // last resort: delete the folder with retries, then let git forget it
+    try { fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 500 }); } catch (e) { lastError = String(e.message || e); }
+    try { git(['worktree', 'prune'], main); } catch { /* ignore */ }
+  }
+  if (fs.existsSync(dir)) {
+    console.warn(`WARNING: the changes were applied, but ${dir} could not be removed (${lastError}). Delete the folder by hand, then run "git worktree prune" and delete the branch ${branch}.`);
+    return;
+  }
+  if (branch.startsWith('worktree-')) { try { git(['branch', '-D', branch], main); } catch { /* already gone */ } }
+  console.log(`Removed ${dir} and ${branch}.`);
+}
+
 try {
   const main = path.dirname(git(['rev-parse', '--path-format=absolute', '--git-common-dir'], wt).trim());
   // The folder must really be one of this repository's agent worktrees (not just a path that contains the words).
@@ -47,10 +86,10 @@ try {
     console.log(`Applied the agent's changes to ${main}:\n${names}`);
   }
   if (args.includes('--remove')) {
+    // The changes are already applied, so a folder that cannot be removed is a warning, not a failure (a build server or
+    // test host may still hold files in the worktree for a moment on Windows: "Permission denied").
     const branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], wt).trim();
-    git(['worktree', 'remove', '--force', wt], main);
-    if (branch.startsWith('worktree-')) git(['branch', '-D', branch], main);
-    console.log(`Removed ${wt} and ${branch}.`);
+    removeWorktree(main, wt, branch);
   }
 } catch (e) {
   console.error(`worktree-apply failed: ${(e.stderr || e.message || e).toString().trim()}`);
