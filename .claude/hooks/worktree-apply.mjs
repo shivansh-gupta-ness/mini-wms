@@ -10,7 +10,8 @@ const GIT = fs.existsSync('C:\\Program Files\\Git\\cmd\\git.exe') ? 'C:\\Program
 const git = (args, cwd, input) => execFileSync(GIT, args, { cwd, input, encoding: 'utf8', maxBuffer: 512 * 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] });
 
 const args = process.argv.slice(2);
-const wt = args.find((a) => !a.startsWith('--'));
+const given = args.find((a) => !a.startsWith('--'));
+const wt = given && path.resolve(given);
 if (!wt || !/[\\/]\.claude[\\/]worktrees[\\/]/i.test(wt)) {
   console.error('usage: node .claude/hooks/worktree-apply.mjs <agent worktree path> [--remove]');
   process.exit(2);
