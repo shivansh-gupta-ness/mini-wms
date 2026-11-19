@@ -1,11 +1,9 @@
 # Frontend: repository context
 
-Angular app for the Mini WMS. Structure decisions are in `docs/adr/ADR-006-angular-structure.md`.
-Created by TASK-007.
+Angular app for the Mini WMS (TASK-007). Structure decisions are in `docs/adr/ADR-006-angular-structure.md`.
 
 ## Versions (as scaffolded, 2026-11-19)
-Angular, Angular CLI / `@angular/build`, Material and CDK: 22.3.0. TypeScript ~6.0.2, RxJS ~7.8.0.
-Node used 24.22.3 (CLI 22.3 needs ^22.22.3, ^24.15.0 or >=26), npm 11.19.1.
+Angular, Angular CLI / `@angular/build`, Material and CDK: 22.3.0. TypeScript ~6.0.2, RxJS ~7.8.0. Node used 24.22.3, npm 11.19.1.
 
 ## Test runner
 The CLI default: Vitest 5 through the `@angular/build:unit-test` builder, with jsdom as the DOM.
@@ -27,7 +25,7 @@ Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component
   `<main id="main-content">`, skip link) and `not-found.page.ts`
 - `shared/`: reusable components, pipes, directives; `shared/forms/apply-server-errors.ts` sets `server` errors on controls
 - `features/`: one folder per module with `pages/`, `components/`, `data/` and `<module>.routes.ts`.
-  For now each holds only `pages/<module>-placeholder.page.ts` (an h1 with the title).
+  Only `locations` is built; the other modules hold `pages/<module>-placeholder.page.ts` (an h1 with the title).
 - `app.ts`, `app.config.ts`, `app.routes.ts`, `app.html`: root component, providers and routes.
   `app.html` is only `<router-outlet />`; the shell is the component of the parent route `''`.
 
@@ -62,8 +60,10 @@ Global `:focus-visible` outline and the skip-link style live in `src/styles.scss
 - API: `dotnet run --project src/backend/MiniWms.Api` (http://localhost:5080)
 - Frontend: `npm start` (http://localhost:4200) proxies `/api/` through `proxy.conf.json` (dev only; `ng build` does not use it).
 - The top bar shows `API: ok` or `API: unavailable` (health check every 30 s, `core/layout/api-status.ts`).
-## Not done yet
-- Real module screens come with their own tickets.
+
+## Locations screens (FEAT-001, `features/locations/`)
+- `pages/locations.page.ts` (header, Rename, Tree and List tabs, `reload()`); `components/` (`location-tree`, `bin-list`, the rename, zone and bin dialogs); `data/` (`LocationsApi` over `ApiClient`, models). Shared parts: `confirm-dialog`, `status-chip`, `empty-state`, `error-banner`.
+- Forms are Material dialogs; field errors use `applyServerErrors`, a stale-version 409 shows a banner with Reload. The real-browser check is not run.
 
 ## Lockfile
 `package-lock.json` is committed and is the source of truth for versions; use `npm ci`, not `npm install`.

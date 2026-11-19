@@ -4,7 +4,7 @@ const routes: Routes = [
   {
     path: '',
     title: 'Locations',
-    loadComponent: () => import('./pages/locations-placeholder.page').then((m) => m.LocationsPlaceholderPage),
+    loadComponent: () => import('./pages/locations.page').then((m) => m.LocationsPage),
   },
 ];
 
