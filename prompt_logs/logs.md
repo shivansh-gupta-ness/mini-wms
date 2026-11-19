@@ -121,7 +121,7 @@ continue from where you left
 
 **Context:** Session was interrupted while writing harness hooks; resuming setup (hooks, agents, skill, plugin repo, GitHub repo + ruleset, adapted dev_prompts).
 
-**Tokens:** 8,629,215 total (in 104 · out 66,960 [thinking 18,567] · cache-read 8,304,233 · cache-write 257,918) · 51 API calls · **Model:** claude-sonnet-5-5 (51)
+**Tokens:** 8,154,706 total (in 90 · out 62,085 [thinking 17,889] · cache-read 7,887,686 · cache-write 204,845) · 45 API calls · **Model:** claude-sonnet-5-5 (45)
 
 ---
 ## Prompt 11 — 2026-11-17
@@ -592,22 +592,6 @@ analyze and make next tasks ready
 
 **Context (outcome):** Analysed the ticket graph: only TASK-004 is unblocked (deps 001 and 003 merged); 005 and 006 wait for 004, 008-010 wait for 007, 011 waits for 002 and 008. TASK-004 set to ready with two additions (extend the existing tool manifest; AC 9: existing Api tests must use a temp database) and notes. TASK-006 stays draft with a note on an open decision (409 detail vs BUG-001). Chore PR opened.
 
----
-
-**User:**
-/start-ticket TASK-004
-
-**Context:** Checking PR 15 merge, ticket readiness and tree, then branching and scouting.
-
----
-
-**User:**
-approve the plan, go ahead (TASK-004)
-
-**Context:** TASK-004 plan approved with the recommended answers: Infrastructure tests in Api.Tests (no new project), sidecar files covered (AC 6 and 7 amended), database per test with a unique name, derived factories keep the override, pools cleared before delete. Active ticket written; implementer first, then test-writer.
-
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
 
 ---
-
-### 2026-11-19 — "yes do both" (commit/push/PR for TASK-004, and chore PR with learning-log row)
