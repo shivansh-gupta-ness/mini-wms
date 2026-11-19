@@ -24,13 +24,13 @@ public class Zone : AuditableEntity
     public static Zone Create(int warehouseId, string? code, string? name, ZoneType type) => new()
     {
         WarehouseId = warehouseId,
-        Code = Guard.RequiredText(code, "Code", CodeMaxLength),
-        Name = Guard.RequiredText(name, "Name", NameMaxLength),
+        Code = Guard.RequiredText(code, "code", "Code", CodeMaxLength),
+        Name = Guard.RequiredText(name, "name", "Name", NameMaxLength),
         Type = EnsureValidType(type),
     };
 
     /// <summary>The code never changes after creation (LOC-2.1).</summary>
-    public void Rename(string? name) => Name = Guard.RequiredText(name, "Name", NameMaxLength);
+    public void Rename(string? name) => Name = Guard.RequiredText(name, "name", "Name", NameMaxLength);
 
     /// <param name="hasBins">Whether the zone has any bin, active or not (LOC-2.1).</param>
     public void ChangeType(ZoneType type, bool hasBins)
@@ -63,5 +63,5 @@ public class Zone : AuditableEntity
     public void Activate() => IsActive = true;
 
     private static ZoneType EnsureValidType(ZoneType type) =>
-        Enum.IsDefined(type) ? type : throw new DomainException("Zone type must be Receiving, Storage or Shipping.");
+        Enum.IsDefined(type) ? type : throw new ValidationFailedException("type", "Zone type must be Receiving, Storage or Shipping.");
 }

@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MiniWms.Api.Common;
+using MiniWms.Api.Common.Errors;
 using MiniWms.Infrastructure;
 using MiniWms.Infrastructure.Persistence;
 
@@ -18,7 +19,16 @@ builder.Services.AddProblemDetails(options =>
     {
         var problem = context.ProblemDetails;
         problem.Extensions.Clear();
-        problem.Detail = null;
+
+        // detail is text written by our own code (business-rule 409), and only on 4xx. Never for 5xx, and never
+        // exception text from unexpected exceptions: only our own handlers mark a response as allowed.
+        var keepDetail = ProblemResponses.IsDetailAllowed(context.HttpContext)
+            && problem.Status is >= 400 and < 500;
+        if (!keepDetail)
+        {
+            problem.Detail = null;
+        }
+
         problem.Instance = null;
         problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
 
@@ -37,6 +47,10 @@ builder.Services.AddProblemDetails(options =>
             problem.Title = "An unexpected error occurred.";
         }
     });
+
+// Our own exception handlers run first, in this order; anything they do not handle stays a generic 500.
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 
 // ADR-002: EF Core + SQLite; a relative database path resolves against the content root.
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);

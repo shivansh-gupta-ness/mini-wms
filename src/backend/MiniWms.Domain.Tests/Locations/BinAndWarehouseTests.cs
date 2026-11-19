@@ -24,8 +24,8 @@ public class BinTests
     [Trait("AC", "TASK-005.6")]
     public void Create_requires_a_code_and_a_name(string? blank)
     {
-        Assert.Throws<DomainException>(() => Bin.Create(1, blank, "Bin"));
-        Assert.Throws<DomainException>(() => Bin.Create(1, "A-01", blank));
+        Assert.Throws<ValidationFailedException>(() => Bin.Create(1, blank, "Bin"));
+        Assert.Throws<ValidationFailedException>(() => Bin.Create(1, "A-01", blank));
     }
 
     [Fact]
@@ -35,8 +35,8 @@ public class BinTests
         var atLimit = Bin.Create(1, new string('C', 30), new string('N', 100));
 
         Assert.Equal(30, atLimit.Code.Length);
-        Assert.Throws<DomainException>(() => Bin.Create(1, new string('C', 31), "Bin"));
-        Assert.Throws<DomainException>(() => Bin.Create(1, "A-01", new string('N', 101)));
+        Assert.Throws<ValidationFailedException>(() => Bin.Create(1, new string('C', 31), "Bin"));
+        Assert.Throws<ValidationFailedException>(() => Bin.Create(1, "A-01", new string('N', 101)));
     }
 
     [Theory]
@@ -85,7 +85,7 @@ public class BinTests
     {
         var bin = Bin.Create(1, "A-01", "Bin");
 
-        Assert.Throws<DomainException>(() => bin.Rename(blank));
+        Assert.Throws<ValidationFailedException>(() => bin.Rename(blank));
         Assert.Equal("Bin", bin.Name);
     }
 }
@@ -110,8 +110,8 @@ public class WarehouseTests
     [Trait("AC", "TASK-005.6")]
     public void Create_requires_a_code_and_a_name(string? blank)
     {
-        Assert.Throws<DomainException>(() => Warehouse.Create(blank, "Name"));
-        Assert.Throws<DomainException>(() => Warehouse.Create("MAIN", blank));
+        Assert.Throws<ValidationFailedException>(() => Warehouse.Create(blank, "Name"));
+        Assert.Throws<ValidationFailedException>(() => Warehouse.Create("MAIN", blank));
     }
 
     [Fact]
@@ -121,8 +121,8 @@ public class WarehouseTests
         var atLimit = Warehouse.Create(new string('C', 20), new string('N', 100));
 
         Assert.Equal(20, atLimit.Code.Length);
-        Assert.Throws<DomainException>(() => Warehouse.Create(new string('C', 21), "Name"));
-        Assert.Throws<DomainException>(() => Warehouse.Create("MAIN", new string('N', 101)));
+        Assert.Throws<ValidationFailedException>(() => Warehouse.Create(new string('C', 21), "Name"));
+        Assert.Throws<ValidationFailedException>(() => Warehouse.Create("MAIN", new string('N', 101)));
     }
 
     [Fact]
@@ -134,7 +134,7 @@ public class WarehouseTests
         warehouse.Rename("Central");
 
         Assert.Equal("Central", warehouse.Name);
-        Assert.Throws<DomainException>(() => warehouse.Rename(" "));
+        Assert.Throws<ValidationFailedException>(() => warehouse.Rename(" "));
         Assert.Equal("Central", warehouse.Name);
         Assert.Equal("MAIN", warehouse.Code);
     }

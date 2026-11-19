@@ -20,10 +20,10 @@ public class Warehouse : AuditableEntity
 
     public static Warehouse Create(string? code, string? name) => new()
     {
-        Code = Guard.RequiredText(code, "Code", CodeMaxLength),
-        Name = Guard.RequiredText(name, "Name", NameMaxLength),
+        Code = Guard.RequiredText(code, "code", "Code", CodeMaxLength),
+        Name = Guard.RequiredText(name, "name", "Name", NameMaxLength),
     };
 
     /// <summary>The code never changes after creation (LOC-2.1).</summary>
-    public void Rename(string? name) => Name = Guard.RequiredText(name, "Name", NameMaxLength);
+    public void Rename(string? name) => Name = Guard.RequiredText(name, "name", "Name", NameMaxLength);
 }
