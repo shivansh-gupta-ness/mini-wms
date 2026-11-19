@@ -138,4 +138,14 @@ public class WarehouseTests
         Assert.Equal("Central", warehouse.Name);
         Assert.Equal("MAIN", warehouse.Code);
     }
+
+    [Fact]
+    [Trait("AC", "TASK-005.6")]
+    public void Deactivate_rejects_a_negative_stock_total_as_an_invalid_argument()
+    {
+        var bin = Bin.Create(1, "A-01", "Bin");
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => bin.Deactivate(-5));
+        Assert.True(bin.IsActive);
+    }
 }

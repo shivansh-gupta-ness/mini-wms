@@ -166,4 +166,14 @@ public class TraitCoverageTests
 
         Assert.True(tagged > 0, $"No test is tagged [Trait(\"AC\", \"{expected}\")].");
     }
+
+    [Fact]
+    [Trait("AC", "TASK-005.6")]
+    public void Deactivate_rejects_a_negative_stock_total_as_an_invalid_argument()
+    {
+        var product = Product.Create("SKU-1", "Widget", "EA", 0);
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => product.Deactivate(-1));
+        Assert.True(product.IsActive);
+    }
 }

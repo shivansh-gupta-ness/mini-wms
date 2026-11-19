@@ -6,9 +6,9 @@ How it was run: `/start-ticket` flow with `ticket-scout`, owner approval (with f
 | Command | Result |
 |---|---|
 | `dotnet build` (src/backend) | 0 Warning(s), 0 Error(s) |
-| `dotnet test --no-build` (run twice) | Both runs: Domain.Tests Passed 61, Api.Tests Passed 153, Application.Tests Passed 46, Failed 0 |
+| `dotnet test --no-build` (run twice) | Both runs: Domain.Tests Passed 63, Api.Tests Passed 158, Application.Tests Passed 46, Failed 0 |
 | `dotnet test --no-build --filter "AC=TASK-005.<n>"` | n=1: 35, 2: 5, 3: 6, 4: 3, 5: 4 Domain + 10 Api, 6: 59, 7: 2 Domain + 6 Api, 8: 4; all passed |
-| `powershell -NoProfile -ExecutionPolicy Bypass -File src/backend/coverage.ps1` | Domain 100%, Api 100%; `Combined line coverage: 100% (98 of 98 lines); threshold 90%`. `GATE PASSED.` |
+| `powershell -NoProfile -ExecutionPolicy Bypass -File src/backend/coverage.ps1` | Domain 100%, Api 100%; `Combined line coverage: 100% (100 of 100 lines); threshold 90%`. `GATE PASSED.` |
 | `dotnet tool run dotnet-ef migrations has-pending-model-changes` (implementer run) | "No changes have been made to the model since the last migration." |
 | `src/backend/MiniWms.Api/App_Data` after all runs | does not exist |
 
@@ -20,14 +20,14 @@ How it was run: `/start-ticket` flow with `ticket-scout`, owner approval (with f
 | 4 | Bin with a missing zone is rejected (FK) | PASS | 3 tests (`ConstraintTests`, SQLite error 787; also zone without warehouse) | Tests passed | 2026-11-19 |
 | 5 | Zone type outside Receiving/Storage/Shipping is rejected | PASS | 10 Api tests (CHECK, raw SQL) + 4 Domain tests (undefined enum) | Tests passed | 2026-11-19 |
 | 6 | Domain enforces zone type, active-flag and reorder-level invariants | PASS | 59 Domain tests (`ZoneTests`, `BinAndWarehouseTests`, `ProductTests`). Stock facts are passed as parameters; the stock-based checks themselves wait for the inventory module | Tests passed | 2026-11-19 |
-| 7 | All tests pass with AC traits | PASS | 8 trait-presence tests (6 Api, 2 Domain) | 260 of 260 tests pass, twice | 2026-11-19 |
+| 7 | All tests pass with AC traits | PASS | 8 trait-presence tests (6 Api, 2 Domain) | 267 of 267 tests pass, twice | 2026-11-19 |
 | 8 | First migration made with local `dotnet-ef`, committed with snapshot, no pending changes | PASS | 4 tests (`MigrationTests`: files exist, migration listed, `HasPendingModelChanges()` false, no pending migration on a new DB) | Tests passed; implementer's CLI check printed no changes | 2026-11-19 |
 
 Totals: PASS 8, FAIL 0, N/A 0, NOT RUN 0
 
 ## Gates
 - Mapping: 8 of 8 ACs have dedicated tests (100%).
-- Pass: 260 of 260 tests pass (100%); 130 new tests (61 Domain, 69 Api).
+- Pass: 267 of 267 tests pass (100%); 137 new tests (63 Domain, 74 Api).
 - Coverage: 100% (gate 90%).
 
 ## Notes
@@ -36,3 +36,7 @@ Totals: PASS 8, FAIL 0, N/A 0, NOT RUN 0
 - `IsActive` default uses `HasDefaultValueSql("1")`, because `HasDefaultValue(true)` makes EF turn an explicit `false` into `true`.
 - Not exercised: the `Seed:Warehouse:*` configuration override.
 - PR size: about 2,400 changed lines in 35 files; about 720 lines are generated migration files. Within the 5000-line and 60-file limits.
+
+## Review round (`/code-review`, 10 findings)
+Fixed: the seeder trims the setting and does nothing if any warehouse exists (so a changed code cannot add a second warehouse, LOC-1.1); bad seed settings raise a message naming `Seed:Warehouse`; a lost start-up race is tolerated; the zone-type CHECK is built from the `ZoneType` names; `Deactivate` rejects a negative stock total. 5 new Api tests and 2 new Domain tests; after the fixes build 0 warnings, 63 + 158 + 46 tests pass twice, gate 100%.
+Not changed: bin code unique across the single warehouse is the owner's decision (no `WarehouseId` on Bin); `Warehouse.IsActive` stays always true in version 1 (data model); NOCASE is ASCII-only and non-blank is enforced in Domain only (accepted in the ticket decisions); the fixture's hand-written `Items` DDL stays, as noted above. Finding 10 was a stale local `main`; the PR diff against `origin/main` is only the TASK-005 files.

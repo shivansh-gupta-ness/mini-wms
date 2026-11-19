@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MiniWms.Domain.Common;
 using MiniWms.Domain.Locations;
 
 namespace MiniWms.Infrastructure.Persistence;
@@ -10,18 +11,41 @@ public static class WarehouseSeeder
     public const string DefaultCode = "MAIN";
     public const string DefaultName = "Main warehouse";
 
+    // A blank value counts as missing; surrounding spaces are removed the same way the Domain does.
+    private static string Setting(IConfiguration configuration, string key, string fallback) =>
+        configuration[key] is { } value && !string.IsNullOrWhiteSpace(value) ? value.Trim() : fallback;
+
     public static void Seed(AppDbContext db, IConfiguration configuration)
     {
-        var code = configuration["Seed:Warehouse:Code"] is { Length: > 0 } c ? c : DefaultCode;
-        var name = configuration["Seed:Warehouse:Name"] is { Length: > 0 } n ? n : DefaultName;
-
-        // The Code column is NOCASE, so this comparison is case-insensitive in SQLite.
-        if (db.Warehouses.Any(w => w.Code == code))
+        // LOC-1.1: exactly one warehouse exists. If any warehouse is there, the seed does nothing,
+        // so changing the configured code later cannot add a second one.
+        if (db.Warehouses.Any())
         {
             return;
         }
 
-        db.Warehouses.Add(Warehouse.Create(code, name));
-        db.SaveChanges();
+        var code = Setting(configuration, "Seed:Warehouse:Code", DefaultCode);
+        var name = Setting(configuration, "Seed:Warehouse:Name", DefaultName);
+
+        Warehouse warehouse;
+        try
+        {
+            warehouse = Warehouse.Create(code, name);
+        }
+        catch (DomainException ex)
+        {
+            throw new InvalidOperationException(
+                $"The warehouse seed configuration (Seed:Warehouse:Code / Name) is invalid: {ex.Message}", ex);
+        }
+
+        db.Warehouses.Add(warehouse);
+        try
+        {
+            db.SaveChanges();
+        }
+        catch (DbUpdateException) when (db.Warehouses.AsNoTracking().Any())
+        {
+            // Another instance seeded between our check and our insert; the warehouse exists, which is the goal.
+        }
     }
 }

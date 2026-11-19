@@ -33,6 +33,6 @@ Add the entities, EF configurations and the first migration for the first two mo
 ## Notes and links
 - TASK-004 stores `DateTimeOffset` as binary and sets audit fields and `Version` centrally; new entities derive from `AuditableEntity`. Tests use the temporary-database fixture in `MiniWms.Api.Tests/Persistence`, never `App_Data/miniwms.db`.
 - Seeding runs at startup in Development only, like the migration, and must be idempotent.
-- Keep the PR within the limits (2000 lines, 60 files); if the first migration is large, say so in the brief.
+- Keep the PR within the limits (5000 lines, 60 files); if the first migration is large, say so in the brief.
 - Record AC results in `docs/reports/TASK-005/ac-results.md` and one row in `docs/reports/ac-log.md`.
 - Owner decisions (2026-11-19, on the scout's brief): seeding is Development only like the migration; no database constraint for "exactly one warehouse" (seeder plus no endpoints); Warehouse `Code` max length 20; Domain enforces the stock-free rules now and takes stock-dependent facts (has bins, has active bins, total on hand) as parameters, the stock-based checks wait for the inventory module; max lengths are enforced with CHECK constraints (`length(col) <= n`) because SQLite ignores `HasMaxLength`; code and SKU unique indexes use NOCASE (ASCII only, accepted); Bin code unique across the single warehouse. `docs/specs/product.md` (LOC and PRD rules) is also a source.

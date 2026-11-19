@@ -32,6 +32,8 @@ public class Bin : AuditableEntity
     /// <param name="totalOnHand">Total quantity held in this bin across all products (LOC-2.2).</param>
     public void Deactivate(int totalOnHand)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(totalOnHand);
+
         if (totalOnHand > 0)
         {
             throw new DomainException($"The bin cannot be deactivated while it holds stock ({totalOnHand} on hand).");

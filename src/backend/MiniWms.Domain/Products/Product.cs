@@ -46,6 +46,8 @@ public class Product : AuditableEntity
     /// <param name="totalOnHand">Total quantity of this product across all bins (PRD-2.2).</param>
     public void Deactivate(int totalOnHand)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(totalOnHand);
+
         if (totalOnHand > 0)
         {
             throw new DomainException(

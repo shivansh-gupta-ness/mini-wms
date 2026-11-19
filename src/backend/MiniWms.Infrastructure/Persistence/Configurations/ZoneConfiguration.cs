@@ -12,7 +12,7 @@ internal sealed class ZoneConfiguration : IEntityTypeConfiguration<Zone>
         {
             t.HasCheckConstraint("CK_Zones_Code_Length", $"length(\"Code\") <= {Zone.CodeMaxLength}");
             t.HasCheckConstraint("CK_Zones_Name_Length", $"length(\"Name\") <= {Zone.NameMaxLength}");
-            t.HasCheckConstraint("CK_Zones_Type", "\"Type\" IN ('Receiving', 'Storage', 'Shipping')");
+            t.HasCheckConstraint("CK_Zones_Type", $"\"Type\" IN ({string.Join(", ", Enum.GetNames<ZoneType>().Select(n => $"'{n}'"))})");
         });
 
         builder.Property(z => z.Code).IsRequired().HasMaxLength(Zone.CodeMaxLength).UseCollation("NOCASE");
