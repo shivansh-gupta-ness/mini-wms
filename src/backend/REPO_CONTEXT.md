@@ -68,3 +68,8 @@ Put new code in the module folder, not at the project root.
 - Endpoints read the body and the query string themselves, so bad JSON or a bad `page`, `pageSize`, `zoneId`, `isActive` is a field-level 400, not ASP.NET's bare 400.
 - `IStockQuery` (`Application/Common`; `BinOnHandAsync`, `ProductOnHandAsync`) is registered with `TryAdd` as `ZeroStockQuery` (always 0) until Inventory registers the real one; tests replace it with a fake.
 - A duplicate zone or bin code (case-insensitive, NOCASE column) is a 400 under `code`, found by the use-case check; the unique index is the safety net and `LocationStore.SaveAsync` maps its violation to the same 400.
+
+## Request size limit (TASK-014)
+- `Api/Common/RequestLimits/RequestBodyLimitMiddleware` caps every request body at 65,536 bytes (inclusive) in the app, not in Kestrel: TestServer ignores Kestrel's limit. A declared `Content-Length` over the cap is a 413 at once; otherwise the body stream throws while it is read, and `RequestBodyTooLargeExceptionHandler` turns that into the same 413.
+- The 413 is `application/problem+json` with `type` `error`, `title` "Request body too large.", `status` and `traceId`; no `detail`, `errors` or limit text.
+- `AlwaysJsonProblemDetailsWriter` writes problem+json whatever the request's `Accept` is (the default writer declines `Accept: text/html`, which left a 500 with an empty body).
