@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -12,7 +14,7 @@ const { join } = (await import(/* @vite-ignore */ pathModule)) as any;
 const root: string = (globalThis as any).process.cwd();
 
 async function render(url: string): Promise<HTMLElement> {
-  TestBed.configureTestingModule({ providers: [provideRouter(routes)] });
+  TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()] });
   const harness = await RouterTestingHarness.create();
   await harness.navigateByUrl(url);
   harness.detectChanges();

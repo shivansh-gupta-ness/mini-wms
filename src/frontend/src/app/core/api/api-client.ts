@@ -1,10 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_PATH } from './api-base';
 
 export interface ApiRequestOptions {
   params?: HttpParams | Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>>;
+  context?: HttpContext;
 }
 
 /** The single way feature services call the backend. Prefixes `API_BASE_PATH` to a relative path. */
