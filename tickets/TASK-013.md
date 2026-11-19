@@ -1,0 +1,40 @@
+---
+id: TASK-013
+type: task
+title: Refresh the docs and context files against the code
+status: ready
+owner: shivansh-gupta-ness
+component: backend-platform
+risk: low
+allowed_paths: [src/backend/REPO_CONTEXT.md, src/frontend/REPO_CONTEXT.md, src/frontend/README.md, docs/adr/**, docs/specs/**, GUIDE.md, docs/sdd-roadmap.md, docs/reports/README.md, docs/reports/TASK-011/**, docs/reports/FEAT-001/**, docs/reports/TASK-013/**, docs/reports/ac-log.md, docs/learning-log.md, docs/qa/README.md, tickets/**, src/.gitkeep, src/backend/MiniWms.Api/Common/.gitkeep, src/backend/MiniWms.Application/Common/.gitkeep, src/backend/MiniWms.Infrastructure/Common/.gitkeep]
+docs: [docs/adr/ADR-001-solution-layering.md, docs/adr/ADR-002-ef-core-sqlite.md, docs/adr/ADR-003-api-conventions.md, docs/adr/ADR-005-testing-coverage-and-ac-log.md]
+parent: 
+depends_on: []
+---
+
+## Description
+Phase 6 hardening, part 1. A read-only audit (2026-11-20) compared the documents with the code and found drift: ADRs and specs still say "Proposed" or "DRAFT", ADR-002 and ADR-003 contradict the built code, the backend context describes the seeder wrongly, `GUIDE.md` says `src/` is not scaffolded, and several reports and tickets lack the written decision or Delivery section the rules ask for. Fix every item in the audit that is not a protected file (the protected ones go through a `setup/` PR). The code wins: change the document, not the code. This ticket changes no behaviour.
+
+## Acceptance criteria
+1. Given the ADRs in `docs/adr/`, when read, then each status line says `Accepted` (ADR-004: accepted, not implemented, Auth deferred by the scope decision of 2026-11-19), and the text that the code contradicts is corrected: ADR-002 (timestamps are stored as binary UTC ticks in INTEGER columns; the Development-only start-up `WarehouseSeeder` adds the warehouse only if none exists; the dev-admin user seed is deferred with Auth), ADR-003 (a duplicate code is a 400 under `code`; the 409 row lists the real business conflicts; the example error carries `traceId` and the six `type` values are listed; 405 is in the status table; `/locations/tree` is the stated exception to paging; CORS stays as a fallback beside the dev proxy), ADR-005 (trait and test-name examples use ticket ids such as `FEAT-001.3`; the NSubstitute clause is dropped), ADR-006 (no linter is configured; route guards and role-aware hiding are deferred with Auth) and ADR-001 (password hashing and authentication setup are marked deferred).
+2. Given `src/backend/REPO_CONTEXT.md`, when read, then it describes the seeder as adding the warehouse only if no warehouse exists, uses ticket ids in the trait example, says `DateTimeOffset` is stored as UTC ticks, names what `SolutionStructureTests` really checks (no claim of an EF Core architecture test), has the run-the-API line without scaffold wording, mentions `GET /api/v1/health` and the CORS policy, and stays under 80 lines.
+3. Given `src/frontend/REPO_CONTEXT.md`, when read, then it stays at most 78 lines counted with the trailing newline (the two Gotchas bullets are merged to make room), mentions the bundle budget (warning 700 kB, error 1 MB), and `src/frontend/README.md` is one line pointing to `REPO_CONTEXT.md`.
+4. Given `docs/specs/product.md`, `docs/specs/ui.md` and `docs/specs/data-model.md`, when read, then their status lines say `Accepted` with the Locations-only scope, the module table has a "Built" column, NFR-2 carves out the unpaged location tree, `ui.md` states that all five nav items show (unbuilt modules open a placeholder) and that buttons show to everyone until Auth, and `data-model.md` uses the real plural table names, the Warehouse code maximum of 20, ticks timestamps, CHECK constraints and `ON DELETE RESTRICT`.
+5. Given `docs/specs/api/locations.yaml` and `products.yaml`, when linted with `npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml" --fail-severity=warn`, then they report nothing, `listZones`, `listBins` and `getLocationTree` document the field-level 400, the warehouse operations document 404 and that POST and DELETE return 405, and `products.yaml` and `docs/specs/api/README.md` say the Products contract is design only (not implemented in this evaluation); and `node docs/specs/api/tools/ac-coverage.mjs` still reports 19 of 19.
+6. Given `GUIDE.md`, `docs/sdd-roadmap.md` and `docs/reports/README.md`, when read, then `GUIDE.md` no longer says `src/` is not scaffolded or that the format and test hooks do nothing, the roadmap says Phase 5 is complete (FEAT-001 criteria 1 to 27 PASS, PRs 37 and 41) and the later module components are annotated as not built, and the reports README describes what the ticket folders really hold.
+7. Given `docs/learning-log.md`, when read, then it has rows for the gaps the audit found (the PR limit change, the bundle budget, the 400 versus 409 spec conflict and the ADRs not updated, the TASK-011 NOT RUN criterion, the frontend context file at its line cap, the removed Products ticket and the Locations-only scope).
+8. Given `docs/reports/TASK-011/ac-results.md`, when read, then AC 1 carries a written owner decision (accepted as NOT RUN, to be checked by hand with both servers running, approved with this ticket's plan); every done ticket has a short `## Delivery` section (the PR and the pass count, taken from `docs/reports/ac-log.md`); and `docs/reports/FEAT-001/ac-results.md` names PRs 37 and 41.
+9. Given the empty placeholder `.gitkeep` files in `src/`, `docs/adr/`, `docs/specs/`, `docs/reports/` and the three `Common/` folders that now hold files, when listed, then they are removed (the empty-module ones in `MiniWms.Domain` and `docs/qa/` stay).
+10. Given the repository after the changes, when `dotnet build src/backend`, `dotnet test src/backend --no-build`, `npm run test:coverage` and `npm run test:gate` run, then they pass exactly as before (this ticket changes no code), and `docs/reports/TASK-013/ac-results.md` records the real output and one row is added to `docs/reports/ac-log.md`.
+
+## Out of scope
+- The protected files: root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, `.github/CODEOWNERS` and `.claude/hooks/format.mjs` (a `setup/` PR).
+- Any code change, including the optional comment fix at `AppDbContext.cs:109`.
+- The Products, Inventory, Inbound, Outbound and Auth modules.
+
+## Notes and links
+- The audit report (2026-11-20) numbered its findings 1 to 59; the criteria above group them: ADRs 20 to 33, backend context 1 to 6, frontend context 7 to 9, specs 40 to 46, contracts 47 to 50, GUIDE and roadmap 34 to 39, learning log 51, reports and tickets 52 to 54, placeholders 56.
+- The frontend context file is at its guard limit (77 lines by `wc -l`): every edit there must be net zero lines, or the guards `tooling.spec.ts` (TASK-010.6) and `locations.guards.spec.ts` (FEAT-001.27) fail. Run `npm test` in `src/frontend` after touching it.
+- The learning log is a shared file: add rows only, never rewrite existing ones.
+- The TASK-011 owner decision (criterion 8) is recorded on the owner's approval of this plan; if the owner prefers to run the manual check first, replace the line with the result.
+- Record AC results in `docs/reports/TASK-013/ac-results.md` and one row in `docs/reports/ac-log.md`. Docs-only ticket: the proof is the real command output, there is no new test code.
