@@ -2,7 +2,7 @@
 id: TASK-009
 type: task
 title: Frontend HTTP layer: interceptors, ApiError and form error helper
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
