@@ -41,7 +41,7 @@ Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component
 - Watch build: `npm run watch`
 
 ## Not done yet
-- Dev-server proxy for `/api/v1` is out of scope here (TASK-009, HTTP layer).
+- Dev-server proxy for `/api` is TASK-011; the HTTP layer is TASK-009.
 - Coverage gate is TASK-010. Shell and navigation are TASK-008.
 
 ## Lockfile
