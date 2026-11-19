@@ -90,7 +90,7 @@ Configured in `.claude/settings.json`, scripts in `.claude/hooks/`. They also ap
 
 | Event | Hook | What it does |
 |---|---|---|
-| Before Edit / Write | `scope-guard` | Always blocks secrets. During a ticket or when an editing agent is the caller: blocks protected paths (`.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, `prompt_logs/`), blocks risk high or blocked, and enforces `allowed_paths`. Outside a ticket, setup work is allowed. |
+| Before Edit / Write | `scope-guard` | Always blocks secrets. During a ticket or when an editing agent is the caller: blocks protected paths (`.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, `prompt_logs/`; the module `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are ordinary code files), blocks risk high or blocked, and enforces `allowed_paths`. Outside a ticket, setup work is allowed. |
 | Before Bash / PowerShell | `command-guard` | Blocks force push, push to main, `reset --hard`, `clean -f`, `--no-verify`, recursive deletes of root or parent, network commands (curl, wget and similar), `gh pr merge`, `gh repo delete`. |
 | After Edit / Write | `format` | Formats the file. Does nothing until `src/` has a project. |
 | When a turn or subagent ends | `token-report` | Updates `prompt_logs/token_usage.md`, `token_usage.json` and the `Tokens:` line under each prompt in `prompt_logs/logs.md`. |
