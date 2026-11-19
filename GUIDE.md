@@ -95,7 +95,6 @@ Configured in `.claude/settings.json`, scripts in `.claude/hooks/`. They also ap
 | After Edit / Write | `format` | Formats the file. |
 | When a turn or subagent ends | `token-report` | Updates `prompt_logs/token_usage.md`, `token_usage.json` and the `Tokens:` line under each prompt in `prompt_logs/logs.md`. |
 | When a turn or subagent ends | `run-tests` | Runs tests after an editing agent finished. |
-
 | An editing agent starts | `worktree-create` (`WorktreeCreate`) | Creates the agent's isolated worktree under `.claude/worktrees/<name>` on its own branch, from the task branch plus a snapshot of the current uncommitted work. It builds the path with an uppercase drive letter, which avoids a Claude Code bug on Windows where the worktree is refused because `c:` and `C:/` compare as different (issue 91618) |
 | An agent's worktree is removed | `worktree-remove` (`WorktreeRemove`) | Removes the worktree and its throwaway branch |
 

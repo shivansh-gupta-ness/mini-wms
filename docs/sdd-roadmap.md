@@ -80,7 +80,7 @@ Twelve small TASK tickets, one layer each (backend, frontend, contracts). Each i
 | TASK-011 | frontend | Dev proxy and API health indicator | 002, 008 |
 | TASK-012 | contracts | Lint the OpenAPI contracts with Spectral and add ADR-003 rules | none |
 
-Tickets that can start immediately: TASK-001, TASK-007 and TASK-012.
+All of these tickets are done (TASK-001 to TASK-012, PRs 8 to 32).
 
 After the scaffold (you, in a `setup/` PR, because these are protected files):
 - Fill the Commands section of `REPO_CONTEXT.md` (build, test, run locally); add `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md`.
@@ -118,7 +118,7 @@ Per module:
 - Refresh the `REPO_CONTEXT.md` files and the knowledge map against the code.
 
 ## Phase 7: Evaluate and close
-One page in `docs/reports/evaluation.md`:
+Done: `docs/reports/evaluation.md`. One page covering:
 - AC results from `ac-log.md`: total ACs, passed first time, passed after fixes, failed, N/A.
 - Tickets delivered by type and risk; time per ticket.
 - Token cost per ticket and per stage (`prompt_logs/token_usage.md`, by branch/ticket).

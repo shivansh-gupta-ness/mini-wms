@@ -38,6 +38,7 @@ The one stated exception is `GET /locations/tree`: a bounded tree view that retu
 | 404 | Resource does not exist |
 | 405 | A method the resource never supports (`POST` or `DELETE` on `/warehouse`), with an `Allow: GET, PATCH` header |
 | 409 | Business-rule conflict (deactivate with stock or with an Active bin, stale `version`, a zone type change while the zone has bins) |
+| 413 | Request body larger than 64 KB (65,536 bytes, inclusive), on any route: problem+json with `type` `error`, title "Request body too large.", `status` and `traceId`; no `detail`, `errors` or limit text (TASK-014) |
 | 500 | Unexpected error: generic body, details only in the log, never a stack trace (NFR-3) |
 
 **Validation:** request shape and field rules are checked in the Application layer with FluentValidation validators, one per command; rules that need data are checked in the use case. A uniqueness violation (duplicate code) raises a validation failure on `code`, mapped to 400; a business-rule conflict (stock, Active bins, stale `version`) raises a domain exception mapped to 409. Messages are the text the UI shows.
