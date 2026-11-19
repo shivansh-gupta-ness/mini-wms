@@ -14,6 +14,12 @@ TestResults/
 coverage/
 *.log
 
+# Local SQLite database and its WAL sidecar files (ADR-002)
+App_Data/
+*.db
+*.db-wal
+*.db-shm
+
 # Node / Angular
 node_modules/
 dist/
