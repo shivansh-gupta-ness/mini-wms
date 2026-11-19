@@ -68,6 +68,8 @@ t('worktree path, project dir = worktree: in scope (ticket found in main repo)',
 t('worktree path: out of scope', sg, f(path.join(WT, 'src', 'frontend', 'a.ts'), { agent_type: 'change-implementer' }), 2, WT);
 t('worktree path: protected .claude/settings.json', sg, f(path.join(WT, '.claude', 'settings.json'), { agent_type: 'change-implementer' }), 2, WT);
 t('worktree path: protected REPO_CONTEXT.md', sg, f(path.join(WT, 'REPO_CONTEXT.md'), { agent_type: 'change-implementer' }), 2, WT);
+t('root REPO_CONTEXT.md stays protected', sg, f(inP('REPO_CONTEXT.md'), { agent_type: 'change-implementer' }), 2);
+t('module REPO_CONTEXT.md is editable when allowed_paths covers it', sg, f(inP('src\\backend\\REPO_CONTEXT.md'), { agent_type: 'change-implementer' }), 0);
 t('worktree path: secret file', sg, f(path.join(WT, '.env'), { agent_type: 'change-implementer' }), 2, WT);
 clearTicket();
 t('worktree, editing agent, no ticket anywhere', sg, f(path.join(WT, 'src', 'backend', 'A.cs'), { agent_type: 'change-implementer' }), 2, WT);

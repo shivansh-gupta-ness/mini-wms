@@ -43,7 +43,8 @@ blocked (secrets, CI, harness): no agent edits.
 - Token report: `node scripts/token-report.mjs` (also runs automatically when a turn ends)
 
 ## Rules agents must follow
-- Never edit `.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, secrets or `.env*`.
+- Never edit `.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, this root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, secrets or `.env*`.
+  The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`, under 80 lines) in the same PR as the change they describe.
 - Stay inside the ticket's `allowed_paths`. If scope must widen, stop and ask the owner.
 - No network commands. Do not push, merge or force-push; the owner does that.
 - Code wins over docs: if a doc disagrees with the code, flag it in the brief, do not silently follow the doc.
