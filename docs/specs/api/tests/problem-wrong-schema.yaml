@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Rule test - Problem schema without traceId
+  version: 1.0.0
+  description: Error body schema that does not require traceId. Linting it must report error-response-uses-problem-schema only.
+servers:
+  - url: http://localhost:5080/api/v1
+tags:
+  - { name: Things, description: Test things }
+paths:
+  /things:
+    get:
+      operationId: listThings
+      summary: List things
+      description: A list operation with page, pageSize and sort.
+      tags: [Things]
+      x-acceptance-criteria: [TST-1.1]
+      parameters:
+        - { name: page, in: query, schema: { type: integer } }
+        - { name: pageSize, in: query, schema: { type: integer } }
+        - { name: sort, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: A page of things
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ThingPage' }
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+components:
+  schemas:
+    Thing:
+      type: object
+      properties:
+        id: { type: integer }
+    ThingPage:
+      type: object
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Thing' } }
+        page: { type: integer }
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        traceId: { type: string }

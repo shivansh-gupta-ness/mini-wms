@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Rule test - single-object reads are not lists
+  version: 1.0.0
+  description: GET operations that return one object or a bare array carry no paging parameters; rule list-operation-has-paging-params must not fire.
+servers:
+  - url: http://localhost:5080/api/v1
+tags:
+  - { name: Things, description: Test things }
+paths:
+  /things/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    get:
+      operationId: getThing
+      summary: Get a thing
+      description: Returns a single object.
+      tags: [Things]
+      x-acceptance-criteria: [TST-1.1]
+      responses:
+        '200':
+          description: The thing
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Thing' }
+  /thing-tree:
+    get:
+      operationId: getThingTree
+      summary: Get the thing tree
+      description: Returns a bare, unpaged array (no items property on the schema).
+      tags: [Things]
+      x-acceptance-criteria: [TST-1.2]
+      responses:
+        '200':
+          description: The tree
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Thing' }
+components:
+  schemas:
+    Thing:
+      type: object
+      properties:
+        id: { type: integer }

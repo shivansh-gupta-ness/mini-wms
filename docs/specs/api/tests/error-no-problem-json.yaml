@@ -1,0 +1,36 @@
+openapi: 3.0.3
+info:
+  title: Rule test - error response without problem+json
+  version: 1.0.0
+  description: The 404 response offers application/json only, so rule error-response-is-problem-json must fire.
+servers:
+  - url: http://localhost:5080/api/v1
+tags:
+  - { name: Things, description: Test things }
+paths:
+  /things/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: integer } }
+    get:
+      operationId: getThing
+      summary: Get a thing
+      description: Single-object read whose error body uses the wrong content type.
+      tags: [Things]
+      x-acceptance-criteria: [TST-1.1]
+      responses:
+        '200':
+          description: The thing
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Thing' }
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Thing' }
+components:
+  schemas:
+    Thing:
+      type: object
+      properties:
+        id: { type: integer }

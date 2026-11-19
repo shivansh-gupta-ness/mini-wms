@@ -1,0 +1,82 @@
+# Spectral ruleset for the Mini WMS API contracts (docs/specs/api/*.yaml).
+# Pinned CLI version: @stoplight/spectral-cli@6.17.1
+# Run: npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml"
+# Conventions come from docs/adr/ADR-003-api-conventions.md.
+extends: ["spectral:oas"]
+
+rules:
+  # Disabled: the contracts are internal to a never-deployed evaluation project;
+  # there is no support contact, license or terms page to publish.
+  info-contact: off
+
+  # ADR-003: every operation lists the acceptance criteria it serves.
+  operation-has-acceptance-criteria:
+    description: Every operation must have a non-empty x-acceptance-criteria array (ADR-003).
+    message: "Operation must have a non-empty x-acceptance-criteria array (ADR-003)."
+    severity: error
+    given: "$.paths[*][get,put,post,delete,patch,head,options,trace]"
+    then:
+      - field: x-acceptance-criteria
+        function: truthy
+      - field: x-acceptance-criteria
+        function: schema
+        functionOptions:
+          schema:
+            type: array
+            minItems: 1
+            items: { type: string, minLength: 1 }
+
+  # ADR-003: every error is application/problem+json.
+  error-response-is-problem-json:
+    description: Every 4xx and 5xx response must offer the application/problem+json content type (ADR-003).
+    message: "Error responses (4xx/5xx) must have content with application/problem+json (ADR-003)."
+    severity: error
+    given: "$.paths[*][get,put,post,delete,patch,head,options,trace].responses[?(@property.match(/^[45]/))]"
+    then:
+      field: content
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: ["application/problem+json"]
+
+  # ADR-003: the body of an error is the shared Problem shape (type, title, status, traceId).
+  error-response-uses-problem-schema:
+    description: The application/problem+json schema of an error response must require type, title, status and traceId (ADR-003).
+    message: "The application/problem+json schema must be the Problem shape and require type, title, status and traceId (ADR-003)."
+    severity: error
+    given: "$.paths[*][get,put,post,delete,patch,head,options,trace].responses[?(@property.match(/^[45]/))].content['application/problem+json']"
+    then:
+      field: schema
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: [required, properties]
+          properties:
+            required:
+              type: array
+              allOf:
+                - contains: { const: type }
+                - contains: { const: title }
+                - contains: { const: status }
+                - contains: { const: traceId }
+
+  # ADR-003: list endpoints accept page, pageSize and sort.
+  list-operation-has-paging-params:
+    description: A list operation (GET whose 200 JSON schema has an items property) must have page, pageSize and sort parameters (ADR-003).
+    message: "List operations must declare the page, pageSize and sort query parameters (ADR-003)."
+    severity: error
+    given: "$.paths[*][?(@property === 'get' && @.responses &&@.responses['200'] && @.responses['200'].content && @.responses['200'].content['application/json'] && @.responses['200'].content['application/json'].schema && @.responses['200'].content['application/json'].schema.properties && @.responses['200'].content['application/json'].schema.properties.items)]"
+    then:
+      - field: parameters
+        function: truthy
+      - field: parameters
+        function: schema
+        functionOptions:
+          schema:
+            type: array
+            allOf:
+              - contains: { type: object, required: [name], properties: { name: { const: page } } }
+              - contains: { type: object, required: [name], properties: { name: { const: pageSize } } }
+              - contains: { type: object, required: [name], properties: { name: { const: sort } } }

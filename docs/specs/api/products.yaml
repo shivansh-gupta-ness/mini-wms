@@ -7,11 +7,15 @@ info:
     totalOnHand is 0 until the Inventory module exists, then the sum of the product's stock levels.
 servers:
   - url: http://localhost:5080/api/v1
+tags:
+  - { name: Products, description: The product catalogue }
 paths:
   /products:
     get:
       operationId: listProducts
       summary: List products (paged, sortable by sku, name, isActive; searchable)
+      tags: [Products]
+      description: Returns a page of products, optionally filtered by active state or a search text on SKU or name.
       x-acceptance-criteria: [PRD-3.1, PRD-3.2]
       parameters:
         - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
@@ -24,6 +28,8 @@ paths:
     post:
       operationId: createProduct
       summary: Create a product (Admin)
+      tags: [Products]
+      description: Creates an Active product. Missing fields or a negative reorder level return 400; a SKU already used (case-insensitive) returns 409.
       x-acceptance-criteria: [PRD-1.1, PRD-1.2, PRD-1.3]
       requestBody:
         required: true
@@ -37,6 +43,8 @@ paths:
     get:
       operationId: getProduct
       summary: Get a product with its total stock on hand
+      tags: [Products]
+      description: Returns one product by id with its total stock on hand, or 404 when it does not exist.
       x-acceptance-criteria: [PRD-3.3]
       responses:
         '200': { description: The product, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
@@ -44,6 +52,8 @@ paths:
     patch:
       operationId: updateProduct
       summary: Change name, unit of measure or reorder level (Admin); the SKU cannot change
+      tags: [Products]
+      description: Updates the editable fields. The SKU never changes. A stale version returns 409.
       x-acceptance-criteria: [PRD-2.1, PRD-1.3]
       requestBody:
         required: true
@@ -58,6 +68,8 @@ paths:
     post:
       operationId: deactivateProduct
       summary: Deactivate a product that has no stock (Admin)
+      tags: [Products]
+      description: Marks the product Inactive. A product with stock on hand, or a stale version, returns 409 with a message giving the total on hand.
       x-acceptance-criteria: [PRD-2.2, PRD-2.3]
       requestBody:
         required: true
@@ -117,10 +129,11 @@ components:
         totalItems: { type: integer }
     Problem:
       type: object
-      required: [type, title, status]
+      required: [type, title, status, traceId]
       properties:
         type: { type: string, description: "validation, conflict, not-found, unauthorized, forbidden, error" }
         title: { type: string }
         status: { type: integer }
-        detail: { type: string }
+        traceId: { type: string, description: "Correlation id of the request, also written to the log" }
+        detail: { type: string, description: "Present only on 4xx responses, and only when the text was written by our own code (validation and business-rule messages). Never sent on a 5xx and never raw exception text." }
         errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
