@@ -37,9 +37,24 @@ api-contracts:
   owners: [shivansh-gupta-ness]
   risk: low
 
-# Add the module components (locations, products, ...) once their code exists, one per component:
+locations:
+  components: [Locations]
+  code_paths: [src/backend/**/Locations/**, src/frontend/src/app/features/locations/**]
+  docs: [docs/specs/product.md, docs/specs/data-model.md, docs/specs/ui.md, docs/specs/api/locations.yaml, docs/adr/ADR-001-solution-layering.md, docs/adr/ADR-003-api-conventions.md]
+  protected_paths: []
+  owners: [shivansh-gupta-ness]
+  risk: low
+
+products:
+  components: [Products]
+  code_paths: [src/backend/**/Products/**, src/frontend/src/app/features/products/**]
+  docs: [docs/specs/product.md, docs/specs/data-model.md, docs/specs/ui.md, docs/specs/api/products.yaml, docs/adr/ADR-001-solution-layering.md, docs/adr/ADR-003-api-conventions.md]
+  protected_paths: []
+  owners: [shivansh-gupta-ness]
+  risk: low
+
+# Add the remaining module components once their code exists, one per component:
 # inventory:   code_paths [src/backend/**/Inventory/**, src/frontend/**/inventory/**]            risk: medium
 # inbound:     receiving / put-away                                                                risk: medium
 # outbound:    orders, picking, shipping                                                           risk: medium
-# locations:   warehouse, zones, bins                                                              risk: low
 # auth:        authentication and roles                                                            risk: high
