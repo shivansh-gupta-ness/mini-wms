@@ -2,7 +2,7 @@
 id: TASK-004
 type: task
 title: EF Core SQLite persistence foundation
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -21,8 +21,8 @@ Add EF Core 10 with SQLite to `MiniWms.Infrastructure` as ADR-002 describes: the
 3. Given an entity with audit fields, when it is created or updated, then `CreatedAt/By` and `UpdatedAt/By` are set centrally in `SaveChanges` from a clock and a current-user abstraction, and `Version` increases on update.
 4. Given a stale `Version`, when an update is saved, then a concurrency exception is raised and nothing is stored.
 5. Given `ConnectionStrings:Default`, when the API starts in Development, then the database file is created under `src/backend/MiniWms.Api/App_Data/` and pending migrations are applied.
-6. Given `.gitignore`, when the database file exists, then git does not list it.
-7. Given the test fixture, when an integration test runs, then it gets its own temporary database file with migrations applied, and the file is removed afterwards.
+6. Given `.gitignore`, when the database file and its WAL sidecar files (`*.db-wal`, `*.db-shm`) exist, then git lists none of them.
+7. Given the test fixture, when an integration test runs, then it gets its own temporary database file (unique name per test) with migrations applied, and the file and its sidecar files are removed afterwards. *(AC 6 and 7 amended on 2026-11-19 with the owner's approval of the scout's findings: WAL mode creates sidecar files, and the database is per test, not per test run.)*
 8. Given the tests, when they run, then all pass with `[Trait("AC", "TASK-004.<n>")]` on those proving the ACs above.
 9. Given the existing API tests (`MiniWms.Api.Tests`, which start the real host in Development), when the host now creates and migrates a database at startup, then those tests use a temporary database file through a `ConnectionStrings:Default` override in the test factory, never `App_Data/miniwms.db`, and all existing tests still pass when run in parallel.
 

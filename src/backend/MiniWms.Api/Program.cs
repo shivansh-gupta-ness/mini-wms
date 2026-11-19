@@ -1,4 +1,8 @@
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using MiniWms.Api.Common;
+using MiniWms.Infrastructure;
+using MiniWms.Infrastructure.Persistence;
 
 const string AngularDevCorsPolicy = "AngularDevServer";
 
@@ -34,7 +38,24 @@ builder.Services.AddProblemDetails(options =>
         }
     });
 
+// ADR-002: EF Core + SQLite; a relative database path resolves against the content root.
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
+
 var app = builder.Build();
+
+// ADR-002: in Development only, create the database folder and apply pending migrations at startup.
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var file = SqliteDataSource.FilePath(new SqliteConnectionStringBuilder(db.Database.GetConnectionString()), null);
+    if (file is not null && Path.GetDirectoryName(file) is { } folder)
+    {
+        Directory.CreateDirectory(folder);
+    }
+
+    db.Database.Migrate();
+}
 
 // CORS must wrap the error handlers so error responses keep their CORS headers.
 app.UseCors(AngularDevCorsPolicy);

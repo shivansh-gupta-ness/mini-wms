@@ -42,4 +42,10 @@ Put new code in the module folder, not at the project root.
 ## Tests
 - xUnit. A test that proves an acceptance criterion carries `[Trait("AC", "<ticket or spec id>")]`, for example `TASK-001.2` or `LOC-1.1`.
 - Repository-structure tests walk up from the test folder to the folder holding `global.json` to find the repo root.
-- Coverage tooling: see Build, test, run. No database yet (TASK-004).
+- Coverage tooling: see Build, test, run.
+
+## Persistence (ADR-002)
+- `MiniWms.Infrastructure/Persistence`: `AppDbContext` (audit fields and `Version` set in `SaveChanges` from `IClock` and `ICurrentUser`), `SqliteConnectionInterceptor` (foreign keys on, WAL, busy timeout 5000 on every open), design-time factory. Wiring: `AddInfrastructure(configuration, contentRoot)`.
+- Domain entities derive from `MiniWms.Domain.Common.AuditableEntity`. The current user is the fixed `dev-admin` until Auth exists.
+- Connection string `ConnectionStrings:Default` (`appsettings.json`) is `Data Source=App_Data/miniwms.db`, relative to the Api content root. Development start-up creates the folder and runs `Database.Migrate()`. `App_Data/`, `*.db`, `*.db-wal`, `*.db-shm` are git-ignored.
+- Migrations go in `MiniWms.Infrastructure/Migrations`. Use the local tool, never the global 11.x: `dotnet tool restore`, then `dotnet tool run dotnet-ef migrations add <Name> --project src/backend/MiniWms.Infrastructure` (same prefix for `database update`, `dbcontext info`).
