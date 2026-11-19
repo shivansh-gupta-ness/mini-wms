@@ -2,7 +2,7 @@
 id: TASK-009
 type: task
 title: Frontend HTTP layer: interceptors, ApiError and form error helper
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
@@ -29,3 +29,4 @@ Build the single HTTP layer ADR-006 describes: base path, token interceptor, err
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-009/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Analysis before readying (2026-11-19): TASK-007 is merged. The error shape to parse is the backend's (ADR-003, as built in TASK-006): `application/problem+json` with `type`, `title`, `status`, `traceId` and, for validation, `errors` keyed by camelCase field name; `detail` is present only on 4xx text written by our own code (business-rule 409, the concurrency 409 text) and never on 5xx, so the 5xx message must be generic and must not show `detail` or `traceId` beyond an optional reference. The dev-server proxy is TASK-011, so this ticket only prefixes `/api/v1`. Tests use Vitest (`HttpTestingController` or a fake backend), names start with `TASK-009.<n>`.

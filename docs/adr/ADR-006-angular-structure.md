@@ -8,7 +8,7 @@ Owner: shivansh-gupta-ness
 The frontend is an Angular app in `src/frontend` that talks only to the API in `docs/specs/api/`. Tickets for it are separate from backend tickets and depend on the published contract. The app runs locally only.
 
 ## Decision
-- **Angular current stable at scaffold time**, created with the Angular CLI (`npx @angular/cli@<version> new`), standalone components, no NgModules, strict TypeScript and strict templates. TASK-003 records the exact version.
+- **Angular current stable at scaffold time**, created with the Angular CLI (`npx @angular/cli@<version> new`), standalone components, no NgModules, strict TypeScript and strict templates. TASK-007 recorded the exact version (Angular 22.3.0; see `src/frontend/REPO_CONTEXT.md`).
 - **Folder layout** (module-first, to match ADR-001 and the knowledge map):
   ```
   src/frontend/src/app/

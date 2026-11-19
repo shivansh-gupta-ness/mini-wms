@@ -2,7 +2,7 @@
 id: TASK-010
 type: task
 title: Frontend test and coverage gate
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
@@ -29,3 +29,4 @@ Make the frontend tests produce coverage and enforce the 90% gate from ADR-005. 
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-010/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Analysis before readying (2026-11-19): TASK-007 is merged. The runner is Vitest 5 with jsdom via `@angular/build:unit-test`, and `npm test` already runs once headless (AC 1 is mostly met; keep the exit-code behaviour and prove it). Coverage likely needs a new dev dependency (`@vitest/coverage-v8`, a test library: allowed, it grows the lockfile); check which provider the builder supports before choosing. AC 5 (filter by AC id) should use the builder's filter option (check `ng test --help` for `--filter`) and be proven with real runs, as TASK-003 did for the backend. The gate script follows the backend one in spirit (`src/backend/coverage.ps1`): a small Node script in `src/frontend` that reads the summary and exits non-zero below 90% naming the shortfall, with tests for pass and fail cases using fixture summaries. Only `src/app` counts; spec files and generated code are excluded. Coverage output folders must be git-ignored.

@@ -15,7 +15,7 @@ The evaluation needs proof that every acceptance criterion (AC) in `docs/specs/p
 - Static analysis: `dotnet build /warnaserror` with the default analyzers; warnings are errors.
 
 **Frontend**
-- The runner is Angular's default at scaffold time (Vitest or Jasmine with Karma, depending on the CLI version); TASK-003 records which one. Component tests use Angular's testing utilities and a fake `HttpClient` backend. Gate: 90% line coverage of `src/frontend/src/app`.
+- The runner is Angular's default at scaffold time (Vitest or Jasmine with Karma, depending on the CLI version); TASK-007 recorded it: Vitest 5 with jsdom (see `src/frontend/REPO_CONTEXT.md`). Component tests use Angular's testing utilities and a fake `HttpClient` backend. Gate: 90% line coverage of `src/frontend/src/app`.
 - End-to-end browser tests are out of version 1 unless the owner adds a ticket.
 
 **AC traceability (the rule that makes the log possible)**

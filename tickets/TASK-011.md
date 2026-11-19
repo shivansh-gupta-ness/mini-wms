@@ -29,3 +29,4 @@ Connect the Angular dev server to the local API: a dev proxy for `/api` and an A
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-011/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Analysis (2026-11-19): stays `draft` until TASK-008 is merged (it needs the shell's top bar) and TASK-009 gives the API client; add TASK-009 to `depends_on` when readying, because the indicator should call `/api/v1/health` through that client.

@@ -10,8 +10,8 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 ## Layout (all application code is under `src/`)
 | Path | Purpose | Status |
 |---|---|---|
-| `src/backend/` | .NET 10 solution (API, domain, infrastructure, tests) | not scaffolded yet |
-| `src/frontend/` | Angular app | not scaffolded yet |
+| `src/backend/` | .NET 10 solution (API, domain, infrastructure, tests); see `src/backend/REPO_CONTEXT.md` | active |
+| `src/frontend/` | Angular app (standalone, strict, Material, Vitest); see `src/frontend/REPO_CONTEXT.md` | active |
 | `tickets/` | Local tickets (replaces Jira): `FEAT-001.md`, `BUG-001.md`, `TASK-001.md` | active |
 | `docs/` | Specs, ADRs, knowledge map (replaces Confluence) | active |
 | `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited). The adapted prompts the skills run are in `.claude/prompts/` | active |
@@ -37,7 +37,7 @@ PR limits: at most 10000 changed lines and 60 files.
 low and medium: agent edits after plan approval. high: agent reads and proposes, a person leads the edit.
 blocked (secrets, CI, harness): no agent edits.
 
-## Commands (fill in when src/ is scaffolded)
+## Commands
 - Backend: `dotnet build src/backend` and `dotnet test src/backend`
 - Frontend: `npm ci` then `npm test` and `npm run build` in `src/frontend`
 - Token report: `node scripts/token-report.mjs` (also runs automatically when a turn ends)
