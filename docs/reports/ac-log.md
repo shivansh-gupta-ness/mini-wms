@@ -18,4 +18,4 @@ Results are PASS, FAIL, N/A or NOT RUN, always from real test output. A ticket i
 | 2026-11-19 | TASK-010 | frontend-platform | 6 | 6 | 0 | 0 | 0 | 66.7 | 100 | 98.41 | #29 |
 | 2026-11-19 | TASK-011 | frontend-platform | 6 | 5 | 0 | 0 | 1 | 100 | 100 | 98.59 | #31 |
 | 2026-11-19 | TASK-012 | api-contracts | 6 | 6 | 0 | 0 | 0 | 100 | 100 | - | #32 |
-| 2026-11-19 | FEAT-001 | locations | 27 | 15 | 0 | 0 | 12 | 86.7 | 100 | 98.87 | - |
+| 2026-11-19 | FEAT-001 | locations | 27 | 15 | 0 | 0 | 12 | 86.7 | 100 | 98.87 | #37 |
