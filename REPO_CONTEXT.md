@@ -31,7 +31,7 @@ Claude Code on .NET 10 and Angular. A named person owns every ticket and every P
 5. `pr-guard` (required check) and a Code Owner review must pass before merge. Nobody pushes to `main`.
 
 Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Harness or doc-only changes use `chore/` or `setup/`.
-PR limits: at most 2000 changed lines and 60 files.
+PR limits: at most 5000 changed lines and 60 files.
 
 ## Autonomy by risk (`docs/knowledge-map.yaml` sets the value per component)
 low and medium: agent edits after plan approval. high: agent reads and proposes, a person leads the edit.
