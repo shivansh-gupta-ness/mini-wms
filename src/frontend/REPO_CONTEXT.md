@@ -27,10 +27,12 @@ Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component
   (no NgRx, Bootstrap and so on).
 
 ## Folder layout (`src/app/`)
-- `core/`: API client, auth session, error handling (empty for now); `core/layout/` holds the shell
-  (`shell.ts`: top bar "Mini WMS" and fixed "Dev Admin", left nav, `<main id="main-content">`, skip link)
-  and `not-found.page.ts`
-- `shared/`: reusable components, pipes, directives (empty for now)
+- `core/`: the HTTP layer (TASK-009). `api/` has `ApiClient` (prefixes `API_BASE_PATH` `/api/v1`, relative paths only)
+  and `ApiError`; `auth/` has the in-memory `AuthSession` signal and `authInterceptor`; `errors/` has `errorInterceptor`
+  (problem+json to `ApiError`, always rethrown) and `ErrorNotifier` (snackbar for 5xx and network only).
+  `core/layout/` holds the shell (`shell.ts`: top bar "Mini WMS" and fixed "Dev Admin", left nav,
+  `<main id="main-content">`, skip link) and `not-found.page.ts`
+- `shared/`: reusable components, pipes, directives; `shared/forms/apply-server-errors.ts` sets `server` errors on controls
 - `features/`: one folder per module with `pages/`, `components/`, `data/` and `<module>.routes.ts`.
   For now each holds only `pages/<module>-placeholder.page.ts` (an h1 with the title).
 - `app.ts`, `app.config.ts`, `app.routes.ts`, `app.html`: root component, providers and routes.
@@ -58,7 +60,7 @@ Global `:focus-visible` outline and the skip-link style live in `src/styles.scss
 - Watch build: `npm run watch`
 
 ## Not done yet
-- Dev-server proxy for `/api` is TASK-011; the HTTP layer is TASK-009.
+- Dev-server proxy for `/api` is TASK-011 (until then `/api/v1` is not served by `npm start`).
 - Coverage gate is TASK-010. Real module screens come with their own tickets.
 
 ## Lockfile
