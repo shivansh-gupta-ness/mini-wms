@@ -1,19 +1,19 @@
 ---
 id: FEAT-001
 type: feature
-title: Locations API: warehouse, zones, bins and the location tree
+title: Locations module: warehouse, zones and bins (API and screens)
 status: draft
 owner: shivansh-gupta-ness
 component: locations
 risk: low
-allowed_paths: [src/backend/**/Locations/**, src/backend/MiniWms.Api/Program.cs, src/backend/MiniWms.Infrastructure/DependencyInjection.cs, src/backend/MiniWms.Infrastructure/Persistence/**, src/backend/MiniWms.Application/Common/**, src/backend/MiniWms.Api.Tests/Host/**, src/backend/REPO_CONTEXT.md, docs/specs/api/locations.yaml, tickets/FEAT-001.md, docs/reports/FEAT-001/**, docs/reports/ac-log.md]
-docs: [docs/specs/product.md, docs/specs/data-model.md, docs/specs/api/locations.yaml, docs/adr/ADR-001-solution-layering.md, docs/adr/ADR-003-api-conventions.md]
+allowed_paths: [src/backend/**/Locations/**, src/backend/MiniWms.Api/Program.cs, src/backend/MiniWms.Infrastructure/DependencyInjection.cs, src/backend/MiniWms.Infrastructure/Persistence/**, src/backend/MiniWms.Application/Common/**, src/backend/MiniWms.Api.Tests/Host/**, src/backend/REPO_CONTEXT.md, docs/specs/api/locations.yaml, tickets/FEAT-001.md, docs/reports/FEAT-001/**, docs/reports/ac-log.md, src/frontend/src/app/features/locations/**, src/frontend/src/app/shared/**, src/frontend/src/app/core/layout/**, src/frontend/REPO_CONTEXT.md, tickets/FEAT-001.md, docs/reports/FEAT-001/**]
+docs: [docs/specs/product.md, docs/specs/data-model.md, docs/specs/api/locations.yaml, docs/adr/ADR-001-solution-layering.md, docs/adr/ADR-003-api-conventions.md, docs/specs/ui.md, docs/adr/ADR-006-angular-structure.md]
 parent: 
-depends_on: [TASK-005, TASK-006]
+depends_on: [TASK-005, TASK-006, TASK-008, TASK-009, TASK-010]
 ---
 
 ## Description
-Build the backend of the Locations module (LOC-1 to LOC-3) on the foundation: the use cases, the endpoints in `docs/specs/api/locations.yaml` (warehouse, zones, bins, location tree) and their tests. The entities, the first migration and the seeded `MAIN` warehouse exist (TASK-005); paging, sorting, validation and error mapping exist (TASK-006). Set `status: ready` after the open decisions below are answered and TASK-005 and TASK-006 are merged.
+Build the whole Locations module (LOC-1 to LOC-3): the API in `docs/specs/api/locations.yaml` (warehouse, zones, bins, location tree) with its use cases and tests, then the screens of `docs/specs/ui.md` section 3 that call it through the `ApiClient`. The entities, the first migration and the seeded `MAIN` warehouse exist (TASK-005); paging, sorting, validation and error mapping exist (TASK-006); the shell, HTTP layer and test tooling exist (TASK-008 to TASK-010). Set `status: ready` after the open decisions below are answered and the knowledge-map component `locations` exists.
 
 ## Acceptance criteria
 1. (LOC-1.1) Given a fresh database, when I call `GET /api/v1/warehouse`, then I get the single warehouse (`id`, `code`, `name`, `isActive`, `version`); and no route can create or delete a warehouse.
@@ -31,18 +31,34 @@ Build the backend of the Locations module (LOC-1 to LOC-3) on the foundation: th
 13. (ADR-003) Given any of these endpoints, when a request fails, then the response is `application/problem+json` as built in TASK-006 (400 with `errors`, 404 `not-found`, 409 `conflict`); every update sends the client `version` through the versioned-update helper so a stale version is detected.
 14. Given the contract `docs/specs/api/locations.yaml`, when the Spectral lint from TASK-012 runs, then it still reports nothing; the contract is changed only where this ticket's decisions below say so, and the change is listed in the PR.
 15. Given the tests, when they run, then all pass with `[Trait("AC", "FEAT-001.<n>")]` on those proving the ACs above, the gates are met (mapping 100, pass 100, coverage 90 on Domain, Application and Api), and `src/backend/REPO_CONTEXT.md` describes the module and the stock query.
+16. (LOC-1.1) Given I open `/locations`, then the page header shows the warehouse name from `GET /warehouse` with a "Rename" action, and there is no control to create or delete a warehouse.
+17. (LOC-2.1, warehouse) Given I use "Rename", when I save a new name, then the header shows it; a blank or over-long name shows the message under the field; a 409 shows its `detail` in a banner at the top of the dialog.
+18. (LOC-3.1, tree) Given zones and bins exist, when I open the Tree tab, then zones are parents and bins are children, each showing code, name and an Active or Inactive chip (text, not colour alone), zones also show their type; a toggle shows or hides Inactive items.
+19. (LOC-3.1 and LOC-3.2, list) Given I open the List tab, then I see a bins table with the columns Code, Name, Zone and Status, sortable by header, a search box that filters by part of a code or name, a zone filter, and a paginator of 25, 50 and 100.
+20. (LOC-1.2, LOC-1.4) Given "New zone", when I fill Code (required, max 20), Name (required, max 100) and Type and save, then the zone appears; a missing field or a duplicate code shows the message under that field, and nothing is saved.
+21. (LOC-1.3, LOC-1.4) Given "New bin", when I choose an Active zone and fill Code (required, max 30) and Name (required, max 100), then the bin appears under the zone with its path; errors show under their fields.
+22. (LOC-2.1) Given "Edit" on a zone or bin, then the Code is read-only, the Name can change, and the zone Type is disabled with a hint saying why when the zone has bins.
+23. (LOC-2.2, LOC-2.3, LOC-2.4) Given "Deactivate" on a bin or zone, then a confirm dialog names the item and its default focus is Cancel; on success the item shows Inactive; on a 409 the dialog stays open and shows the message (the stock on hand, or the Active bin).
+24. Given any screen, then it shows a progress bar on first load, an empty state that explains how to add the first item, a disabled button with a spinner while saving, and a generic message on a 5xx (no technical detail).
+25. Given keyboard-only use, then every control is reachable with a visible focus, every control has a label, required fields are marked, and dialogs trap focus (NFR-6).
+26. Given the code, then all calls go through `ApiClient`, field errors are applied with `applyServerErrors` (the unmatched messages go to the banner), and no host is hard-coded.
+27. Given the tests, when they run, then all pass with test names starting `FEAT-001.<n>`, the coverage gate holds (90% of `src/app`), `npm run build` passes, and `src/frontend/REPO_CONTEXT.md` stays under 80 lines.
 
 ## Out of scope
-- Role checks ("Given I am an Admin"): there is no authentication yet (ADR-004, the Auth module); the endpoints are open and stamp the development user until then. Mark the role part of each Admin AC N/A with this reason.
+- Role checks ("Given I am an Admin") and role-based hiding of buttons: there is no authentication yet (ADR-004, the Auth module); the endpoints are open and stamp the development user, and every button shows. Mark the role part of each Admin AC N/A with this reason.
 - The real stock quantities (Inventory module): the stock query returns zero until Inventory exists.
-- The frontend (FEAT-002).
+- A real-browser check of the screens is a manual step, marked NOT RUN unless run.
 
 ## Notes and links
+- Backend criteria are 1 to 15 (the API), screen criteria are 16 to 27; tests carry `FEAT-001.<n>` with the same numbers (`[Trait("AC", "FEAT-001.<n>")]` in the backend, test names starting `FEAT-001.<n>` in the frontend).
 - Spec: `docs/specs/product.md` section 7 (LOC-1 to LOC-3), `docs/specs/data-model.md`, `docs/specs/api/locations.yaml`. Domain rules and entities already exist in `MiniWms.Domain/Locations` (TASK-005): `Zone.ChangeType(type, hasBins)`, `Zone.Deactivate(hasActiveBins)`, `Bin.Deactivate(totalOnHand)`; field rules throw `ValidationFailedException` (400), business conflicts throw `DomainException` (409).
 - **Open owner decision 1 (duplicate codes: 400 or 409).** `product.md` (LOC-1.4) and `ui.md` say a duplicate code is "rejected with a field-level message", but `locations.yaml` says a duplicate code returns 409 (which the UI shows as a banner). Recommended: 400 with the message under `code`, found by a check in the use case (the unique index stays as the safety net); change the contract descriptions and responses of `createZone` and `createBin` accordingly (the contract file is in `allowed_paths`). Alternative: keep 409 and update the UI spec.
-- **Open owner decision 2 (stock query).** LOC-2.2 needs the quantity on hand of a bin, which belongs to Inventory (ADR-001). Recommended: an `IStockQuery` in `MiniWms.Application/Common` (`BinOnHand(binId)`, `ProductOnHand(productId)`), registered with a default implementation that returns 0 until the Inventory module replaces it; tests use a fake that returns stock. FEAT-003 reuses it for products. Alternative: leave LOC-2.2 as NOT RUN until Inventory exists.
+- **Open owner decision 2 (stock query).** LOC-2.2 needs the quantity on hand of a bin, which belongs to Inventory (ADR-001). Recommended: an `IStockQuery` in `MiniWms.Application/Common` (`BinOnHand(binId)`, `ProductOnHand(productId)`), registered with a default implementation that returns 0 until the Inventory module replaces it; tests use a fake that returns stock. the Products ticket (FEAT-002) reuses it. Alternative: leave LOC-2.2 as NOT RUN until Inventory exists.
 - **Open owner decision 3 (Admin role).** Recommended: no role check now (see Out of scope); the Auth module adds it later with its own ACs.
 - Layering (ADR-001): use cases and DTOs in `MiniWms.Application/Locations`, EF queries in `MiniWms.Infrastructure`, endpoints in `MiniWms.Api/Locations` registered with a `MapLocationsEndpoints` extension called from `Program.cs`; Application never references EF Core. Reuse `PagedQuery`, `SortFields`, `ToPagedResultAsync`, `UseClientVersion`, the validators and the error handlers from TASK-006; keep the middleware order and the problem-details customizer unchanged.
 - Tests: unit tests for the use cases in `MiniWms.Application.Tests`, API tests through `ApiFactory` (temporary database, never `App_Data`) in `MiniWms.Api.Tests`. The `list`/`tree` queries must be proven on SQLite, not only in memory.
-- Slicing: if the PR would grow past about 4000 lines, split warehouse and zones from bins.
+- **Open owner decision 4 (dialogs or pages).** `ui.md` calls the zone and bin forms dialogs. Recommended: Material dialogs with reactive forms. **Open owner decision 5 (tree control).** Recommended: Material tree or nested lists, whichever keeps keyboard navigation simple. **Open owner decision 6 (data loading).** Recommended: signals or RxJS services in `features/locations/data/` calling `ApiClient`; no state library (ADR-006).
+- Test with `HttpTestingController` and Vitest (see the existing specs); the coverage gate counts every new file.
+- Frontend spec: `docs/specs/ui.md` sections 2 and 3. The page replaces `features/locations/pages/locations-placeholder.page.ts`; the lazy route `/locations` already exists. Reusable parts (confirm dialog, status chip, empty state, error banner) go in `shared/` because the Products screens reuse them. If a duplicate code returns 400 (decision 1), the message appears under the field; if it stays 409, it shows in the banner.
+- **Delivery in two PRs, one ticket.** The ticket spans both layers of this one repository (the layer rule in `tickets/README.md` is about separate repositories). Run the backend first (`/run-feature-be FEAT-001`, branch `feat/FEAT-001-locations-api`), merge it, then the screens (`/run-feature-fe FEAT-001 B`, branch `feat/FEAT-001-locations-screens`). Each PR must stay within the limits (10000 lines, 60 files) and passes `pr-guard` on its own. The `ac-results.md` file is written in the first PR and completed in the second; add the `ac-log.md` row with the second PR. The scope guard allows both layers' paths for the whole ticket, so agents must still work on one layer per run.
 - The feature pipeline appends a `## Delivery` section to this file, files reports in `docs/reports/FEAT-001/` and appends a row to `docs/reports/ac-log.md`, so all three stay in `allowed_paths`.
