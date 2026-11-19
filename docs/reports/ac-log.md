@@ -19,3 +19,4 @@ Results are PASS, FAIL, N/A or NOT RUN, always from real test output. A ticket i
 | 2026-11-19 | TASK-011 | frontend-platform | 6 | 5 | 0 | 0 | 1 | 100 | 100 | 98.59 | #31 |
 | 2026-11-19 | TASK-012 | api-contracts | 6 | 6 | 0 | 0 | 0 | 100 | 100 | - | #32 |
 | 2026-11-19 | FEAT-001 | locations | 27 | 27 | 0 | 0 | 0 | 92.6 | 100 | 98.87 (API) / 96.52 (screens) | #37, #41 |
+| 2026-11-20 | TASK-013 | backend-platform | 10 | 10 | 0 | 0 | 0 | n/a | 100 | - | - |

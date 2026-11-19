@@ -72,6 +72,6 @@ GPL, AGPL, SSPL, BUSL and Commons-Clause. When you change dependencies, run `npm
 the lockfile in the same PR.
 
 ## Gotchas
-- Tools may not be on PATH in agent shells: add `C:\Program Files\nodejs` first.
-- npm 11 warns about install scripts not covered by `allowScripts` (esbuild, lmdb and others); not needed to build or test.
+- Tools may not be on PATH in agent shells: add `C:\Program Files\nodejs` first. npm 11 warns about install scripts not covered by `allowScripts` (esbuild, lmdb and others); not needed to build or test.
+- Bundle budget (`angular.json`): initial bundle warns at 700 kB and fails the build at 1 MB.
 - `node_modules`, `dist`, `.angular` and `coverage` are git-ignored.

@@ -92,9 +92,9 @@ Configured in `.claude/settings.json`, scripts in `.claude/hooks/`. They also ap
 |---|---|---|
 | Before Edit / Write | `scope-guard` | Always blocks secrets. During a ticket or when an editing agent is the caller: blocks protected paths (`.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, `prompt_logs/`; the module `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are ordinary code files), blocks risk high or blocked, and enforces `allowed_paths`. Outside a ticket, setup work is allowed. |
 | Before Bash / PowerShell | `command-guard` | Blocks force push, push to main, `reset --hard`, `clean -f`, `--no-verify`, recursive deletes of root or parent, network commands (curl, wget and similar), `gh pr merge`, `gh repo delete`. |
-| After Edit / Write | `format` | Formats the file. Does nothing until `src/` has a project. |
+| After Edit / Write | `format` | Formats the file. |
 | When a turn or subagent ends | `token-report` | Updates `prompt_logs/token_usage.md`, `token_usage.json` and the `Tokens:` line under each prompt in `prompt_logs/logs.md`. |
-| When a turn or subagent ends | `run-tests` | Runs tests after an editing agent finished. Does nothing until `src/` has projects. |
+| When a turn or subagent ends | `run-tests` | Runs tests after an editing agent finished. |
 
 | An editing agent starts | `worktree-create` (`WorktreeCreate`) | Creates the agent's isolated worktree under `.claude/worktrees/<name>` on its own branch, from the task branch plus a snapshot of the current uncommitted work. It builds the path with an uppercase drive letter, which avoids a Claude Code bug on Windows where the worktree is refused because `c:` and `C:/` compare as different (issue 91618) |
 | An agent's worktree is removed | `worktree-remove` (`WorktreeRemove`) | Removes the worktree and its throwaway branch |
@@ -150,7 +150,7 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 
 ## 8. Known gaps
 
-- `/start-ticket`, `/run-feature-be` and `/run-feature-fe` have not run on a real ticket yet. `src/` is not scaffolded.
+- `/start-ticket`, `/run-feature-be` and `/run-feature-fe` have run on TASK-001 to TASK-012, BUG-001 and FEAT-001.
 - `.claude/state/active-ticket.json` is not removed automatically. A stale file keeps the scope guard on; delete it when a ticket is done.
 - `prompt_logs/` changes every turn, so the tree is never clean. Commit it in periodic `chore/` PRs, or `/start-ticket` will stop on the dirty tree.
 - Hooks need `node` on your PATH.

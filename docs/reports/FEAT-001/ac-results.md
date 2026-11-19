@@ -1,7 +1,7 @@
 # FEAT-001 acceptance-criteria results (API and screens)
 
 Ticket: `tickets/FEAT-001.md` (Locations module: warehouse, zones and bins, API and screens). Branch: `feat/FEAT-001-locations-api`. Date: 2026-11-19.
-The ticket was delivered in two PRs: the API (criteria 1 to 15, PR 37, branch `feat/FEAT-001-locations-api`) and the screens (criteria 16 to 27, branch `feat/FEAT-001-locations-screens`, this second PR). Both halves are recorded below.
+The ticket was delivered in two PRs: the API (criteria 1 to 15, PR 37, branch `feat/FEAT-001-locations-api`) and the screens (criteria 16 to 27, PR 41, branch `feat/FEAT-001-locations-screens`). Both halves are recorded below.
 How it was run: `/start-ticket` flow with `ticket-scout`, owner approval (decisions recorded in the ticket), `change-implementer` in two stages (contract and Application layer, then Infrastructure and Api), then two `test-writer` runs in parallel (unit tests, API tests on SQLite), then a third `change-implementer` run to fix a production defect the API tests found, each in an isolated worktree with work carried back by `worktree-apply.mjs`. The pipeline skill `/run-feature-be` was not used (owner decision). Numbers come from my own runs in the main working tree.
 
 | Command | Result |

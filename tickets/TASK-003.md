@@ -31,3 +31,6 @@ Add the coverage tooling ADR-005 requires: coverlet in the test projects, Report
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-003/ac-results.md` and one row in `docs/reports/ac-log.md`.
+
+## Delivery
+Delivered in PR 11. All 7 criteria PASS; results in `docs/reports/TASK-003/ac-results.md`, the row in `docs/reports/ac-log.md`.

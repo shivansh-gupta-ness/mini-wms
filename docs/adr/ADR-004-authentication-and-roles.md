@@ -1,6 +1,6 @@
 # ADR-004: Authentication and roles
 
-Status: Proposed (accepted when merged)
+Status: Accepted; not implemented (Auth deferred, scope decision 2026-11-19)
 Date: 2026-11-18
 Owner: shivansh-gupta-ness
 
@@ -20,4 +20,5 @@ Owner: shivansh-gupta-ness
 ## Consequences
 - No endpoint is written without a policy, so adding real auth later changes configuration, not endpoints.
 - JWT in memory is safer against theft than storage, at the cost of signing in again after a reload; acceptable for a local app.
+- The Locations endpoints were built open (no policy and no development handler). They gain their policies in the Auth ticket.
 - Auth is the highest-risk module: agents propose, the owner makes the edit (`docs/autonomy-by-risk.md`), and `/security-review` is run on its PR.

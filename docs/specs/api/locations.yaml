@@ -14,19 +14,21 @@ tags:
   - { name: Locations, description: Combined views over zones and bins }
 paths:
   /warehouse:
+    description: The warehouse can be read and renamed, never created or deleted. POST and DELETE return 405 with the header Allow GET, PATCH.
     get:
       operationId: getWarehouse
       summary: Get the single warehouse
       tags: [Warehouse]
-      description: Returns the one warehouse that exists; no endpoint can create a second one.
+      description: Returns the one warehouse that exists; no endpoint can create a second one. Returns 404 if the warehouse row is missing.
       x-acceptance-criteria: [LOC-1.1, LOC-3.1]
       responses:
         '200': { description: The warehouse, content: { application/json: { schema: { $ref: '#/components/schemas/Warehouse' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
     patch:
       operationId: renameWarehouse
       summary: Change the warehouse name (Admin)
       tags: [Warehouse]
-      description: Renames the warehouse; the code stays unchanged. A stale version returns 409.
+      description: Renames the warehouse; the code stays unchanged. Returns 404 if the warehouse row is missing. A stale version returns 409.
       x-acceptance-criteria: [LOC-2.1]
       requestBody:
         required: true
@@ -34,6 +36,7 @@ paths:
       responses:
         '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Warehouse' } } } }
         '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
         '409': { $ref: '#/components/responses/Conflict' }
   /zones:
     get:
@@ -51,6 +54,7 @@ paths:
         - { name: isActive, in: query, schema: { type: boolean } }
       responses:
         '200': { description: A page of zones, content: { application/json: { schema: { $ref: '#/components/schemas/ZonePage' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
     post:
       operationId: createZone
       summary: Create a zone (Admin)
@@ -116,10 +120,11 @@ paths:
         - { $ref: '#/components/parameters/PageSize' }
         - { $ref: '#/components/parameters/Sort' }
         - { $ref: '#/components/parameters/Q' }
-        - { name: zoneId, in: query, schema: { type: integer, format: int64 } }
+        - { name: zoneId, in: query, schema: { type: integer, format: int32 } }
         - { name: isActive, in: query, schema: { type: boolean } }
       responses:
         '200': { description: A page of bins, content: { application/json: { schema: { $ref: '#/components/schemas/BinPage' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
     post:
       operationId: createBin
       summary: Create a bin in a zone (Admin)
@@ -184,9 +189,10 @@ paths:
         - { name: isActive, in: query, schema: { type: boolean } }
       responses:
         '200': { description: The tree, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ZoneNode' } } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
 components:
   parameters:
-    Id: { name: id, in: path, required: true, schema: { type: integer, format: int64 } }
+    Id: { name: id, in: path, required: true, schema: { type: integer, format: int32 } }
     Page: { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
     PageSize: { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 25 } }
     Sort: { name: sort, in: query, description: "One field name, prefix with - for descending (for example -code). Allowed fields: zones are code, name, type, isActive; bins are code, name, zone, isActive.", schema: { type: string } }
@@ -201,7 +207,7 @@ components:
       type: object
       required: [id, code, name, isActive, version]
       properties:
-        id: { type: integer, format: int64 }
+        id: { type: integer, format: int32 }
         code: { type: string }
         name: { type: string, maxLength: 100 }
         isActive: { type: boolean }
@@ -210,8 +216,8 @@ components:
       type: object
       required: [id, warehouseId, code, name, type, isActive, binCount, version]
       properties:
-        id: { type: integer, format: int64 }
-        warehouseId: { type: integer, format: int64 }
+        id: { type: integer, format: int32 }
+        warehouseId: { type: integer, format: int32 }
         code: { type: string, maxLength: 20 }
         name: { type: string, maxLength: 100 }
         type: { $ref: '#/components/schemas/ZoneType' }
@@ -222,8 +228,8 @@ components:
       type: object
       required: [id, zoneId, zoneCode, code, name, path, isActive, version]
       properties:
-        id: { type: integer, format: int64 }
-        zoneId: { type: integer, format: int64 }
+        id: { type: integer, format: int32 }
+        zoneId: { type: integer, format: int32 }
         zoneCode: { type: string }
         code: { type: string, maxLength: 30 }
         name: { type: string, maxLength: 100 }
@@ -254,7 +260,7 @@ components:
       type: object
       required: [zoneId, code, name]
       properties:
-        zoneId: { type: integer, format: int64 }
+        zoneId: { type: integer, format: int32 }
         code: { type: string, maxLength: 30 }
         name: { type: string, maxLength: 100 }
     RenameRequest:

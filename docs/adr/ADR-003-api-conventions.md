@@ -1,6 +1,6 @@
 # ADR-003: API conventions
 
-Status: Proposed (accepted when merged)
+Status: Accepted
 Date: 2026-11-18
 Owner: shivansh-gupta-ness
 
@@ -21,27 +21,30 @@ The frontend depends on the API contract in `docs/specs/api/`. Consistent conven
 ```json
 { "items": [], "page": 1, "pageSize": 25, "totalItems": 0 }
 ```
+The one stated exception is `GET /locations/tree`: a bounded tree view that returns an unpaged array.
 
 **Errors:** every error is `application/problem+json` (RFC 9457) with `type`, `title`, `status`, `traceId` and, for validation, an `errors` object keyed by field name. `detail` is present only on 4xx responses whose text our own code wrote (validation and business-rule messages, for example the 409 `detail` the UI shows in a banner). It is never sent on a 5xx and never carries raw exception text, so an unexpected error cannot leak internals (decided 2026-11-19, resolving the TASK-006 / BUG-001 conflict):
 ```json
-{ "type": "validation", "title": "Validation failed", "status": 400, "errors": { "sku": ["SKU is required."] } }
+{ "type": "validation", "title": "Validation failed", "status": 400, "traceId": "0HN...", "errors": { "sku": ["SKU is required."] } }
 ```
+`type` is one of six values, chosen by status: `validation` (400), `unauthorized` (401), `forbidden` (403), `not-found` (404), `conflict` (409), and `error` (anything else, including 405 and 500).
 
 | Status | Used for |
 |---|---|
 | 200 / 201 / 204 | Success; 201 returns the new resource and a `Location` header |
-| 400 | Validation of the request (missing or malformed fields) |
+| 400 | Validation of the request (missing or malformed fields, and a duplicate zone or bin code, reported under `code`) |
 | 401 | No valid session |
 | 403 | Signed in, but the role lacks the permission |
 | 404 | Resource does not exist |
-| 409 | Business-rule conflict (duplicate code, deactivate with stock, stale `version`) |
+| 405 | A method the resource never supports (`POST` or `DELETE` on `/warehouse`), with an `Allow: GET, PATCH` header |
+| 409 | Business-rule conflict (deactivate with stock or with an Active bin, stale `version`, a zone type change while the zone has bins) |
 | 500 | Unexpected error: generic body, details only in the log, never a stack trace (NFR-3) |
 
-**Validation:** request shape and field rules are checked in the Application layer with FluentValidation validators, one per command; rules that need data (uniqueness, stock) are checked in the use case and raise a domain exception mapped to 409. Messages are the text the UI shows.
+**Validation:** request shape and field rules are checked in the Application layer with FluentValidation validators, one per command; rules that need data are checked in the use case. A uniqueness violation (duplicate code) raises a validation failure on `code`, mapped to 400; a business-rule conflict (stock, Active bins, stale `version`) raises a domain exception mapped to 409. Messages are the text the UI shows.
 
 **Concurrency:** updates send the resource `version`; a mismatch returns 409.
 
-**CORS:** only `http://localhost:4200` (the Angular dev server) is allowed.
+**CORS:** only `http://localhost:4200` (the Angular dev server) is allowed. This is a fallback: the normal path is the Angular dev-server proxy (ADR-006), which makes calls same-origin.
 
 ## Consequences
 - The frontend can generate or hand-write typed clients straight from the YAML.

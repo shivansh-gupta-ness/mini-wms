@@ -4,6 +4,7 @@ info:
   version: 1.0.0
   description: >
     Contract for module PRD (docs/specs/product.md). Conventions: docs/adr/ADR-003-api-conventions.md.
+    This contract is design only and is not implemented in this evaluation (scope decision 2026-11-19: Locations only).
     totalOnHand is 0 until the Inventory module exists, then the sum of the product's stock levels.
 servers:
   - url: http://localhost:5080/api/v1
@@ -29,7 +30,7 @@ paths:
       operationId: createProduct
       summary: Create a product (Admin)
       tags: [Products]
-      description: Creates an Active product. Missing fields or a negative reorder level return 400; a SKU already used (case-insensitive) returns 409.
+      description: Creates an Active product. Missing fields or a negative reorder level return 400. A SKU already used, compared without regard to case, also returns 400 with the message under errors.sku.
       x-acceptance-criteria: [PRD-1.1, PRD-1.2, PRD-1.3]
       requestBody:
         required: true
@@ -37,7 +38,6 @@ paths:
       responses:
         '201': { description: Created, headers: { Location: { schema: { type: string } } }, content: { application/json: { schema: { $ref: '#/components/schemas/Product' } } } }
         '400': { $ref: '#/components/responses/ValidationError' }
-        '409': { $ref: '#/components/responses/Conflict' }
   /products/{id}:
     parameters: [ { $ref: '#/components/parameters/Id' } ]
     get:

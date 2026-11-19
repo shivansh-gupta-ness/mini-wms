@@ -1,6 +1,6 @@
 # ADR-005: Testing, coverage and the acceptance-criteria log
 
-Status: Proposed (accepted when merged)
+Status: Accepted
 Date: 2026-11-18
 Owner: shivansh-gupta-ness
 
@@ -9,7 +9,7 @@ The evaluation needs proof that every acceptance criterion (AC) in `docs/specs/p
 
 ## Decision
 **Backend**
-- Framework: xUnit. Assertions: xUnit's own `Assert` (no assertion library with licence changes). Test doubles: hand-written fakes for Application tests; NSubstitute only where a fake is impractical.
+- Framework: xUnit. Assertions: xUnit's own `Assert` (no assertion library with licence changes). Test doubles: hand-written fakes for Application tests.
 - Layers: Domain tests (rules), Application tests (use cases with fakes), Api tests (real HTTP against a temporary SQLite database, ADR-002). Prefer the real database over mocking EF Core.
 - Coverage: `coverlet.collector`; reports built with ReportGenerator. Scope: Domain, Application and Api. Excluded: migrations, `Program.cs`, generated code. Gate: line coverage of at least 90% of the scope; branch coverage is reported, not gated.
 - Static analysis: `dotnet build /warnaserror` with the default analyzers; warnings are errors.
@@ -19,7 +19,7 @@ The evaluation needs proof that every acceptance criterion (AC) in `docs/specs/p
 - End-to-end browser tests are out of version 1 unless the owner adds a ticket.
 
 **AC traceability (the rule that makes the log possible)**
-- Every test that proves an AC carries the AC ID: backend `[Trait("AC", "LOC-1.1")]` (repeat the trait for several ACs); frontend the AC ID at the start of the test name, `it('LOC-1.1 creates a zone ...')`.
+- Every test that proves an AC carries the AC ID: backend `[Trait("AC", "FEAT-001.3")]` (repeat the trait for several ACs); frontend the AC ID at the start of the test name, `it('FEAT-001.3 creates a zone ...')`. The ids are ticket ids and criterion numbers, so the ac-log is per ticket AC; the spec ids (such as LOC-1.1) are mapped to them in the ticket text.
 - A test with no AC ID is allowed (extra tests), but an AC with no test is reported as NOT RUN.
 - The pipeline's Prompt 3 mapping table and Prompt B step 5 read these IDs and write `docs/reports/<ID>/ac-results.md` and the `docs/reports/ac-log.md` row (PASS, FAIL, N/A, NOT RUN) from real test output, never from memory.
 - A ticket is done only when every AC in its scope is PASS, or a written owner decision explains the exception.
