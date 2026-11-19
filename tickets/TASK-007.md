@@ -2,7 +2,7 @@
 id: TASK-007
 type: task
 title: Angular app creation, strict configuration and Material
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
