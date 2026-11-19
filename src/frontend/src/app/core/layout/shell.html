@@ -1,0 +1,18 @@
+<a class="skip-link" href="#main-content" (click)="focusMain($event)">Skip to main content</a>
+<mat-toolbar class="top-bar" role="banner">
+  <span class="app-name">Mini WMS</span>
+  <span class="spacer"></span>
+  <span class="user-label">{{ userLabel }}</span>
+</mat-toolbar>
+<div class="body">
+  <nav class="side-nav" aria-label="Main navigation">
+    <mat-nav-list>
+      @for (item of navItems; track item.path) {
+        <a mat-list-item [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">{{ item.label }}</a>
+      }
+    </mat-nav-list>
+  </nav>
+  <main id="main-content" class="content" tabindex="-1">
+    <router-outlet />
+  </main>
+</div>
