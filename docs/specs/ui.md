@@ -1,10 +1,10 @@
 # Mini WMS: UI specification
 
-Status: Proposed (accepted when merged). Source: `docs/specs/product.md`. Structure: `docs/adr/ADR-006-angular-structure.md`. Locations and Products are specified in full because they are built first; the other modules are outlined and get their detail when their module is frozen.
+Status: Accepted. Source: `docs/specs/product.md`. Structure: `docs/adr/ADR-006-angular-structure.md`. Locations is built; Products is specified in full but not built in this evaluation (`product.md` section 9, decision 7); the other modules are outlined and get their detail when their module is frozen.
 
 ## 1. Shell and navigation
 - Top bar: app name, signed-in user and role, sign-out (once AUT exists; until then a fixed "Dev Admin" label).
-- Left navigation, in this order: **Stock**, **Receipts**, **Orders**, **Products**, **Locations**, **Users** (Admin only). Items for modules not built yet are not shown.
+- Left navigation, in this order: **Stock**, **Receipts**, **Orders**, **Products**, **Locations**. All five items show; a module that is not built opens a placeholder page. **Users** (Admin only) is not shown: it has no route until the Auth module exists.
 - Every page has a title, a primary action button top-right (for example "New product"), and a body. Breadcrumbs only on detail pages.
 - Layout works from 1024 px wide upwards; phones and tablets are out of version 1.
 
@@ -16,7 +16,7 @@ Status: Proposed (accepted when merged). Source: `docs/specs/product.md`. Struct
 | Server errors | A 400 response puts each message under its field; a 409 shows the `detail` in a banner at the top of the form; 500 shows a generic message with no technical detail (NFR-3) |
 | Confirm | Deactivate actions open a confirm dialog naming the item; the dialog's default focus is Cancel |
 | Status words | Shown exactly as in the spec (`Active`, `Inactive`, `Draft`) as a coloured chip with text, never colour alone |
-| Roles | Buttons the role may not use are hidden; the server is the real check (AUT-3.2) |
+| Roles | Buttons the role may not use are hidden; the server is the real check (AUT-3.2). Until the Auth module, buttons show to everyone |
 | Loading | A progress bar on first load, a disabled button with a spinner on save |
 | Accessibility | Keyboard-reachable, visible focus, labels or `aria-label` on all controls, dialogs trap focus (NFR-6) |
 
@@ -24,9 +24,9 @@ Status: Proposed (accepted when merged). Source: `docs/specs/product.md`. Struct
 
 ### 3.1 Locations page (`/locations`)
 - Two tabs: **Tree** and **List**.
-- **Tree** (LOC-3.1): zones as parents, bins as children, each showing code, name, an Active/Inactive chip, and for zones the type (`Receiving`, `Storage`, `Shipping`). A toggle shows or hides Inactive items. Admin sees buttons: "New zone", per zone "New bin", and per item "Edit" and "Deactivate".
+- **Tree** (LOC-3.1): zones as parents, bins as children, each showing code, name, an Active/Inactive chip, and for zones the type (`Receiving`, `Storage`, `Shipping`). A toggle shows or hides Inactive items. Admin sees (until the Auth module: shown to everyone) buttons: "New zone", per zone "New bin", and per item "Edit" and "Deactivate".
 - **List** (LOC-3.1, LOC-3.2): a bins table with columns Code, Name, Zone, Status; sortable; search box filters by part of code or name; a zone filter.
-- The warehouse name is shown in the page header with an Admin-only "Rename" action (LOC-2.1). There is no "New warehouse" control (LOC-1.1).
+- The warehouse name is shown in the page header with an Admin-only "Rename" action (until the Auth module: shown to everyone) (LOC-2.1). There is no "New warehouse" control (LOC-1.1).
 
 ### 3.2 Zone form (dialog)
 Fields: Code (required, max 20, unique), Name (required, max 100), Type (select; disabled when the zone has bins, with a hint saying why). Errors per LOC-1.4. Code is read-only when editing (LOC-2.1).
@@ -38,7 +38,7 @@ Fields: Zone (select of Active zones), Code (required, max 30, unique across the
 - Bin: confirm dialog. If the API answers 409 (stock on hand, LOC-2.2) the dialog stays open and shows the message naming the stock.
 - Zone: same; 409 when it still has an Active bin (LOC-2.4).
 
-## 4. Products (module PRD)
+## 4. Products (module PRD, not built in this evaluation)
 
 ### 4.1 Products page (`/products`)
 - Table columns: SKU, Name, Unit, Reorder level, On hand, Status. Sortable by SKU, Name and Status (PRD-3.1). Search box matches part of SKU or name (PRD-3.2). Filter: Active, Inactive, All (default Active).

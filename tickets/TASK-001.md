@@ -32,3 +32,6 @@ Create the .NET 10 solution described in ADR-001: four source projects and three
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-001/ac-results.md` and one row in `docs/reports/ac-log.md`.
+
+## Delivery
+Delivered in PR 8. All 8 criteria PASS; results in `docs/reports/TASK-001/ac-results.md`, the row in `docs/reports/ac-log.md`.

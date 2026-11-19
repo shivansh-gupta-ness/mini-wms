@@ -84,7 +84,7 @@ Tickets that can start immediately: TASK-001, TASK-007 and TASK-012.
 
 After the scaffold (you, in a `setup/` PR, because these are protected files):
 - Fill the Commands section of `REPO_CONTEXT.md` (build, test, run locally); add `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md`.
-- Add knowledge-map components with real globs: `locations` (low), `products` (low), `inventory`, `inbound`, `outbound` (medium), `auth` (high).
+- Add knowledge-map components with real globs: `locations` (low), `products` (low), `inventory`, `inbound`, `outbound` (medium), `auth` (high). Done for `locations` and `products`; the rest are not built, see the Phase 5 scope decision.
 - The format and run-tests hooks start working automatically once projects exist; confirm they do.
 
 **Exit:** `dotnet build`, `dotnet test`, `npm test`, `npm run build` pass locally on `main`; the app runs locally against the SQLite file.
@@ -97,7 +97,7 @@ After the scaffold (you, in a `setup/` PR, because these are protected files):
 **Exit:** every control blocked its bad edit; the AC log works; findings logged in `docs/learning-log.md`.
 
 ## Phase 5: Feature delivery (most of the time, module by module)
-Order: Locations, Products, Inventory, Inbound, Outbound, then Auth (high risk: agents propose, you edit).
+Order: Locations, Products, Inventory, Inbound, Outbound, then Auth (high risk: agents propose, you edit). Only Locations was built; see the scope decision below.
 
 Per module:
 1. Freeze the module's spec section, data-model part and API contract (merged before tickets start).
@@ -110,7 +110,7 @@ Per module:
 
 **Exit per module:** all ACs PASS in the log, gates met, reports in `docs/reports/<ID>/`.
 
-**Scope decision (owner, 2026-11-19).** This evaluation delivers one module end to end: **Locations**, API (FEAT-001, PR 37) and Angular screens (FEAT-001, second PR). Phase 5 is complete when that second PR is merged and the FEAT-001 criteria 1 to 27 are in the AC log with real results. Products, Inventory, Inbound, Outbound and Auth are not built in this evaluation; their specs, data model and contracts stay in the repository as the design, their acceptance criteria are not run, and `product.md` says so (section 9, decision 7). Consequences: the Locations paths that need stock (LOC-2.2) and the Admin role criteria are proven with fakes or marked N/A; Phase 6 is limited to hardening what exists (no cross-module flows); Phase 7 summarises the tickets delivered (TASK-001 to TASK-012, BUG-001, FEAT-001).
+**Scope decision (owner, 2026-11-19).** This evaluation delivers one module end to end: **Locations**, API (FEAT-001, PR 37) and Angular screens (FEAT-001, PR 41). Phase 5 is complete: FEAT-001 criteria 1 to 27 PASS (PRs 37 and 41). Products, Inventory, Inbound, Outbound and Auth are not built in this evaluation; their specs, data model and contracts stay in the repository as the design, their acceptance criteria are not run, and `product.md` says so (section 9, decision 7). Consequences: the Locations paths that need stock (LOC-2.2) and the Admin role criteria are proven with fakes or marked N/A; Phase 6 is limited to hardening what exists (no cross-module flows); Phase 7 summarises the tickets delivered (TASK-001 to TASK-012, BUG-001, FEAT-001).
 
 ## Phase 6: Hardening
 - Cross-module flows (receive, put away, pick, ship) as API tests, each linked to the ACs it proves and logged the same way.

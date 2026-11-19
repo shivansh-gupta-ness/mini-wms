@@ -19,6 +19,8 @@ How it was run: `/start-ticket` flow with `ticket-scout`, owner approval (decisi
 
 Totals: PASS 5, FAIL 0, N/A 0, NOT RUN 1 (AC 1, and the real-browser part of AC 2 and AC 3)
 
+Owner decision (2026-11-20): AC 1 accepted as NOT RUN; the real proxy forwarding is checked by hand with both servers running.
+
 ## Gates
 - Mapping: 6 of 6 ACs have dedicated tests (100%); AC 1 and the browser parts of AC 2 and 3 need the manual check.
 - Pass: 169 of 169 frontend tests pass (100%); 28 new.

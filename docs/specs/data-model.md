@@ -1,13 +1,13 @@
 # Mini WMS: data model
 
-Status: Proposed (accepted when merged). Source: `docs/specs/product.md`. Storage rules: `docs/adr/ADR-002-ef-core-sqlite.md`.
+Status: Accepted (Locations built and migrated; Products entity and schema only; the other tables are design only). Source: `docs/specs/product.md`. Storage rules: `docs/adr/ADR-002-ef-core-sqlite.md`.
 
 ## Conventions
-- Table and column names are PascalCase in the model; EF Core maps them as is.
+- Table and column names are PascalCase; table names are plural (`Warehouses`, `Zones`, `Bins`, `Products`, and so on). The headings below use the singular entity name.
 - Every table has `Id` (integer primary key, auto-increment).
-- Every mutable table also has `CreatedAt`, `CreatedBy`, `UpdatedAt`, `UpdatedBy` (audit) and `Version` (integer concurrency token). Append-only tables (`StockMovement`) have only `CreatedAt` and `CreatedBy`.
-- Timestamps are UTC. Quantities are integers. "Code" columns have a case-insensitive unique index (`COLLATE NOCASE`).
-- Foreign keys are enforced (`PRAGMA foreign_keys = ON`). Nothing is physically deleted; `IsActive` marks inactive records.
+- Every mutable table also has `CreatedAt`, `CreatedBy`, `UpdatedAt`, `UpdatedBy` (audit) and `Version` (`INTEGER` concurrency token). Append-only tables (`StockMovement`) have only `CreatedAt` and `CreatedBy`.
+- Timestamps are UTC, stored as ticks in `INTEGER` columns (SQLite cannot order `DateTimeOffset`). Quantities are integers. Every text column with a maximum length has a `CHECK (length(...) <= max)` constraint, because SQLite does not enforce lengths. "Code" columns have a case-insensitive unique index (`COLLATE NOCASE`).
+- Foreign keys are enforced (`PRAGMA foreign_keys = ON`) and are `ON DELETE RESTRICT`. Nothing is physically deleted; `IsActive` marks inactive records.
 
 ## Entity overview
 
@@ -33,7 +33,7 @@ erDiagram
 ### Warehouse (module LOC)
 | Column | Type | Rules |
 |---|---|---|
-| Code | text | required, unique; seeded `MAIN` |
+| Code | text | required, max 20, unique; seeded `MAIN` |
 | Name | text | required, max 100 |
 | IsActive | bool | always true in version 1 |
 

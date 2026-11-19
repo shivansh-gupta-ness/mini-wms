@@ -5,7 +5,7 @@ OpenAPI 3.0.3 files, one per module, are the source of truth for the HTTP API (c
 | File | Module |
 |---|---|
 | `locations.yaml` | LOC: warehouse, zones, bins |
-| `products.yaml` | PRD: products |
+| `products.yaml` | PRD: products (design only, not implemented in this evaluation) |
 
 Each operation lists the acceptance criteria it serves in `x-acceptance-criteria` (ids from `docs/specs/product.md`).
 
@@ -17,7 +17,7 @@ Spectral is not installed in the repository; run it through `npx` with the pinne
 npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml"
 ```
 
-The expected result is no errors and no warnings. The ruleset is `.spectral.yaml` at the repository root: it extends `spectral:oas` and adds three rules that enforce ADR-003 (all severity error):
+The expected result is no errors and no warnings. The ruleset is `.spectral.yaml` at the repository root: it extends `spectral:oas` and adds four rules that enforce ADR-003 (all severity error):
 
 | Rule | Enforces | Why |
 |---|---|---|

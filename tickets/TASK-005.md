@@ -36,3 +36,6 @@ Add the entities, EF configurations and the first migration for the first two mo
 - Keep the PR within the limits (5000 lines, 60 files); if the first migration is large, say so in the brief.
 - Record AC results in `docs/reports/TASK-005/ac-results.md` and one row in `docs/reports/ac-log.md`.
 - Owner decisions (2026-11-19, on the scout's brief): seeding is Development only like the migration; no database constraint for "exactly one warehouse" (seeder plus no endpoints); Warehouse `Code` max length 20; Domain enforces the stock-free rules now and takes stock-dependent facts (has bins, has active bins, total on hand) as parameters, the stock-based checks wait for the inventory module; max lengths are enforced with CHECK constraints (`length(col) <= n`) because SQLite ignores `HasMaxLength`; code and SKU unique indexes use NOCASE (ASCII only, accepted); Bin code unique across the single warehouse. `docs/specs/product.md` (LOC and PRD rules) is also a source.
+
+## Delivery
+Delivered in PR 21. All 8 criteria PASS; results in `docs/reports/TASK-005/ac-results.md`, the row in `docs/reports/ac-log.md`.

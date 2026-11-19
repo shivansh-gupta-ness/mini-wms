@@ -36,3 +36,6 @@ Add EF Core 10 with SQLite to `MiniWms.Infrastructure` as ADR-002 describes: the
 - `src/backend/MiniWms.Api/Program.cs` (changed by BUG-001) is where the host registers persistence; keep its middleware order (`UseCors` first) and the problem-details setup unchanged.
 - Run the coverage gate and tests with the commands in `src/backend/REPO_CONTEXT.md` (the PowerShell script needs `-ExecutionPolicy Bypass` on this machine).
 - Record AC results in `docs/reports/TASK-004/ac-results.md` and one row in `docs/reports/ac-log.md`.
+
+## Delivery
+Delivered in PR 16. All 9 criteria PASS; results in `docs/reports/TASK-004/ac-results.md`, the row in `docs/reports/ac-log.md`.

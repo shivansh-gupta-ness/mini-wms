@@ -31,3 +31,6 @@ Make `MiniWms.Api` a running minimal-API host: a health endpoint, the standard e
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-002/ac-results.md` and one row in `docs/reports/ac-log.md`.
+
+## Delivery
+Delivered in PR 10. All 7 criteria PASS; results in `docs/reports/TASK-002/ac-results.md`, the row in `docs/reports/ac-log.md`.

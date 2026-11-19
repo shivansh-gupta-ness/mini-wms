@@ -1,6 +1,6 @@
 # Mini WMS: product specification
 
-Status: **DRAFT, owner decisions applied; awaiting final review** (Phase 1 of `docs/sdd-roadmap.md`). Nothing here is approved until the owner merges it.
+Status: **Accepted.** Locations built (FEAT-001); the other modules are design only (section 9, decision 7). Phase 1 of `docs/sdd-roadmap.md`.
 Owner: shivansh-gupta-ness. The owner's decisions are recorded in section 9.
 
 ## 1. Purpose and scope
@@ -46,14 +46,14 @@ The permission matrix is in section 7, module AUT.
 
 ## 5. Module summary
 
-| Code | Module | Knowledge-map component | Risk | Depends on |
-|---|---|---|---|---|
-| LOC | Locations | `locations` | low | none |
-| PRD | Products | `products` | low | none |
-| INV | Inventory | `inventory` | medium | LOC, PRD |
-| INB | Inbound | `inbound` | medium | LOC, PRD, INV |
-| OUT | Outbound | `outbound` | medium | LOC, PRD, INV |
-| AUT | Auth | `auth` | high | all (cross-cutting) |
+| Code | Module | Knowledge-map component | Risk | Depends on | Built |
+|---|---|---|---|---|---|
+| LOC | Locations | `locations` | low | none | yes |
+| PRD | Products | `products` | low | none | entity and schema only |
+| INV | Inventory | `inventory` | medium | LOC, PRD | no |
+| INB | Inbound | `inbound` | medium | LOC, PRD, INV | no |
+| OUT | Outbound | `outbound` | medium | LOC, PRD, INV | no |
+| AUT | Auth | `auth` | high | all (cross-cutting) | no |
 
 Build order follows the roadmap: LOC, PRD, INV, INB, OUT, then AUT. Until AUT is built the app runs with a fixed local Admin user.
 
@@ -62,7 +62,7 @@ Build order follows the roadmap: LOC, PRD, INV, INB, OUT, then AUT. Until AUT is
 | ID | Requirement |
 |---|---|
 | NFR-1 | Runs locally only. No deployment, hosting, cloud service or network dependency. Data is a local SQLite file excluded from git |
-| NFR-2 | Every list endpoint is paged (default 25, maximum 100) and sortable; list pages respond within 500 ms for 10,000 rows on a developer laptop |
+| NFR-2 | Every list endpoint is paged (default 25, maximum 100) and sortable, except the bounded, unpaged `/locations/tree` view (one warehouse, its zones and bins); list pages respond within 500 ms for 10,000 rows on a developer laptop |
 | NFR-3 | Invalid input is rejected with a field-level error message; the API returns a consistent error body (ProblemDetails) and never a stack trace |
 | NFR-4 | Stock changes are atomic: a failed operation leaves no partial change |
 | NFR-5 | Every stock change writes a movement record with who, when, why and the before and after quantity |
