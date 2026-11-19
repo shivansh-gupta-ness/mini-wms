@@ -2,7 +2,7 @@
 id: TASK-008
 type: task
 title: Application shell, navigation and lazy routes
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
