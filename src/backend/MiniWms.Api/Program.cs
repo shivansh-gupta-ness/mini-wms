@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MiniWms.Api.Common;
 using MiniWms.Api.Common.Errors;
+using MiniWms.Api.Locations;
 using MiniWms.Infrastructure;
 using MiniWms.Infrastructure.Persistence;
 
@@ -54,6 +55,7 @@ builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 
 // ADR-002: EF Core + SQLite; a relative database path resolves against the content root.
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
+builder.Services.AddLocations();
 
 var app = builder.Build();
 
@@ -79,6 +81,7 @@ app.UseStatusCodePages();
 
 // Every module registers through its own MapXxxEndpoints extension, called here.
 app.MapHealthEndpoints();
+app.MapLocationsEndpoints();
 
 app.Run();
 

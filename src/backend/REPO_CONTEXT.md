@@ -60,3 +60,10 @@ Put new code in the module folder, not at the project root.
 - `detail` is kept by the problem-details customizer only when one of our handlers marks the response and the status is 4xx. Never use it for 401/403/404, 5xx or unexpected exceptions.
 - Lists: `Application/Common/Paging` (`PagedQuery` page 1, size 25, max 100; `PagedResult<T>` = items, page, pageSize, totalItems), `Common/Sorting` (`sort=field` or `-field`, one field, per-module `SortFields<T>` allow-list, `Id` tie-breaker, unknown field is a field-level 400), `Common/Validation/PagedQueryValidator<T>`. `ApplySort` + `ToPagedResult` work on any `IQueryable`.
 - Updates: apply the client's version with `db.UseClientVersion(entity, version)` (`Infrastructure/Persistence/VersionedUpdate`) before `SaveChanges`; `ApplyAudit` overwrites a directly set `Version`.
+
+## Locations module (FEAT-001, contract `docs/specs/api/locations.yaml`)
+- `Application/Locations`: one file per use case (command, validator, handler), DTOs, `ILocationStore` (write side) and `ILocationQueries` (read side, DTOs). `Infrastructure/Locations`: `LocationStore`, `LocationQueries`, `ZeroStockQuery`. `Api/Locations`: `AddLocations()` and `MapLocationsEndpoints()` (called from `Program.cs`), under `/api/v1`.
+- Routes: `/warehouse` (GET, PATCH; POST and DELETE are 405), `/zones` and `/bins` (GET list, POST 201 with `Location`), `/zones/{id}` and `/bins/{id}` (GET, PATCH), `/zones/{id}/deactivate` and `/bins/{id}/deactivate` (POST `{version}`), `/locations/tree` (unpaged). Unknown id is 404; a non-numeric id matches no route (404).
+- Endpoints read the body and the query string themselves, so bad JSON or a bad `page`, `pageSize`, `zoneId`, `isActive` is a field-level 400, not ASP.NET's bare 400.
+- `IStockQuery` (`Application/Common`; `BinOnHandAsync`, `ProductOnHandAsync`) is registered with `TryAdd` as `ZeroStockQuery` (always 0) until Inventory registers the real one; tests replace it with a fake.
+- A duplicate zone or bin code (case-insensitive, NOCASE column) is a 400 under `code`, found by the use-case check; the unique index is the safety net and `LocationStore.SaveAsync` maps its violation to the same 400.

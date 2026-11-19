@@ -2,8 +2,11 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MiniWms.Application.Common;
+using MiniWms.Application.Locations;
 using MiniWms.Infrastructure.Common;
+using MiniWms.Infrastructure.Locations;
 using MiniWms.Infrastructure.Persistence;
 
 namespace MiniWms.Infrastructure;
@@ -20,6 +23,11 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options
             .UseSqlite(ResolveConnectionString(configuration, basePath))
             .AddInterceptors(new SqliteConnectionInterceptor()));
+
+        services.AddScoped<ILocationStore, LocationStore>();
+        services.AddScoped<ILocationQueries, LocationQueries>();
+        // Default until the Inventory module registers the real one; TryAdd lets it (or a test) replace it.
+        services.TryAddSingleton<IStockQuery, ZeroStockQuery>();
 
         return services;
     }

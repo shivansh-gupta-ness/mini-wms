@@ -43,6 +43,7 @@ public class BinTests
     [InlineData(1)]
     [InlineData(250)]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.9")]
     public void Deactivate_is_rejected_while_stock_on_hand_is_above_zero(int onHand)
     {
         var bin = Bin.Create(1, "A-01", "Bin");
