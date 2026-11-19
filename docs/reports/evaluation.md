@@ -66,5 +66,5 @@ About 15 rows; none a security incident. By cause:
 2. Log the first-run result per acceptance criterion so "passed first time" can be measured.
 3. In the pipeline prompts: run the API tests before accepting an implementer stage that adds queries; split test jobs by area; ask agents for a status list before long work.
 4. Keep one source for each limit (PR size, file caps) and link to it.
-5. Finish harness part 4b and the owner's manual checks: TASK-008, TASK-011, FEAT-001 screens in a browser, and the real Kestrel 413.
-6. Add the 413 row to ADR-003 and the small leftovers (GUIDE table row, roadmap Phase 3 line, Products contract ids, the `AppDbContext.cs` comment).
+5. The owner's manual checks: TASK-008, TASK-011, FEAT-001 screens in a browser, and the real Kestrel 413; and branch protection (Code Owner review, no bypass), which is a GitHub setting only the owner can change.
+6. Done after this write-up (closing PRs): harness part 4b (pr-guard from the base branch, setup-only harness changes, shell-write and bypass checks, fail-closed guards, pinned actions), the ADR-003 413 row, and the small leftovers (GUIDE table row, roadmap Phase 3 line, Products contract ids, the `AppDbContext.cs` comment).

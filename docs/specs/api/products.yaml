@@ -80,7 +80,7 @@ paths:
         '409': { $ref: '#/components/responses/Conflict' }
 components:
   parameters:
-    Id: { name: id, in: path, required: true, schema: { type: integer, format: int64 } }
+    Id: { name: id, in: path, required: true, schema: { type: integer, format: int32 } }
   responses:
     ValidationError: { description: Request failed validation, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
     NotFound: { description: Resource not found, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
@@ -90,7 +90,7 @@ components:
       type: object
       required: [id, sku, name, unitOfMeasure, reorderLevel, isActive, totalOnHand, lowStock, version]
       properties:
-        id: { type: integer, format: int64 }
+        id: { type: integer, format: int32 }
         sku: { type: string, maxLength: 40 }
         name: { type: string, maxLength: 150 }
         unitOfMeasure: { type: string, maxLength: 20 }

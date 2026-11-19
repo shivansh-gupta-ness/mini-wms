@@ -8,7 +8,7 @@ using MiniWms.Domain.Products;
 namespace MiniWms.Infrastructure.Persistence;
 
 /// <summary>
-/// Context base (ADR-002). Module tables are added by module tickets; this class applies the
+/// Database context (ADR-002). It holds the Locations and Products sets (a module that is built adds its sets here); it applies the
 /// conventions for every <see cref="AuditableEntity"/> and stamps audit fields in SaveChanges.
 /// </summary>
 public class AppDbContext(DbContextOptions<AppDbContext> options, IClock clock, ICurrentUser currentUser)
@@ -22,7 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IClock clock, 
 
     public DbSet<Product> Products => Set<Product>();
 
-    // The SQLite provider cannot order or compare DateTimeOffset values; store them as UTC ticks instead.
+    // The SQLite provider cannot order or compare DateTimeOffset values; store them as binary UTC ticks instead.
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Properties<DateTimeOffset>()
             .HaveConversion<Microsoft.EntityFrameworkCore.Storage.ValueConversion.DateTimeOffsetToBinaryConverter>();
