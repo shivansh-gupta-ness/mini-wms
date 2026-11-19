@@ -8,7 +8,7 @@ How to build Mini WMS spec-first with Claude Code, following `Claude Code Adopti
 
 **Every acceptance criterion gets a logged result.** See "Acceptance-criteria log" below.
 
-**PR limits:** at most 1000 changed lines (tests included) and 30 files, enforced by `pr-guard`.
+**PR limits:** at most 2000 changed lines (tests included) and 60 files, enforced by `pr-guard`.
 
 **Stack:** .NET 10 Web API + EF Core with SQLite (a local file database), Angular frontend. DB Browser for SQLite is used to inspect the database.
 
@@ -37,7 +37,7 @@ Every AC of every ticket ends with a recorded result: **PASS**, **FAIL**, **N/A*
 A ticket is not done while any AC is FAIL or NOT RUN without an owner decision written in `ac-results.md`. The current prompts already verify ACs (Prompt B) and file reports; writing `ac-results.md` and updating `ac-log.md` was added to the local prompts, skills and plugin copies in Phase 0 (Prompt B step 5, Prompt 5 sections 8.e-8.f, FE section 9.5). Feature tickets then also list `docs/reports/ac-log.md` in `allowed_paths`.
 
 ## Phase 0: Finish setup
-- Merge mini-wms PR #1, commit the pending local changes (including the 1000-line limit) in a `setup/` PR.
+- Merge mini-wms PR #1, commit the pending local changes (including the PR size limit) in a `setup/` PR.
 - Merge claude-plugins PR #3, tag `v0.3.0`.
 - Try `git push origin main` once and confirm it is rejected.
 - Add the AC-log step to the adapted prompts (now `.claude/prompts/`) and the run-feature skills (and the plugin copies); create `docs/reports/ac-log.md` with its header row.
@@ -101,7 +101,7 @@ Order: Locations, Products, Inventory, Inbound, Outbound, then Auth (high risk: 
 
 Per module:
 1. Freeze the module's spec section, data-model part and API contract (merged before tickets start).
-2. Create a backend FEAT ticket and a frontend FEAT ticket (frontend `depends_on` the backend). Copy the spec's numbered ACs into each. Slice so each PR stays within 1000 lines and 30 files.
+2. Create a backend FEAT ticket and a frontend FEAT ticket (frontend `depends_on` the backend). Copy the spec's numbered ACs into each. Slice so each PR stays within 2000 lines and 60 files.
 3. Backend: `/start-ticket FEAT-00x`, approve the plan, `/run-feature-be FEAT-00x`, answer each STOP REPORT.
 4. Frontend: same with `/run-feature-fe FEAT-00y B`.
 5. Check `ac-results.md`: every AC PASS, or a written decision for any other result.

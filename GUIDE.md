@@ -109,7 +109,7 @@ Blocked actions are logged to `.claude/state/guard-log.jsonl`.
 
 | Check | When | What it does |
 |---|---|---|
-| `pr-guard` (required) | On every PR | Branch name, ticket file exists, changed files inside `allowed_paths`, no blocked paths, size at most 1000 lines and 30 files, knowledge-map globs that match nothing, npm lockfile licences. No AI involved. `setup/` and `chore/` branches and the `bootstrap` label are exempt. |
+| `pr-guard` (required) | On every PR | Branch name, ticket file exists, changed files inside `allowed_paths`, no blocked paths, size at most 2000 lines and 60 files, knowledge-map globs that match nothing, npm lockfile licences. No AI involved. `setup/` and `chore/` branches and the `bootstrap` label are exempt. |
 | gitleaks | After `pr-guard` in the same workflow | Secret scan. |
 | `protect-main` ruleset | Always | No deletion, no force push, PR required with `pr-guard` passing. 0 required approvals, because GitHub never lets an author approve their own PR. |
 | `CODEOWNERS` | On every PR | Requests review from the owner. |
