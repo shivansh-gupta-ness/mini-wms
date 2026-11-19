@@ -5,7 +5,7 @@ using MiniWms.Infrastructure.Persistence;
 
 namespace MiniWms.Api.Tests.Persistence;
 
-/// <summary>Test-only entity: there are no module tables yet (TASK-005), so the audit conventions need one to act on.</summary>
+/// <summary>Test-only entity: its table is created by <see cref="TemporaryDatabase"/>, not by a migration.</summary>
 internal sealed class PersistenceTestItem : AuditableEntity
 {
     public string Name { get; set; } = string.Empty;

@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using MiniWms.Application.Common;
 using MiniWms.Infrastructure.Persistence;
 
@@ -8,14 +6,27 @@ namespace MiniWms.Api.Tests.Persistence;
 
 /// <summary>
 /// A temporary SQLite database for one test: its own file (unique GUID name under the system temp folder),
-/// built with the production <see cref="SqliteConnectionInterceptor"/>. Migrations are applied, and because there
-/// are no migrations yet the schema of the test-only entity is created as well. Dispose disposes the contexts,
+/// built with the production <see cref="SqliteConnectionInterceptor"/>. Migrations are applied (all module tables), and
+/// the table of the test-only entity is created on top. Dispose disposes the contexts,
 /// clears the connection pools and deletes the .db, -wal and -shm files.
 /// </summary>
 internal sealed class TemporaryDatabase : IDisposable
 {
     // The interceptor is stateless; one instance keeps EF from building a new internal service provider per context.
     private static readonly SqliteConnectionInterceptor Interceptor = new();
+
+    // The module tables come from the migrations; this is the one table that exists only in tests.
+    private const string CreateItemsTable = """
+        CREATE TABLE "Items" (
+            "Id" INTEGER NOT NULL CONSTRAINT "PK_Items" PRIMARY KEY AUTOINCREMENT,
+            "Name" TEXT NOT NULL,
+            "CreatedAt" INTEGER NOT NULL,
+            "CreatedBy" TEXT NOT NULL,
+            "UpdatedAt" INTEGER NULL,
+            "UpdatedBy" TEXT NULL,
+            "Version" INTEGER NOT NULL
+        )
+        """;
 
     private readonly List<PersistenceTestDbContext> contexts = [];
 
@@ -26,10 +37,14 @@ internal sealed class TemporaryDatabase : IDisposable
 
         try
         {
-            var context = CreateContext();
-            context.Database.Migrate();
-            // Migrate() has no migrations to apply yet, so create the test-only table directly.
-            context.Database.GetService<IRelationalDatabaseCreator>().CreateTables();
+            // Migrations belong to AppDbContext (the derived test context has a different type), so apply them
+            // through the production context. They create every module table; only the test-only table is added here.
+            using (var production = new AppDbContext(CreateOptions(), new FakeClock(default), new FakeCurrentUser("migrator")))
+            {
+                production.Database.Migrate();
+            }
+
+            CreateContext().Database.ExecuteSqlRaw(CreateItemsTable);
         }
         catch
         {
@@ -48,18 +63,19 @@ internal sealed class TemporaryDatabase : IDisposable
 
     public PersistenceTestDbContext CreateContext(IClock? clock = null, ICurrentUser? currentUser = null)
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(ConnectionString)
-            .AddInterceptors(Interceptor)
-            .Options;
-
         var context = new PersistenceTestDbContext(
-            options,
+            CreateOptions(),
             clock ?? new FakeClock(new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)),
             currentUser ?? new FakeCurrentUser("fixture-user"));
         contexts.Add(context);
         return context;
     }
+
+    private DbContextOptions<AppDbContext> CreateOptions() =>
+        new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(ConnectionString)
+            .AddInterceptors(Interceptor)
+            .Options;
 
     public void Dispose()
     {

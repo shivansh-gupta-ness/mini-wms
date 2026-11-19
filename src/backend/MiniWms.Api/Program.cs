@@ -55,6 +55,7 @@ if (app.Environment.IsDevelopment())
     }
 
     db.Database.Migrate();
+    WarehouseSeeder.Seed(db, app.Configuration);
 }
 
 // CORS must wrap the error handlers so error responses keep their CORS headers.
