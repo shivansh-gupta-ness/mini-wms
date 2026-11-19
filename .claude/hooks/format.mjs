@@ -1,4 +1,4 @@
-// PostToolUse (Edit|Write|MultiEdit): format the edited file. Silent no-op until src/ has a project.
+// PostToolUse (Edit|Write|MultiEdit): format the edited file. Silent no-op when no formatter applies to it.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';

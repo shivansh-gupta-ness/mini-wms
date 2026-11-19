@@ -2,8 +2,8 @@
 # to the small set of code and docs that matter. Owned by the architect; changes go through a PR.
 # Format rules (pr-guard parses this with a tiny reader): top-level key = component, list fields in [a, b] flow style.
 # risk: low | medium | high | blocked  (see docs/autonomy-by-risk.md)
-# STATUS: DRAFT. Code paths are the intended layout; pr-guard fails any glob that matches no file,
-# so entries are added together with the code they describe (start with the harness entry below).
+# STATUS: current. pr-guard fails any glob that matches no file, so an entry is added together with the code it describes.
+# Tickets also list the shared files they touch (Program.cs, Persistence/**, shared/**) in their own allowed_paths.
 
 harness:
   components: [Harness, CI]
@@ -45,6 +45,7 @@ locations:
   owners: [shivansh-gupta-ness]
   risk: low
 
+# Products is design only plus the TASK-005 entity and schema; no use cases, endpoints or screens (scope decision 2026-11-19).
 products:
   components: [Products]
   code_paths: [src/backend/**/Products/**, src/frontend/src/app/features/products/**]
@@ -53,7 +54,7 @@ products:
   owners: [shivansh-gupta-ness]
   risk: low
 
-# Add the remaining module components once their code exists, one per component:
+# Not built in this evaluation (scope decision 2026-11-19); add an entry when a module is built, one per component:
 # inventory:   code_paths [src/backend/**/Inventory/**, src/frontend/**/inventory/**]            risk: medium
 # inbound:     receiving / put-away                                                                risk: medium
 # outbound:    orders, picking, shipping                                                           risk: medium
