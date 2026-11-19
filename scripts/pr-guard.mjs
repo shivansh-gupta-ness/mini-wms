@@ -2,6 +2,7 @@
 // pr-guard: plain script, no AI, runs as a required GitHub check on every PR.
 // Checks: ticket + allowed paths, blocked paths, size limits, knowledge-map globs, licences.
 // Secret scanning (gitleaks) runs as the next workflow step.
+// The workflow runs this file from the base branch (not from the PR), so a PR cannot weaken its own check.
 // Env: BASE_REF (e.g. origin/main), HEAD_REF (sha), BRANCH, PR_LABELS (comma list)
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -23,6 +24,7 @@ const flow = (v) => (v || '').replace(/^\[|\]$/g, '').split(',').map((s) => s.tr
 
 // Bootstrap/maintenance PRs (setup/*, chore/*) or the `bootstrap` label skip the ticket-scope and size rules.
 const exempt = /^(setup|chore)\//.test(BRANCH) || LABELS.includes('bootstrap');
+const harnessPr = /^setup\//.test(BRANCH);
 
 const files = git(['diff', '--name-only', `${BASE}...${HEAD}`]).split('\n').filter(Boolean);
 const numstat = git(['diff', '--numstat', `${BASE}...${HEAD}`]).split('\n').filter(Boolean).map((l) => l.split('\t'));
@@ -41,10 +43,12 @@ if (!exempt) {
   if (!m) fail(`Branch "${BRANCH}" must be named <feat|bug|task>/<TICKET-ID>-short-name (e.g. feat/FEAT-001-add-stock).`);
   else {
     const id = m[2].toUpperCase();
-    const tf = fs.existsSync('tickets') ? fs.readdirSync('tickets').find((f) => f.endsWith('.md') && (f.toUpperCase() === `${id}.MD` || f.toUpperCase().startsWith(`${id}-`) || f.toUpperCase().startsWith(`${id}.`))) : null;
-    if (!tf) fail(`No ticket file tickets/${id}*.md found for branch ${BRANCH}.`);
+    // The ticket is read from the base branch, so a PR cannot widen its own allowed_paths. A ticket is merged (chore PR) before its work starts.
+    const inBase = git(['ls-tree', '--name-only', BASE, 'tickets/']).split('\n').filter(Boolean).map((f) => f.replace(/^tickets\//, ''));
+    const tf = inBase.find((f) => f.endsWith('.md') && (f.toUpperCase() === `${id}.MD` || f.toUpperCase().startsWith(`${id}-`) || f.toUpperCase().startsWith(`${id}.`)));
+    if (!tf) fail(`No ticket file tickets/${id}*.md found on ${BASE} for branch ${BRANCH} (merge the ticket to the base branch first).`);
     else {
-      const fm = (fs.readFileSync(path.join('tickets', tf), 'utf8').match(/^---\n([\s\S]*?)\n---/) || [])[1] || '';
+      const fm = (git(['show', `${BASE}:tickets/${tf}`]).replace(/\r\n/g, '\n').match(/^---\n([\s\S]*?)\n---/) || [])[1] || '';
       const allowed = flow((fm.match(/^allowed_paths:\s*(.*)$/m) || [])[1]);
       const owner = (fm.match(/^owner:\s*(.*)$/m) || [])[1];
       if (!owner || !owner.trim()) fail(`Ticket ${id} has no owner.`);
@@ -57,11 +61,12 @@ if (!exempt) {
   }
 }
 
-// 3. Blocked paths: harness, CI and shared context change only via a bootstrap/chore PR, never in ticket work
+// 3. Blocked paths: harness, CI and shared context change only in a setup/ PR with owner review, never in ticket or chore work
+//    (the `bootstrap` label does not lift this rule)
 const blocked = ['.github/**', '.claude/**', 'scripts/**', 'CLAUDE.md', 'REPO_CONTEXT.md', 'docs/knowledge-map.yaml'];
-if (!exempt) {
+if (!harnessPr) {
   const hit = files.filter((f) => matchAny(f, blocked));
-  if (hit.length) fail(`Blocked paths changed in a ticket PR (use a chore/ PR with owner review):\n  ` + hit.join('\n  '));
+  if (hit.length) fail(`Blocked paths changed outside a setup/ PR (use a setup/ branch with owner review):\n  ` + hit.join('\n  '));
 }
 
 // 4. Knowledge-map globs must match real files

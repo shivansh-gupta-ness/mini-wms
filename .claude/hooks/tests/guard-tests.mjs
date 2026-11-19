@@ -40,6 +40,28 @@ t('no-verify', cg, c('git commit --no-verify -m x'), 2);
 t('push feature branch', cg, c('git push -u origin feat/FEAT-001-x'), 0);
 t('git status', cg, c('git status'), 0);
 t('dotnet test', cg, c('dotnet test src/backend'), 0);
+// bypass forms (part 4b)
+t('force push after a git global option', cg, c('git -c user.name=x push --force origin feat/x'), 2);
+t('force push with -C', cg, c('git -C src push -f origin feat/x'), 2);
+t('force push, combined flag -uf', cg, c('git push -uf origin feat/x'), 2);
+t('force push, --force-if-includes', cg, c('git push --force-if-includes origin feat/x'), 2);
+t('force push, +refspec', cg, c('git push origin +feat/x'), 2);
+t('quoted git push to main', cg, c('"git" push origin HEAD:main'), 2);
+t('push --all', cg, c('git push --all origin'), 2);
+t('delete a remote branch by refspec', cg, c('git push origin :feat/x'), 2);
+t('reset hard after -C', cg, c('git -C . reset --hard'), 2);
+t('hooksPath change', cg, c('git -c core.hooksPath=/dev/null commit -m x'), 2);
+t('rm -fr root', cg, c('rm -fr /'), 2);
+t('rm --recursive wildcard', cg, c('rm --recursive *'), 2);
+t('rm -rf of a build folder stays allowed', cg, c('rm -rf src/frontend/dist'), 0);
+t('Remove-Item -r alias flag on a wildcard', cg, c('Remove-Item -r *'), 2);
+t('gh pr merge', cg, c('gh pr merge 5'), 2);
+t('gh pr merge with --repo', cg, c('gh --repo a/b pr merge 5'), 2);
+t('gh api with a changing method', cg, c('gh api -X PUT repos/a/b/pulls/1/merge'), 2);
+t('gh api read stays allowed', cg, c('gh api repos/a/b/git/ref/tags/v4'), 0);
+t('gh pr create stays allowed', cg, c('gh pr create --base main --title x'), 0);
+t('WebClient download', cg, c('(New-Object Net.WebClient).DownloadString("http://x")'), 2);
+t('git push origin feature with a colon refspec to a feature branch', cg, c('git push origin HEAD:feat/FEAT-001-x'), 0);
 
 console.log('-- scope guard, main tree');
 t('.env edit', sg, f(inP('.env')), 2);
@@ -51,6 +73,27 @@ t('ticket: out of scope', sg, f(inP('src\\frontend\\a.ts')), 2);
 t('ticket: protected .claude', sg, f(inP('.claude\\settings.json')), 2);
 t('ticket: protected CLAUDE.md', sg, f(inP('CLAUDE.md')), 2);
 t('ticket: protected scripts', sg, f(inP('scripts\\pr-guard.mjs')), 2);
+
+console.log('-- command guard, shell writes to protected paths (ticket active)');
+t('redirect into .claude', cg, c('echo x > .claude/settings.json'), 2);
+t('append to scripts', cg, c('echo x >> scripts/pr-guard.mjs'), 2);
+t('cp into .github', cg, c('cp a.yml .github/workflows/pr-guard.yml'), 2);
+t('sed -i on CLAUDE.md', cg, c("sed -i 's/a/b/' CLAUDE.md"), 2);
+t('PowerShell Set-Content on the root REPO_CONTEXT.md', cg, c('Set-Content -Path REPO_CONTEXT.md -Value x'), 2);
+t('PowerShell Out-File into .claude with backslashes', cg, c('"x" | Out-File .claude\\hooks\\lib.mjs'), 2);
+t('node -e writing into the knowledge map', cg, c("node -e \"require('fs').writeFileSync('docs/knowledge-map.yaml','')\""), 2);
+t('git checkout restoring a protected file', cg, c('git checkout main -- .claude/settings.json'), 2);
+t('absolute path into the repository', cg, c(`echo x > ${inP('.claude\\settings.json')}`), 2);
+t('rm of prompt_logs', cg, c('rm prompt_logs/logs.md'), 2);
+t('reading a protected file is allowed', cg, c('cat .claude/settings.json'), 0);
+t('git status excluding prompt_logs is allowed', cg, c('git status --short -- . ":!prompt_logs"'), 0);
+t('running a hook script is allowed', cg, c('node .claude/hooks/worktree-apply.mjs "C:\\x\\.claude\\worktrees\\agent-1" --remove'), 0);
+t('running the token report is allowed', cg, c('node scripts/token-report.mjs 2>&1 | tail -3'), 0);
+t('writing a report file is allowed', cg, c('echo x >> docs/reports/ac-log.md'), 0);
+t('module REPO_CONTEXT.md write is allowed', cg, c('echo x >> src/backend/REPO_CONTEXT.md'), 0);
+t('a write inside an agent worktree to src is allowed', cg, c(`cp a.cs ${path.join(P, '.claude', 'worktrees', 'agent-x', 'src', 'a.cs')}`), 0);
+t('a write inside an agent worktree to scripts is not', cg, c(`cp a.cs ${path.join(P, '.claude', 'worktrees', 'agent-x', 'scripts', 'a.mjs')}`), 2);
+t('a redirect to /dev/null with a protected path read is allowed', cg, c('grep x .claude/settings.json > /dev/null'), 0);
 
 console.log('-- scope guard, drive-letter and separator forms (the Windows path problem)');
 const lower = (p) => p[0].toLowerCase() + p.slice(1);
@@ -233,6 +276,41 @@ const pg1 = guardRun('feat/FEAT-1-x');
 check('pr-guard: branch FEAT-1 does not use the ticket FEAT-10', pg1.status === 1 && /No ticket file tickets\/FEAT-1/.test(String(pg1.stderr)), `exit ${pg1.status}`);
 const pg2 = guardRun('feat/FEAT-10-x');
 check('pr-guard: branch FEAT-10 finds its own ticket', pg2.status === 0, `exit ${pg2.status} ${String(pg2.stderr).split('\n').slice(0, 3).join(' ')}`);
+
+// guards fail closed: a missing or crashing guard script blocks the call instead of letting it through
+const guardCmds = settings.hooks.PreToolUse.flatMap((g) => g.hooks.map((h) => h.command));
+const noNode = { ...process.env, PATH: 'C:\\Program Files\\Git\\usr\\bin', CLAUDE_PROJECT_DIR: REPO };
+check('settings: both PreToolUse guards are wrapped to fail closed', guardCmds.length === 2 && guardCmds.every((c2) => /rc=\$\?/.test(c2) && /exit 2/.test(c2)));
+for (const c2 of guardCmds) {
+  const r = spawnSync(BASH, ['-c', c2], { input: '{}', encoding: 'utf8', env: noNode });
+  check('settings: a guard that cannot run (node missing) blocks with exit 2', r.status === 2, 'exit ' + r.status);
+}
+
+// pr-guard (part 4b): chore/ PRs may not change the harness; the ticket is read from the base branch
+const gc = (...a) => gitR(['-c', 'user.name=t', '-c', 'user.email=t@t', ...a]);
+gc('checkout', '-q', 'main');
+gc('checkout', '-q', '-b', 'chore/harness-edit');
+fs.mkdirSync(path.join(R, '.claude'), { recursive: true });
+fs.writeFileSync(path.join(R, '.claude', 'x.txt'), 'x\n');
+gc('add', '-A'); gc('commit', '-q', '-m', 'harness edit');
+const pgChore = guardRun('chore/harness-edit');
+check('pr-guard: a chore/ PR that changes .claude is refused', pgChore.status === 1 && /Blocked paths changed outside a setup\/ PR/.test(String(pgChore.stderr)), `exit ${pgChore.status}`);
+const pgSetup = guardRun('setup/harness-edit');
+check('pr-guard: a setup/ PR may change .claude', pgSetup.status === 0, `exit ${pgSetup.status} ${String(pgSetup.stderr).split('\n').slice(0, 3).join(' ')}`);
+const pgLabel = spawnSync('node', [path.join(HOOKS, '..', '..', 'scripts', 'pr-guard.mjs')], { cwd: R, encoding: 'utf8', env: { ...process.env, PATH: ENV_PATH, BASE_REF: 'main', HEAD_REF: 'HEAD', BRANCH: 'feat/FEAT-10-x', PR_LABELS: 'bootstrap' } });
+check('pr-guard: the bootstrap label does not allow harness changes', pgLabel.status === 1 && /Blocked paths changed outside a setup\/ PR/.test(String(pgLabel.stderr)), `exit ${pgLabel.status}`);
+gc('checkout', '-q', 'main');
+gc('checkout', '-q', '-b', 'feat/FEAT-10-widen');
+fs.writeFileSync(path.join(R, 'tickets', 'FEAT-10.md'), '---\nid: FEAT-10\nowner: me\nallowed_paths: [src/**, docs/**, tickets/FEAT-10.md]\n---\n');
+fs.mkdirSync(path.join(R, 'docs'), { recursive: true });
+fs.writeFileSync(path.join(R, 'docs', 'y.md'), 'y\n');
+gc('add', '-A'); gc('commit', '-q', '-m', 'widen own ticket');
+const pgWiden = guardRun('feat/FEAT-10-widen');
+check('pr-guard: a PR cannot widen its own ticket allowed_paths', pgWiden.status === 1 && /outside FEAT-10 allowed_paths/.test(String(pgWiden.stderr)), `exit ${pgWiden.status}`);
+gc('checkout', '-q', 'main');
+gc('checkout', '-q', '-b', 'feat/FEAT-11-x');
+const pgNoBase = guardRun('feat/FEAT-11-x');
+check('pr-guard: a ticket that is not on the base branch is refused', pgNoBase.status === 1 && /found on main/.test(String(pgNoBase.stderr)), `exit ${pgNoBase.status}`);
 
 // settings: git branch is allowed only in its read-only forms; --output is denied on git diff and git log
 const allow = settings.permissions.allow;
