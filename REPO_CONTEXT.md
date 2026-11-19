@@ -6,19 +6,22 @@ Vendor-neutral context for people and coding agents. Keep under 200 lines; only 
 ## What this is
 Mini Warehouse Management System: production-grade in quality, never deployed. Built spec-first to evaluate
 Claude Code on .NET 10 and Angular. A named person owns every ticket and every PR.
+Scope (owner, 2026-11-19): only Locations is built end to end (API and screens). Products, Inventory, Inbound, Outbound and Auth
+are design only (`docs/specs/product.md` section 9, decision 7).
 
 ## Layout (all application code is under `src/`)
 | Path | Purpose | Status |
 |---|---|---|
 | `src/backend/` | .NET 10 solution (API, domain, infrastructure, tests); see `src/backend/REPO_CONTEXT.md` | active |
 | `src/frontend/` | Angular app (standalone, strict, Material, Vitest); see `src/frontend/REPO_CONTEXT.md` | active |
-| `tickets/` | Local tickets (replaces Jira): `FEAT-001.md`, `BUG-001.md`, `TASK-001.md` | active |
+| `tickets/` | Local tickets (replaces Jira): `FEAT-001`, `BUG-001` and the `TASK-nnn` tickets, plus `_templates/` | active |
 | `docs/` | Specs, ADRs, knowledge map (replaces Confluence) | active |
 | `dev_prompts/` | Original feature-pipeline prompts in `dev_prompts/original/` (never edited). The adapted prompts the skills run are in `.claude/prompts/` | active |
 | `prompt_logs/` | `logs.md` (every user prompt) and `token_usage.md` (token report) | active |
 | `.claude/` | Agents, skills, prompts, settings, hooks (the harness) | active |
 | `.github/` | CODEOWNERS, PR template, `pr-guard` workflow | active |
 | `scripts/` | `pr-guard.mjs`, `token-report.mjs` | active |
+| `.spectral.yaml`, `.config/`, `global.json` | Contract lint rules, local tool manifest (`dotnet-ef`, ReportGenerator), SDK pin | active |
 
 ## How work flows
 1. A ticket file in `tickets/` has an owner, a component, risk, acceptance criteria and `allowed_paths`.
@@ -40,11 +43,13 @@ blocked (secrets, CI, harness): no agent edits.
 ## Commands
 - Backend: `dotnet build src/backend` and `dotnet test src/backend`
 - Frontend: `npm ci` then `npm test` and `npm run build` in `src/frontend`
+- Coverage gates (90% line coverage): `powershell -NoProfile -ExecutionPolicy Bypass -File src/backend/coverage.ps1` and `npm run test:coverage` in `src/frontend`
+- Contract lint: `npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml"` (rules in `.spectral.yaml`); AC coverage: `node docs/specs/api/tools/ac-coverage.mjs`
 - Token report: `node scripts/token-report.mjs` (also runs automatically when a turn ends)
 
 ## Rules agents must follow
 - Never edit `.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, this root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, secrets or `.env*`.
-  The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`, under 80 lines) in the same PR as the change they describe.
+  The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`; backend file under 80 lines, frontend file at most 78 counting the trailing newline) in the same PR as the change they describe.
 - Stay inside the ticket's `allowed_paths`. If scope must widen, stop and ask the owner.
 - No network commands. Do not push, merge or force-push; the owner does that.
 - Code wins over docs: if a doc disagrees with the code, flag it in the brief, do not silently follow the doc.

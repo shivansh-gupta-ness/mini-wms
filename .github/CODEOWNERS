@@ -4,7 +4,6 @@
 
 # Sensitive areas (kept as separate lines so they can move to teams later)
 /src/backend/**/Auth*/    @shivansh-gupta-ness
-/infrastructure/          @shivansh-gupta-ness
 
 # Shared context, the knowledge map, the harness and CI (including pr-guard): agents never edit these
 /CLAUDE.md                @shivansh-gupta-ness
