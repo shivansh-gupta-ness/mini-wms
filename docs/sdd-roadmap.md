@@ -8,7 +8,7 @@ How to build Mini WMS spec-first with Claude Code, following `Claude Code Adopti
 
 **Every acceptance criterion gets a logged result.** See "Acceptance-criteria log" below.
 
-**PR limits:** at most 5000 changed lines (tests included) and 60 files, enforced by `pr-guard`.
+**PR limits:** at most 10000 changed lines (tests included) and 60 files, enforced by `pr-guard`.
 
 **Stack:** .NET 10 Web API + EF Core with SQLite (a local file database), Angular frontend. DB Browser for SQLite is used to inspect the database.
 
@@ -101,7 +101,7 @@ Order: Locations, Products, Inventory, Inbound, Outbound, then Auth (high risk: 
 
 Per module:
 1. Freeze the module's spec section, data-model part and API contract (merged before tickets start).
-2. Create a backend FEAT ticket and a frontend FEAT ticket (frontend `depends_on` the backend). Copy the spec's numbered ACs into each. Slice so each PR stays within 5000 lines and 60 files.
+2. Create a backend FEAT ticket and a frontend FEAT ticket (frontend `depends_on` the backend). Copy the spec's numbered ACs into each. Slice so each PR stays within 10000 lines and 60 files.
 3. Backend: `/start-ticket FEAT-00x`, approve the plan, `/run-feature-be FEAT-00x`, answer each STOP REPORT.
 4. Frontend: same with `/run-feature-fe FEAT-00y B`.
 5. Check `ac-results.md`: every AC PASS, or a written decision for any other result.
