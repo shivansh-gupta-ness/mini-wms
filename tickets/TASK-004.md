@@ -2,7 +2,7 @@
 id: TASK-004
 type: task
 title: EF Core SQLite persistence foundation
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
