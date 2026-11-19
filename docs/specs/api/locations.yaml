@@ -7,17 +7,26 @@ info:
     The x-acceptance-criteria extension lists the ACs each operation serves.
 servers:
   - url: http://localhost:5080/api/v1
+tags:
+  - { name: Warehouse, description: The single warehouse }
+  - { name: Zones, description: Zones inside the warehouse }
+  - { name: Bins, description: Bins inside zones }
+  - { name: Locations, description: Combined views over zones and bins }
 paths:
   /warehouse:
     get:
       operationId: getWarehouse
       summary: Get the single warehouse
+      tags: [Warehouse]
+      description: Returns the one warehouse that exists; no endpoint can create a second one.
       x-acceptance-criteria: [LOC-1.1, LOC-3.1]
       responses:
         '200': { description: The warehouse, content: { application/json: { schema: { $ref: '#/components/schemas/Warehouse' } } } }
     patch:
       operationId: renameWarehouse
       summary: Change the warehouse name (Admin)
+      tags: [Warehouse]
+      description: Renames the warehouse; the code stays unchanged. A stale version returns 409.
       x-acceptance-criteria: [LOC-2.1]
       requestBody:
         required: true
@@ -30,6 +39,8 @@ paths:
     get:
       operationId: listZones
       summary: List zones (paged, sortable, searchable)
+      tags: [Zones]
+      description: Returns a page of zones, optionally filtered by type, active state or a search text on code or name.
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
@@ -43,6 +54,8 @@ paths:
     post:
       operationId: createZone
       summary: Create a zone (Admin)
+      tags: [Zones]
+      description: Creates an Active zone. Missing fields return 400; a code already used in the warehouse returns 409.
       x-acceptance-criteria: [LOC-1.2, LOC-1.4]
       requestBody:
         required: true
@@ -56,6 +69,8 @@ paths:
     get:
       operationId: getZone
       summary: Get a zone
+      tags: [Zones]
+      description: Returns one zone by id, or 404 when it does not exist.
       x-acceptance-criteria: [LOC-3.1]
       responses:
         '200': { description: The zone, content: { application/json: { schema: { $ref: '#/components/schemas/Zone' } } } }
@@ -63,6 +78,8 @@ paths:
     patch:
       operationId: updateZone
       summary: Change a zone's name (Admin); type may change only while the zone has no bins
+      tags: [Zones]
+      description: Updates the name, and the type while the zone has no bins. The code never changes. A stale version returns 409.
       x-acceptance-criteria: [LOC-2.1]
       requestBody:
         required: true
@@ -77,6 +94,8 @@ paths:
     post:
       operationId: deactivateZone
       summary: Deactivate a zone with no Active bin (Admin)
+      tags: [Zones]
+      description: Marks the zone Inactive. A zone that still has an Active bin, or a stale version, returns 409.
       x-acceptance-criteria: [LOC-2.4]
       requestBody:
         required: true
@@ -89,6 +108,8 @@ paths:
     get:
       operationId: listBins
       summary: List bins (paged, sortable, searchable)
+      tags: [Bins]
+      description: Returns a page of bins, optionally filtered by zone, active state or a search text on code or name.
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
@@ -102,6 +123,8 @@ paths:
     post:
       operationId: createBin
       summary: Create a bin in a zone (Admin)
+      tags: [Bins]
+      description: Creates an Active bin under a zone. Missing fields return 400; a code already used in the warehouse returns 409.
       x-acceptance-criteria: [LOC-1.3, LOC-1.4]
       requestBody:
         required: true
@@ -115,6 +138,8 @@ paths:
     get:
       operationId: getBin
       summary: Get a bin
+      tags: [Bins]
+      description: Returns one bin by id, including its display path, or 404 when it does not exist.
       x-acceptance-criteria: [LOC-3.1]
       responses:
         '200': { description: The bin, content: { application/json: { schema: { $ref: '#/components/schemas/Bin' } } } }
@@ -122,6 +147,8 @@ paths:
     patch:
       operationId: updateBin
       summary: Change a bin's name (Admin)
+      tags: [Bins]
+      description: Renames the bin; the code stays unchanged. A stale version returns 409.
       x-acceptance-criteria: [LOC-2.1]
       requestBody:
         required: true
@@ -136,6 +163,8 @@ paths:
     post:
       operationId: deactivateBin
       summary: Deactivate a bin that holds no stock (Admin)
+      tags: [Bins]
+      description: Marks the bin Inactive. A bin that holds stock, or a stale version, returns 409 with a message naming the stock on hand.
       x-acceptance-criteria: [LOC-2.2, LOC-2.3]
       requestBody:
         required: true
@@ -148,6 +177,8 @@ paths:
     get:
       operationId: getLocationTree
       summary: Zones with their bins, for the tree view
+      tags: [Locations]
+      description: Returns every zone with its bins nested, unpaged, for the tree view. Optionally filtered by active state.
       x-acceptance-criteria: [LOC-3.1]
       parameters:
         - { name: isActive, in: query, schema: { type: boolean } }
@@ -254,10 +285,11 @@ components:
         totalItems: { type: integer }
     Problem:
       type: object
-      required: [type, title, status]
+      required: [type, title, status, traceId]
       properties:
         type: { type: string, description: "validation, conflict, not-found, unauthorized, forbidden, error" }
         title: { type: string }
         status: { type: integer }
-        detail: { type: string }
+        traceId: { type: string, description: "Correlation id of the request, also written to the log" }
+        detail: { type: string, description: "Present only on 4xx responses, and only when the text was written by our own code (validation and business-rule messages). Never sent on a 5xx and never raw exception text." }
         errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
