@@ -43,6 +43,7 @@ public class ZoneTests
 
     [Fact]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.7")]
     public void ChangeType_changes_the_type_when_the_zone_has_no_bins()
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
@@ -54,6 +55,7 @@ public class ZoneTests
 
     [Fact]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.7")]
     public void ChangeType_to_a_different_type_is_rejected_once_the_zone_has_bins()
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
@@ -64,6 +66,7 @@ public class ZoneTests
 
     [Fact]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.7")]
     public void ChangeType_to_the_same_type_is_allowed_when_the_zone_has_bins()
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
@@ -75,6 +78,7 @@ public class ZoneTests
 
     [Fact]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.10")]
     public void Deactivate_is_rejected_while_the_zone_has_active_bins()
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
@@ -85,6 +89,7 @@ public class ZoneTests
 
     [Fact]
     [Trait("AC", "TASK-005.6")]
+    [Trait("AC", "FEAT-001.10")]
     public void Deactivate_works_without_active_bins_and_Activate_reverses_it()
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using MiniWms.Application.Common.Sorting;
 using MiniWms.Domain.Common;
 
@@ -21,6 +22,22 @@ public static class QueryablePagingExtensions
 
         var ordered = sort.Descending ? source.OrderByDescending(sort.Selector) : source.OrderBy(sort.Selector);
         return ordered.ThenBy(e => e.Id);
+    }
+
+    /// <summary>
+    /// Same as <see cref="ApplySort{TEntity}(IQueryable{TEntity}, SortSpec{TEntity}?)"/> for a projected query
+    /// (a DTO) that is not an entity; <paramref name="idSelector"/> is the final tie-breaker.
+    /// </summary>
+    public static IQueryable<T> ApplySort<T>(
+        this IQueryable<T> source, SortSpec<T>? sort, Expression<Func<T, int>> idSelector)
+    {
+        if (sort is null)
+        {
+            return source.OrderBy(idSelector);
+        }
+
+        var ordered = sort.Descending ? source.OrderByDescending(sort.Selector) : source.OrderBy(sort.Selector);
+        return ordered.ThenBy(idSelector);
     }
 
     public static IQueryable<T> ApplyPage<T>(this IQueryable<T> source, PagedQuery query) =>

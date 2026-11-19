@@ -40,7 +40,7 @@ paths:
       operationId: listZones
       summary: List zones (paged, sortable, searchable)
       tags: [Zones]
-      description: Returns a page of zones, optionally filtered by type, active state or a search text on code or name.
+      description: Returns a page of zones, optionally filtered by type, active state or a search text on code or name. Allowed sort fields are code, name, type and isActive (prefix with - for descending). binCount counts all bins of the zone, including inactive ones.
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
@@ -55,7 +55,7 @@ paths:
       operationId: createZone
       summary: Create a zone (Admin)
       tags: [Zones]
-      description: Creates an Active zone. Missing fields return 400; a code already used in the warehouse returns 409.
+      description: Creates an Active zone. Missing or invalid fields return 400. A code already used in the warehouse, compared without regard to case, also returns 400 with the message under errors.code.
       x-acceptance-criteria: [LOC-1.2, LOC-1.4]
       requestBody:
         required: true
@@ -63,7 +63,6 @@ paths:
       responses:
         '201': { description: Created, headers: { Location: { schema: { type: string } } }, content: { application/json: { schema: { $ref: '#/components/schemas/Zone' } } } }
         '400': { $ref: '#/components/responses/ValidationError' }
-        '409': { $ref: '#/components/responses/Conflict' }
   /zones/{id}:
     parameters: [ { $ref: '#/components/parameters/Id' } ]
     get:
@@ -95,13 +94,14 @@ paths:
       operationId: deactivateZone
       summary: Deactivate a zone with no Active bin (Admin)
       tags: [Zones]
-      description: Marks the zone Inactive. A zone that still has an Active bin, or a stale version, returns 409.
+      description: Marks the zone Inactive. A missing or invalid version in the body returns 400. A zone that still has an Active bin, or a stale version, returns 409. Deactivating a zone that is already Inactive returns 200 and changes nothing.
       x-acceptance-criteria: [LOC-2.4]
       requestBody:
         required: true
         content: { application/json: { schema: { $ref: '#/components/schemas/VersionRequest' } } }
       responses:
         '200': { description: Deactivated, content: { application/json: { schema: { $ref: '#/components/schemas/Zone' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
         '404': { $ref: '#/components/responses/NotFound' }
         '409': { $ref: '#/components/responses/Conflict' }
   /bins:
@@ -109,7 +109,7 @@ paths:
       operationId: listBins
       summary: List bins (paged, sortable, searchable)
       tags: [Bins]
-      description: Returns a page of bins, optionally filtered by zone, active state or a search text on code or name.
+      description: Returns a page of bins, optionally filtered by zone, active state or a search text on code or name. Allowed sort fields are code, name, zone (the zone code) and isActive (prefix with - for descending).
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
@@ -124,7 +124,7 @@ paths:
       operationId: createBin
       summary: Create a bin in a zone (Admin)
       tags: [Bins]
-      description: Creates an Active bin under a zone. Missing fields return 400; a code already used in the warehouse returns 409.
+      description: Creates an Active bin under a zone. Missing or invalid fields return 400. A code already used in the warehouse, compared without regard to case, returns 400 with the message under errors.code. An unknown or Inactive zone returns 400 with the message under errors.zoneId.
       x-acceptance-criteria: [LOC-1.3, LOC-1.4]
       requestBody:
         required: true
@@ -132,7 +132,6 @@ paths:
       responses:
         '201': { description: Created, headers: { Location: { schema: { type: string } } }, content: { application/json: { schema: { $ref: '#/components/schemas/Bin' } } } }
         '400': { $ref: '#/components/responses/ValidationError' }
-        '409': { $ref: '#/components/responses/Conflict' }
   /bins/{id}:
     parameters: [ { $ref: '#/components/parameters/Id' } ]
     get:
@@ -164,13 +163,14 @@ paths:
       operationId: deactivateBin
       summary: Deactivate a bin that holds no stock (Admin)
       tags: [Bins]
-      description: Marks the bin Inactive. A bin that holds stock, or a stale version, returns 409 with a message naming the stock on hand.
+      description: Marks the bin Inactive. A missing or invalid version in the body returns 400. A bin that holds stock, or a stale version, returns 409 with a message naming the stock on hand. Deactivating a bin that is already Inactive returns 200 and changes nothing.
       x-acceptance-criteria: [LOC-2.2, LOC-2.3]
       requestBody:
         required: true
         content: { application/json: { schema: { $ref: '#/components/schemas/VersionRequest' } } }
       responses:
         '200': { description: Deactivated, content: { application/json: { schema: { $ref: '#/components/schemas/Bin' } } } }
+        '400': { $ref: '#/components/responses/ValidationError' }
         '404': { $ref: '#/components/responses/NotFound' }
         '409': { $ref: '#/components/responses/Conflict' }
   /locations/tree:
@@ -178,7 +178,7 @@ paths:
       operationId: getLocationTree
       summary: Zones with their bins, for the tree view
       tags: [Locations]
-      description: Returns every zone with its bins nested, unpaged, for the tree view. Optionally filtered by active state.
+      description: Returns every zone with its bins nested, unpaged, for the tree view. The optional isActive filter applies to zones and to bins independently.
       x-acceptance-criteria: [LOC-3.1]
       parameters:
         - { name: isActive, in: query, schema: { type: boolean } }
@@ -189,8 +189,8 @@ components:
     Id: { name: id, in: path, required: true, schema: { type: integer, format: int64 } }
     Page: { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
     PageSize: { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 25 } }
-    Sort: { name: sort, in: query, description: "Field name, prefix with - for descending (for example -code)", schema: { type: string } }
-    Q: { name: q, in: query, description: Part of the code or name, schema: { type: string } }
+    Sort: { name: sort, in: query, description: "One field name, prefix with - for descending (for example -code). Allowed fields: zones are code, name, type, isActive; bins are code, name, zone, isActive.", schema: { type: string } }
+    Q: { name: q, in: query, description: "Part of the code or name, at most 100 characters. Case is ignored for ASCII letters only.", schema: { type: string, maxLength: 100 } }
   responses:
     ValidationError: { description: Request failed validation, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
     NotFound: { description: Resource not found, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
