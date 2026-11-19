@@ -30,3 +30,4 @@ Create the Angular app in `src/frontend` as ADR-006 describes, with strict setti
 
 ## Notes and links
 - Record AC results in `docs/reports/TASK-007/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Owner decisions (2026-11-19, on the scout's brief): the npm registry may be used for this ticket only (install, `ng new`, `ng add`; this is an exception to "no network commands"); test runner is the Angular default (Vitest expected), and a DOM library such as jsdom counts as a test library, not a UI or state library; measure the lockfile first and stop to ask if the PR would exceed 5000 lines or 60 files; no dev-server proxy (TASK-009); AC 5 is marked NOT RUN unless a headless browser check works; the stale "TASK-003 records the version" lines in ADR-005 and ADR-006 are fixed in a separate chore PR. Installed here: Node 24.22.3, npm 11.19.1; the current Angular CLI on the registry is 22.3.0.
