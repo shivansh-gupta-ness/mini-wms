@@ -2,7 +2,7 @@
 id: TASK-012
 type: task
 title: Lint the OpenAPI contracts
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: api-contracts
 risk: low
