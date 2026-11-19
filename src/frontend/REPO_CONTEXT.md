@@ -27,11 +27,28 @@ Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component
   (no NgRx, Bootstrap and so on).
 
 ## Folder layout (`src/app/`)
-- `core/`: API client, auth session, error handling, layout shell (empty for now)
+- `core/`: API client, auth session, error handling (empty for now); `core/layout/` holds the shell
+  (`shell.ts`: top bar "Mini WMS" and fixed "Dev Admin", left nav, `<main id="main-content">`, skip link)
+  and `not-found.page.ts`
 - `shared/`: reusable components, pipes, directives (empty for now)
-- `features/`: one folder per module with `pages/`, `components/`, `data/` and `<module>.routes.ts` (empty for now)
+- `features/`: one folder per module with `pages/`, `components/`, `data/` and `<module>.routes.ts`.
+  For now each holds only `pages/<module>-placeholder.page.ts` (an h1 with the title).
 - `app.ts`, `app.config.ts`, `app.routes.ts`, `app.html`: root component, providers and routes.
-  `app.html` is still the CLI placeholder page; the shell replaces it in TASK-008.
+  `app.html` is only `<router-outlet />`; the shell is the component of the parent route `''`.
+
+## Routes (all children of the shell, each lazy via `loadChildren`, default export)
+| URL | Feature folder | Title / nav |
+|---|---|---|
+| `/` | redirect to `/stock` | |
+| `/stock` | `inventory` | Stock (nav 1) |
+| `/receipts` | `inbound` | Receipts (nav 2) |
+| `/orders` | `outbound` | Orders (nav 3) |
+| `/products` | `products` | Products (nav 4) |
+| `/locations` | `locations` | Locations (nav 5) |
+| `/sign-in` | `auth` | Sign in (no nav item) |
+| `**` | `core/layout/not-found.page.ts` | Page not found, inside the shell |
+
+Global `:focus-visible` outline and the skip-link style live in `src/styles.scss` (NFR-6).
 
 ## Commands (run in `src/frontend`)
 - Install exactly from the lockfile: `npm ci`
@@ -42,7 +59,7 @@ Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component
 
 ## Not done yet
 - Dev-server proxy for `/api` is TASK-011; the HTTP layer is TASK-009.
-- Coverage gate is TASK-010. Shell and navigation are TASK-008.
+- Coverage gate is TASK-010. Real module screens come with their own tickets.
 
 ## Lockfile
 `package-lock.json` is committed and is the source of truth for versions; use `npm ci`, not `npm install`.

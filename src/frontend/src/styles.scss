@@ -36,4 +36,24 @@ body {
   margin: 0;
   height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */
+// Visible keyboard focus on every focusable element (NFR-6).
+:focus-visible {
+  outline: 3px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+// Skip link: off-screen until it receives keyboard focus.
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 8px 16px;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  transform: translateY(-200%);
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
