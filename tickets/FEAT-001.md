@@ -2,7 +2,7 @@
 id: FEAT-001
 type: feature
 title: Locations module: warehouse, zones and bins (API and screens)
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: locations
 risk: low
@@ -62,3 +62,4 @@ Build the whole Locations module (LOC-1 to LOC-3): the API in `docs/specs/api/lo
 - Frontend spec: `docs/specs/ui.md` sections 2 and 3. The page replaces `features/locations/pages/locations-placeholder.page.ts`; the lazy route `/locations` already exists. Reusable parts (confirm dialog, status chip, empty state, error banner) go in `shared/` because the Products screens reuse them. If a duplicate code returns 400 (decision 1), the message appears under the field; if it stays 409, it shows in the banner.
 - **Delivery in two PRs, one ticket.** The ticket spans both layers of this one repository (the layer rule in `tickets/README.md` is about separate repositories). Run the backend first (`/run-feature-be FEAT-001`, branch `feat/FEAT-001-locations-api`), merge it, then the screens (`/run-feature-fe FEAT-001 B`, branch `feat/FEAT-001-locations-screens`). Each PR must stay within the limits (10000 lines, 60 files) and passes `pr-guard` on its own. The `ac-results.md` file is written in the first PR and completed in the second; add the `ac-log.md` row with the second PR. The scope guard allows both layers' paths for the whole ticket, so agents must still work on one layer per run.
 - The feature pipeline appends a `## Delivery` section to this file, files reports in `docs/reports/FEAT-001/` and appends a row to `docs/reports/ac-log.md`, so all three stay in `allowed_paths`.
+- Owner decisions (2026-11-19, recommended options taken for all six open decisions above): (1) a duplicate zone or bin code, compared without regard to case, returns 400 with the message under `code`, found by a check in the use case (the unique index stays as the safety net); `createZone` and `createBin` in `docs/specs/api/locations.yaml` change from 409 to 400 for this case, and the PR lists the contract change; (2) `IStockQuery` (`BinOnHand`, `ProductOnHand`) lives in `MiniWms.Application/Common`, a default implementation returning 0 is registered until the Inventory module replaces it, tests use a fake that returns stock; (3) no role check now, the role part of each Admin AC is N/A; (4) the zone and bin forms are Material dialogs with reactive forms; (5) the tree uses Material nested lists or the Material tree, whichever keeps keyboard navigation simple; (6) data loading uses signals or RxJS services in `features/locations/data/` through `ApiClient`, with no state library. Delivery is two PRs as described above: the API first (`feat/FEAT-001-locations-api`), then the screens (`feat/FEAT-001-locations-screens`).
