@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MiniWms.Application.Common;
 using MiniWms.Domain.Common;
+using MiniWms.Domain.Locations;
+using MiniWms.Domain.Products;
 
 namespace MiniWms.Infrastructure.Persistence;
 
@@ -12,6 +14,14 @@ namespace MiniWms.Infrastructure.Persistence;
 public class AppDbContext(DbContextOptions<AppDbContext> options, IClock clock, ICurrentUser currentUser)
     : DbContext(options)
 {
+    public DbSet<Warehouse> Warehouses => Set<Warehouse>();
+
+    public DbSet<Zone> Zones => Set<Zone>();
+
+    public DbSet<Bin> Bins => Set<Bin>();
+
+    public DbSet<Product> Products => Set<Product>();
+
     // The SQLite provider cannot order or compare DateTimeOffset values; store them as UTC ticks instead.
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Properties<DateTimeOffset>()
@@ -20,6 +30,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IClock clock, 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
