@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ApiStatus } from './api-status';
 
 interface NavItem {
   readonly label: string;
@@ -11,7 +12,7 @@ interface NavItem {
 @Component({
   selector: 'app-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatListModule, MatToolbarModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [ApiStatus, MatListModule, MatToolbarModule, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })

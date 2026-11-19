@@ -1,10 +1,12 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { routes } from './app.routes';
 
 async function open(url: string): Promise<{ el: HTMLElement; router: Router; harness: RouterTestingHarness }> {
-  TestBed.configureTestingModule({ providers: [provideRouter(routes)] });
+  TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()] });
   const harness = await RouterTestingHarness.create();
   await harness.navigateByUrl(url);
   harness.detectChanges();

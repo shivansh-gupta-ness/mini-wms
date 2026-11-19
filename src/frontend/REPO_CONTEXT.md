@@ -58,8 +58,11 @@ Global `:focus-visible` outline and the skip-link style live in `src/styles.scss
 - Gate script tests (`node --test`, fixture summaries, not part of `npm test`): `npm run test:gate`
 - Watch build: `npm run watch`
 
+## Run the API and the frontend together (TASK-011)
+- API: `dotnet run --project src/backend/MiniWms.Api` (http://localhost:5080)
+- Frontend: `npm start` (http://localhost:4200) proxies `/api/` through `proxy.conf.json` (dev only; `ng build` does not use it).
+- The top bar shows `API: ok` or `API: unavailable` (health check every 30 s, `core/layout/api-status.ts`).
 ## Not done yet
-- Dev-server proxy for `/api` is TASK-011 (until then `/api/v1` is not served by `npm start`).
 - Real module screens come with their own tickets.
 
 ## Lockfile

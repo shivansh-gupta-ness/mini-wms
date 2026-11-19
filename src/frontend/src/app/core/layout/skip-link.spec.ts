@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -7,7 +9,7 @@ describe('TASK-008 skip link behaviour (AC 5)', () => {
   afterEach(() => document.body.replaceChildren());
 
   it('TASK-008.5 activating the skip link moves focus to the main content without navigating', async () => {
-    TestBed.configureTestingModule({ providers: [provideRouter(routes)] });
+    TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()] });
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/stock');
     harness.detectChanges();
