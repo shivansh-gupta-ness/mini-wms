@@ -4,7 +4,7 @@
 //  2. When a ticket is active (.claude/state/active-ticket.json written by /start-ticket) or the caller is an
 //     editing agent, edits must stay inside the ticket's allowed_paths and must not touch protected paths.
 //  3. With no active ticket and no editing agent (setup work by the owner), everything else is allowed.
-import { readInput, rel, matchAny, isEditingAgent, activeTicket, block } from './lib.mjs';
+import { readInput, rel, matchAny, isEditingAgent, activeTicket, block, PROTECTED_PATHS } from './lib.mjs';
 
 const input = readInput();
 const target = input.tool_input?.file_path || input.tool_input?.notebook_path;
@@ -17,7 +17,7 @@ if (matchAny(file, secrets)) block('scope-guard', `${file} is a secret/env file;
 const ticket = activeTicket();
 if (!ticket && !isEditingAgent(input)) process.exit(0);
 
-const protectedPaths = ['.github/**', '.claude/**', 'scripts/**', 'CLAUDE.md', 'REPO_CONTEXT.md', 'docs/knowledge-map.yaml', 'prompt_logs/**', ...(ticket?.protected_paths || [])];
+const protectedPaths = [...PROTECTED_PATHS, ...(ticket?.protected_paths || [])];
 if (matchAny(file, protectedPaths)) block('scope-guard', `${file} is a protected path (harness, shared context, CI or logs). Ask the owner.`);
 
 if (!ticket) block('scope-guard', `No active ticket. Run /start-ticket <ID> and get the plan approved before editing ${file}.`);
