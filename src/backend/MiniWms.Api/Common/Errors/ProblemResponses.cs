@@ -44,8 +44,16 @@ internal static class ProblemResponses
         return await Write(context, problems, exception, problem);
     }
 
+    /// <summary>A status-only problem: <c>detail</c> is not marked as allowed, so the customizer drops it.</summary>
+    public static async ValueTask<bool> WriteStatus(
+        HttpContext context, IProblemDetailsService problems, Exception? exception, int status, string title)
+    {
+        var problem = new ProblemDetails { Status = status, Title = title };
+        return await Write(context, problems, exception, problem);
+    }
+
     private static async ValueTask<bool> Write(
-        HttpContext context, IProblemDetailsService problems, Exception exception, ProblemDetails problem)
+        HttpContext context, IProblemDetailsService problems, Exception? exception, ProblemDetails problem)
     {
         context.Response.StatusCode = problem.Status!.Value;
         return await problems.TryWriteAsync(new ProblemDetailsContext

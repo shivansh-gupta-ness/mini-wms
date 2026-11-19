@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MiniWms.Api.Common;
 using MiniWms.Api.Common.Errors;
+using MiniWms.Api.Common.RequestLimits;
 using MiniWms.Api.Locations;
 using MiniWms.Infrastructure;
 using MiniWms.Infrastructure.Persistence;
@@ -49,9 +50,13 @@ builder.Services.AddProblemDetails(options =>
         }
     });
 
+// Registered after AddProblemDetails so the default writer is consulted first; this one only takes over when it declines.
+builder.Services.AddSingleton<IProblemDetailsWriter, AlwaysJsonProblemDetailsWriter>();
+
 // Our own exception handlers run first, in this order; anything they do not handle stays a generic 500.
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
+builder.Services.AddExceptionHandler<RequestBodyTooLargeExceptionHandler>();
 
 // ADR-002: EF Core + SQLite; a relative database path resolves against the content root.
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
@@ -78,6 +83,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors(AngularDevCorsPolicy);
 app.UseExceptionHandler();
 app.UseStatusCodePages();
+
+// TASK-014: after the error handlers (so the limit exception becomes a 413 problem), before every endpoint.
+app.UseMiddleware<RequestBodyLimitMiddleware>();
 
 // Every module registers through its own MapXxxEndpoints extension, called here.
 app.MapHealthEndpoints();

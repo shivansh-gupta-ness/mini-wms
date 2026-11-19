@@ -2,7 +2,7 @@
 id: TASK-014
 type: task
 title: Limit the request body size and prove the Development 500
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -33,3 +33,4 @@ Phase 6 hardening, part 2 (security review 2026-11-20, finding L5 and the follow
 - Tests can use the in-process `ApiFactory` (temporary database, never `App_Data`); a streamed body without a `Content-Length` header must be covered too, because the limit then triggers while reading.
 - Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
 - Record AC results in `docs/reports/TASK-014/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Owner decisions (2026-11-20, on the scout's brief, recommended options taken): the limit is 65,536 bytes, inclusive (a body larger than that is rejected); it is a global middleware on every route (a GET larger than 64 KB also gets 413); no Kestrel `MaxRequestBodySize` is set in this ticket, because the in-app check is the enforced and in-process testable limit (the real Kestrel behaviour is a manual check, NOT RUN: send a body over 64 KB to the running API); the 413 body is `type` `error`, the title "Request body too large.", a `traceId`, no `detail`, no `errors`, and no limit text. The in-process test server does not enforce Kestrel's limit, so the work is a small middleware that rejects a declared `Content-Length` over the limit with a problem response and wraps the request body in a read-limited stream (throwing `BadHttpRequestException` with status 413 past the limit) that a new exception handler turns into the same problem response. Stages: 1 production code; 2 tests; 3 `REPO_CONTEXT.md`, the report and the AC log. ADR-003 gets a 413 row in a later docs PR (it is outside this ticket).
