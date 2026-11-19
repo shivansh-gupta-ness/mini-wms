@@ -2,7 +2,7 @@
 id: TASK-013
 type: task
 title: Refresh the docs and context files against the code
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -39,3 +39,6 @@ Phase 6 hardening, part 1. A read-only audit (2026-11-20) compared the documents
 - The TASK-011 owner decision (criterion 8) is recorded on the owner's approval of this plan; if the owner prefers to run the manual check first, replace the line with the result.
 - Record AC results in `docs/reports/TASK-013/ac-results.md` and one row in `docs/reports/ac-log.md`. Docs-only ticket: the proof is the real command output, there is no new test code.
 - Owner decisions (2026-11-20, on the scout's brief, recommended options taken): `allowed_paths` gains `docs/reports/.gitkeep` (needed for criterion 9); the warehouse 405 is documented as a note in the `/warehouse` path description only (no new operations); the Products duplicate-SKU response changes from 409 to 400 under `errors.sku` (PRD-1.2 and the Locations precedent); the Locations id format changes from `int64` to `int32` (the routes are `{id:int}`); `ui.md` marks the Products screens and the "built first" line as not built in this evaluation; the TASK-011 AC 1 line reads "Owner decision (2026-11-20): AC 1 accepted as NOT RUN; the real proxy forwarding is checked by hand with both servers running"; the TASK-011 Delivery wording is "5 PASS, 1 NOT RUN (AC 1, manual check)"; the TASK-013 AC log row shows `n/a` for mapping (docs-only, no new test code) and the PR number after the PR opens; the removed Products ticket is logged from PR 36 (FEAT-002 deleted on 2026-11-19 at the owner's request); Spectral may be run through `npx` for this ticket (registry exception for this ticket, as for TASK-012). Further findings from the scout that are in scope: the contract README says "three rules" but lists four, the roadmap Phase 3 knowledge-map line is stale, and the data model has singular table names. The root `REPO_CONTEXT.md` is already correct (PR 43), so nothing to do there. Stages run in parallel on separate files: 1 ADRs; 2 specs and contracts; 3 module context files, GUIDE, roadmap and report files; 4 ticket Delivery sections, the learning log and the placeholder files. The final checks and `docs/reports/TASK-013/ac-results.md` are written by the main session.
+
+## Delivery
+PR 45. All 10 acceptance criteria PASS (a docs-only ticket: proven by command output, no new test code); results in `docs/reports/TASK-013/ac-results.md` and the row in `docs/reports/ac-log.md`.
