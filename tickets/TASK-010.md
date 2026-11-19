@@ -2,7 +2,7 @@
 id: TASK-010
 type: task
 title: Frontend test and coverage gate
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
