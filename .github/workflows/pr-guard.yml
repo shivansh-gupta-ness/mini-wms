@@ -1,6 +1,7 @@
 name: pr-guard
 
 # Required status check (name: pr-guard). Plain scripts, no AI. Agents and people cannot skip it.
+# Actions are pinned to full commit SHAs (the comment names the version), so a moved tag cannot change what runs.
 on:
   pull_request:
     branches: [main]
@@ -14,23 +15,27 @@ jobs:
     name: pr-guard
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
+      # The check runs the copy of pr-guard.mjs that is on the base branch, not the one in the PR,
+      # so a PR cannot weaken the check it is judged by. A change to the script takes effect after it is merged.
       - name: Scope, size, knowledge-map and licence checks
         env:
           BASE_REF: origin/${{ github.base_ref }}
           HEAD_REF: ${{ github.event.pull_request.head.sha }}
           BRANCH: ${{ github.head_ref }}
           PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
-        run: node scripts/pr-guard.mjs
+        run: |
+          git show "$BASE_REF:scripts/pr-guard.mjs" > "$RUNNER_TEMP/pr-guard.mjs"
+          node "$RUNNER_TEMP/pr-guard.mjs"
 
       - name: Secret scan (gitleaks)
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

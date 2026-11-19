@@ -33,7 +33,7 @@ are design only (`docs/specs/product.md` section 9, decision 7).
 4. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR.
 5. `pr-guard` (required check) and a Code Owner review must pass before merge. Nobody pushes to `main`.
 
-Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Harness or doc-only changes use `chore/` or `setup/`.
+Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Doc-only changes use `chore/`; harness, CI and root context file changes use `setup/` (the only branches pr-guard lets change them).
 PR limits: at most 10000 changed lines and 60 files.
 
 ## Autonomy by risk (`docs/knowledge-map.yaml` sets the value per component)
