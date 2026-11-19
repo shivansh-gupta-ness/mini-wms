@@ -4,19 +4,12 @@ Angular app for the Mini WMS. Structure decisions are in `docs/adr/ADR-006-angul
 Created by TASK-007.
 
 ## Versions (as scaffolded, 2026-11-19)
-| Item | Version |
-|---|---|
-| Angular (`@angular/*`) | 22.3.0 |
-| Angular CLI / `@angular/build` | 22.3.0 |
-| Angular Material / CDK | 22.3.0 |
-| TypeScript | ~6.0.2 |
-| RxJS | ~7.8.0 |
-| Node used | 24.22.3 (CLI 22.3 needs ^22.22.3, ^24.15.0 or >=26) |
-| npm used | 11.19.1 |
+Angular, Angular CLI / `@angular/build`, Material and CDK: 22.3.0. TypeScript ~6.0.2, RxJS ~7.8.0.
+Node used 24.22.3 (CLI 22.3 needs ^22.22.3, ^24.15.0 or >=26), npm 11.19.1.
 
 ## Test runner
 The CLI default: Vitest 5 through the `@angular/build:unit-test` builder, with jsdom as the DOM.
-It runs headless, so no browser is needed. jsdom is a test library, not a UI library.
+It runs headless, so no browser is needed. jsdom and `@vitest/coverage-v8` (same version as Vitest) are test libraries.
 Test names start with the AC ID (ADR-005), for example `TASK-007.1 app component is created`.
 
 ## Setup
@@ -56,12 +49,18 @@ Global `:focus-visible` outline and the skip-link style live in `src/styles.scss
 - Install exactly from the lockfile: `npm ci`
 - Dev server: `npm start` (http://localhost:4200)
 - Production build: `npm run build` (output in `dist/`)
-- Tests, once and headless, exits when done: `npm test`
+- Tests, once and headless, exits with pass/fail status: `npm test`
+- Only the tests of one AC (same quoting in bash, PowerShell and cmd): `npm test -- --filter "\bTASK-010\.1\b"`
+- Tests with coverage, then the gate: `npm run test:coverage` (text table, report in git-ignored `coverage/mini-wms/`)
+- Gate alone: `node scripts/coverage-gate.mjs` (reads `coverage-summary.json`; `--summary <file>`, `--threshold <n>`).
+  Line coverage of `src/app` (specs and `.d.ts` excluded) must be at least 90%, else it exits 1 and names the shortfall;
+  a missing summary also exits 1. Fail example: `node scripts/coverage-gate.mjs --threshold 101`
+- Gate script tests (`node --test`, fixture summaries, not part of `npm test`): `npm run test:gate`
 - Watch build: `npm run watch`
 
 ## Not done yet
 - Dev-server proxy for `/api` is TASK-011 (until then `/api/v1` is not served by `npm start`).
-- Coverage gate is TASK-010. Real module screens come with their own tickets.
+- Real module screens come with their own tickets.
 
 ## Lockfile
 `package-lock.json` is committed and is the source of truth for versions; use `npm ci`, not `npm install`.
@@ -71,6 +70,5 @@ the lockfile in the same PR.
 
 ## Gotchas
 - Tools may not be on PATH in agent shells: add `C:\Program Files\nodejs` first.
-- npm 11 warns that 4 packages have install scripts not covered by `allowScripts`
-  (esbuild, lmdb, @parcel/watcher, msgpackr-extract). Build and tests work without running them.
-- `node_modules`, `dist` and `.angular` are git-ignored.
+- npm 11 warns about install scripts not covered by `allowScripts` (esbuild, lmdb and others); not needed to build or test.
+- `node_modules`, `dist`, `.angular` and `coverage` are git-ignored.
