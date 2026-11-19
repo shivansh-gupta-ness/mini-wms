@@ -8,7 +8,8 @@
       "PowerShell(git status*)",
       "PowerShell(git diff*)",
       "PowerShell(git log*)",
-      "PowerShell(git branch*)",
+      "PowerShell(git branch --list*)",
+      "PowerShell(git branch --show-current*)",
       "PowerShell(node scripts/token-report.mjs*)",
       "Bash(git status*)",
       "Bash(git diff*)",
@@ -32,7 +33,11 @@
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "PowerShell(git push --force*)",
-      "PowerShell(git push -f*)"
+      "PowerShell(git push -f*)",
+      "Bash(git diff*--output*)",
+      "Bash(git log*--output*)",
+      "PowerShell(git diff*--output*)",
+      "PowerShell(git log*--output*)"
     ]
   },
   "hooks": {

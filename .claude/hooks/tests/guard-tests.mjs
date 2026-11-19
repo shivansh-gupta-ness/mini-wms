@@ -168,6 +168,79 @@ check('settings command: command guard still blocks a push to main when run from
 const okRun = viaSettings('PreToolUse', 'Bash', c('git status'), elsewhere);
 check('settings command: an allowed command passes from an unrelated folder', okRun.status === 0, `exit ${okRun.status}`);
 
+console.log('-- hardening: case, junctions, hand-off checks, ticket lookup, settings');
+// case: NTFS folders are case-insensitive
+t('scope guard: a secret file with other letter case is still blocked', sg, f(inP('.ENV')), 2);
+setTicket({ id: 'T-9', risk: 'low', allowed_paths: ['src/**', '.claude/**'] });
+t('scope guard: protected folder with other letter case is blocked', sg, f(inP('.CLAUDE/hooks/x.mjs')), 2);
+t('scope guard: allowed path with other letter case is accepted', sg, f(inP('SRC/a.cs')), 0);
+// junction: src/jlink points at .claude, so an edit through it is an edit to a protected folder
+fs.mkdirSync(path.join(P, 'src'), { recursive: true });
+try { fs.symlinkSync(path.join(P, '.claude'), path.join(P, 'src', 'jlink'), 'junction'); } catch { /* not permitted */ }
+if (fs.existsSync(path.join(P, 'src', 'jlink'))) t('scope guard: an edit through a junction to a protected folder is blocked', sg, f(inP('src/jlink/hooks/new.mjs')), 2);
+else check('scope guard: junction test skipped (the junction could not be created)', true);
+clearTicket();
+
+// worktree-apply refuses protected files and out-of-scope files, and does not apply anything then
+const A = path.join(tmp, 'apply-repo');
+const gitA = (args, cwd = A) => execFileSync(path.join(GIT_DIR, 'git.exe'), args, { cwd, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
+fs.mkdirSync(path.join(A, 'src'), { recursive: true });
+fs.writeFileSync(path.join(A, '.gitignore'), '.claude/state/\n.claude/worktrees/\n');
+fs.writeFileSync(path.join(A, 'src', 'a.txt'), 'one\n');
+gitA(['init', '-q', '-b', 'task/T-2-x']);
+gitA(['-c', 'user.name=t', '-c', 'user.email=t@t', 'add', '-A']);
+gitA(['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '-m', 'init']);
+fs.mkdirSync(path.join(A, '.claude', 'state'), { recursive: true });
+fs.writeFileSync(path.join(A, '.claude', 'state', 'active-ticket.json'), JSON.stringify({ id: 'T-2', risk: 'low', allowed_paths: ['src/**'] }));
+const made = (name) => hook('worktree-create.mjs', { name, cwd: A }, A, A).stdout.trim();
+const applyIn = (dir) => spawnSync('node', [path.join(HOOKS, 'worktree-apply.mjs'), dir], { cwd: A, encoding: 'utf8', env: { ...process.env, PATH: ENV_PATH } });
+const w1 = made('agent-prot');
+fs.mkdirSync(path.join(w1, '.github'), { recursive: true });
+fs.writeFileSync(path.join(w1, '.github', 'x.yml'), 'evil\n');
+fs.writeFileSync(path.join(w1, 'src', 'a.txt'), 'one\nchanged\n');
+const r1 = applyIn(w1);
+check('apply: a protected file written in the worktree is refused', r1.status === 1 && /\.github\/x\.yml/.test(String(r1.stderr)), `exit ${r1.status}`);
+check('apply: nothing is applied when one file is refused', text(path.join(A, 'src', 'a.txt')) === 'one\n' && !fs.existsSync(path.join(A, '.github', 'x.yml')));
+check('apply: the refused worktree is kept for inspection', fs.existsSync(w1));
+const w2 = made('agent-scope');
+fs.writeFileSync(path.join(w2, 'other.txt'), 'outside the ticket\n');
+const r2 = applyIn(w2);
+check('apply: a file outside the active ticket allowed_paths is refused', r2.status === 1 && /other\.txt/.test(String(r2.stderr)) && !fs.existsSync(path.join(A, 'other.txt')), `exit ${r2.status}`);
+const w3 = made('agent-ok');
+fs.writeFileSync(path.join(w3, 'src', 'a.txt'), 'one\nok\n');
+const r3 = applyIn(w3);
+check('apply: an in-scope change still applies', r3.status === 0 && text(path.join(A, 'src', 'a.txt')) === 'one\nok\n', `exit ${r3.status} ${String(r3.stderr).split('\n')[0]}`);
+const decoy = path.join(tmp, 'decoy', '.claude', 'worktrees', 'x');
+fs.mkdirSync(decoy, { recursive: true });
+const r4 = applyIn(decoy);
+check('apply: a folder that only looks like a worktree path is refused', r4.status === 1, `exit ${r4.status}`);
+
+// pr-guard: FEAT-1 must not pick up the ticket FEAT-10
+const R = path.join(tmp, 'prg-repo');
+const gitR = (args, cwd = R) => execFileSync(path.join(GIT_DIR, 'git.exe'), args, { cwd, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] });
+fs.mkdirSync(path.join(R, 'tickets'), { recursive: true });
+fs.mkdirSync(path.join(R, 'src'), { recursive: true });
+fs.writeFileSync(path.join(R, 'tickets', 'FEAT-10.md'), '---\nid: FEAT-10\nowner: me\nallowed_paths: [src/**, tickets/FEAT-10.md]\n---\n');
+fs.writeFileSync(path.join(R, 'src', 'a.txt'), 'one\n');
+gitR(['init', '-q', '-b', 'main']);
+gitR(['-c', 'user.name=t', '-c', 'user.email=t@t', 'add', '-A']);
+gitR(['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '-m', 'init']);
+gitR(['checkout', '-q', '-b', 'feat/FEAT-1-x']);
+fs.writeFileSync(path.join(R, 'src', 'a.txt'), 'one\ntwo\n');
+gitR(['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '-am', 'change']);
+const guardRun = (branch) => spawnSync('node', [path.join(HOOKS, '..', '..', 'scripts', 'pr-guard.mjs')], { cwd: R, encoding: 'utf8', env: { ...process.env, PATH: ENV_PATH, BASE_REF: 'main', HEAD_REF: 'HEAD', BRANCH: branch } });
+const pg1 = guardRun('feat/FEAT-1-x');
+check('pr-guard: branch FEAT-1 does not use the ticket FEAT-10', pg1.status === 1 && /No ticket file tickets\/FEAT-1/.test(String(pg1.stderr)), `exit ${pg1.status}`);
+const pg2 = guardRun('feat/FEAT-10-x');
+check('pr-guard: branch FEAT-10 finds its own ticket', pg2.status === 0, `exit ${pg2.status} ${String(pg2.stderr).split('\n').slice(0, 3).join(' ')}`);
+
+// settings: git branch is allowed only in its read-only forms; --output is denied on git diff and git log
+const allow = settings.permissions.allow;
+const deny = settings.permissions.deny;
+check('settings: the allow list has no unrestricted git branch rule', !allow.some((a) => /git branch\*/.test(a)), allow.filter((a) => /git branch/.test(a)).join(' | '));
+check('settings: git branch --list and --show-current stay allowed', allow.includes('PowerShell(git branch --list*)') && allow.includes('PowerShell(git branch --show-current*)'));
+check('settings: --output is denied on git diff and git log', ['Bash(git diff*--output*)', 'Bash(git log*--output*)', 'PowerShell(git diff*--output*)', 'PowerShell(git log*--output*)'].every((d) => deny.includes(d)));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(bad ? `${bad} FAILED` : 'ALL PASSED');
 process.exit(bad ? 1 : 0);

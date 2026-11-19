@@ -41,7 +41,7 @@ if (!exempt) {
   if (!m) fail(`Branch "${BRANCH}" must be named <feat|bug|task>/<TICKET-ID>-short-name (e.g. feat/FEAT-001-add-stock).`);
   else {
     const id = m[2].toUpperCase();
-    const tf = fs.existsSync('tickets') ? fs.readdirSync('tickets').find((f) => f.toUpperCase().startsWith(id) && f.endsWith('.md')) : null;
+    const tf = fs.existsSync('tickets') ? fs.readdirSync('tickets').find((f) => f.endsWith('.md') && (f.toUpperCase() === `${id}.MD` || f.toUpperCase().startsWith(`${id}-`) || f.toUpperCase().startsWith(`${id}.`))) : null;
     if (!tf) fail(`No ticket file tickets/${id}*.md found for branch ${BRANCH}.`);
     else {
       const fm = (fs.readFileSync(path.join('tickets', tf), 'utf8').match(/^---\n([\s\S]*?)\n---/) || [])[1] || '';

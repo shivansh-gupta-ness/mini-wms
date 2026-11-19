@@ -30,16 +30,34 @@ export const workRoot = (input = {}) => {
   return m ? c.slice(0, m.index + m[0].length) : root();
 };
 
+// The real path of a file that may not exist yet: the nearest existing parent is resolved (junctions and symlinks
+// followed) and the missing tail is appended. Without this, a path like src/link/x, where link is a junction to .claude,
+// would look like a path in src.
+const realOf = (abs) => {
+  let p = abs;
+  const tail = [];
+  while (!fs.existsSync(p)) {
+    const parent = path.dirname(p);
+    if (parent === p) return abs;
+    tail.unshift(path.basename(p));
+    p = parent;
+  }
+  try { return path.join(fs.realpathSync.native(p), ...tail); } catch { return abs; }
+};
+
 // Repo-relative path with forward slashes, with any agent-worktree prefix removed.
 export const rel = (p) => {
-  const abs = path.resolve(root(), p);
+  const abs = realOf(path.resolve(root(), p));
   const m = abs.match(WORKTREE);
-  const r = m ? abs.slice(m.index + m[0].length) : path.relative(mainRoot(), abs);
+  const r = m ? abs.slice(m.index + m[0].length) : path.relative(realOf(mainRoot()), abs);
   return r.replace(/\\/g, '/').replace(/^\/+/, '');
 };
 
+// Paths that no ticket may touch (the scope guard, and the hand-off from an agent worktree, both use this list).
+export const PROTECTED_PATHS = ['.github/**', '.claude/**', 'scripts/**', 'CLAUDE.md', 'REPO_CONTEXT.md', 'docs/knowledge-map.yaml', 'prompt_logs/**'];
+
 // "**/" = any folders (or none); a trailing "**" = anything; "*" = within one path segment.
-export const globToRe = (g) => new RegExp('^' + g.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*\//g, '\u0000').replace(/\*\*/g, '\u0001').replace(/\*/g, '[^/]*').replace(/\u0000/g, '(?:.*/)?').replace(/\u0001/g, '.*') + '$');
+export const globToRe = (g) => new RegExp('^' + g.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*\//g, '\u0000').replace(/\*\*/g, '\u0001').replace(/\*/g, '[^/]*').replace(/\u0000/g, '(?:.*/)?').replace(/\u0001/g, '.*') + '$', 'i');
 export const matchAny = (f, globs) => globs.some((g) => globToRe(g.replace(/^\.?\//, '')).test(f));
 export const EDITING_AGENTS = ['change-implementer', 'test-writer'];
 export const isEditingAgent = (i) => EDITING_AGENTS.includes(i.agent_type || '');
