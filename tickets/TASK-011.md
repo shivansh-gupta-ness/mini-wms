@@ -2,7 +2,7 @@
 id: TASK-011
 type: task
 title: Frontend dev proxy and API health indicator
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: frontend-platform
 risk: low
