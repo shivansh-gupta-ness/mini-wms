@@ -27,7 +27,7 @@ public class ZoneTests
     [Trait("AC", "TASK-005.6")]
     public void Create_rejects_a_type_that_is_not_Receiving_Storage_or_Shipping(int value)
     {
-        Assert.Throws<DomainException>(() => Zone.Create(1, "Z1", "Zone", (ZoneType)value));
+        Assert.Throws<ValidationFailedException>(() => Zone.Create(1, "Z1", "Zone", (ZoneType)value));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class ZoneTests
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
 
-        Assert.Throws<DomainException>(() => zone.ChangeType((ZoneType)99, hasBins: false));
+        Assert.Throws<ValidationFailedException>(() => zone.ChangeType((ZoneType)99, hasBins: false));
         Assert.Equal(ZoneType.Storage, zone.Type);
     }
 
@@ -104,8 +104,8 @@ public class ZoneTests
     [Trait("AC", "TASK-005.6")]
     public void Create_requires_a_code_and_a_name(string? blank)
     {
-        Assert.Throws<DomainException>(() => Zone.Create(1, blank, "Zone", ZoneType.Storage));
-        Assert.Throws<DomainException>(() => Zone.Create(1, "Z1", blank, ZoneType.Storage));
+        Assert.Throws<ValidationFailedException>(() => Zone.Create(1, blank, "Zone", ZoneType.Storage));
+        Assert.Throws<ValidationFailedException>(() => Zone.Create(1, "Z1", blank, ZoneType.Storage));
     }
 
     [Fact]
@@ -126,8 +126,8 @@ public class ZoneTests
 
         Assert.Equal(20, atLimit.Code.Length);
         Assert.Equal(100, atLimit.Name.Length);
-        Assert.Throws<DomainException>(() => Zone.Create(1, new string('C', 21), "Zone", ZoneType.Storage));
-        Assert.Throws<DomainException>(() => Zone.Create(1, "Z1", new string('N', 101), ZoneType.Storage));
+        Assert.Throws<ValidationFailedException>(() => Zone.Create(1, new string('C', 21), "Zone", ZoneType.Storage));
+        Assert.Throws<ValidationFailedException>(() => Zone.Create(1, "Z1", new string('N', 101), ZoneType.Storage));
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public class ZoneTests
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
 
-        Assert.Throws<DomainException>(() => zone.Rename(blank));
+        Assert.Throws<ValidationFailedException>(() => zone.Rename(blank));
         Assert.Equal("Zone", zone.Name);
     }
 
@@ -169,6 +169,6 @@ public class ZoneTests
     {
         var zone = Zone.Create(1, "Z1", "Zone", ZoneType.Storage);
 
-        Assert.Throws<DomainException>(() => zone.Rename(new string('N', 101)));
+        Assert.Throws<ValidationFailedException>(() => zone.Rename(new string('N', 101)));
     }
 }

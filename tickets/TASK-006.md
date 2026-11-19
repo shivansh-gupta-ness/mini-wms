@@ -2,7 +2,7 @@
 id: TASK-006
 type: task
 title: API building blocks: paging, sorting, validation and error mapping
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -32,3 +32,4 @@ Build the shared pieces every module endpoint will use, once: paged and sorted l
 - **Decision (owner, 2026-11-19): resolved with the suggested option below.** Part of this ticket: change the BUG-001 customizer in `Program.cs` so `detail` is kept only when it comes from a domain exception on a 4xx, adjust the `BUG-001.6`/`BUG-001.7` allow-list tests to match (add `detail` for that case only), and keep the rest of BUG-001 unchanged. ADR-003 is already updated. Original finding: AC 5 expects a business-rule 409 to carry the exception message as `detail` (the UI spec shows the 409 `detail` in a banner, `docs/specs/ui.md` section 2). BUG-001 (merged) clears `detail` on every error body in `Program.cs` and its tests (`BUG-001.6`, `BUG-001.7`) require no `detail` and an allow-list of `type`, `title`, `status`, `traceId` and `errors`. Both cannot hold. Suggested resolution: keep `detail` only for 4xx responses whose text is written by our own code (validation and business rules), never for 5xx and never for exception text; then adjust the BUG-001 customizer and its allow-list test accordingly and update ADR-003, which still says every error has `detail`.
 - BUG-001 already delivers the problem `type` by status and the `traceId`; this ticket adds the shared pieces on top (paging, sorting, validation, domain exceptions), so AC 4 to 6 should reuse that customizer, not replace it.
 - Record AC results in `docs/reports/TASK-006/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- Owner decisions (2026-11-19, on the scout's brief, recommended options taken): (1) field-rule failures from Domain guards (blank, too long, negative, invalid type) use a new `ValidationFailedException` in Domain, mapped to 400 with the field in `errors`; `DomainException` stays for business-rule conflicts and maps to 409 (the Domain code and tests from TASK-005 change accordingly); (2) the concurrency 409 carries the fixed text "The item was changed by someone else. Reload and try again." as `detail`; (3) `page` and `pageSize` below 1 are also a 400, default page size 25, maximum 100; (4) one sort field only, no default order when `sort` is omitted, `Id` as a tie-breaker; (5) `q` search is out of scope; (6) risk stays low. A client-supplied version is applied through `OriginalValue` (helper in Infrastructure), because `ApplyAudit` overwrites a directly set `Version`.

@@ -25,17 +25,17 @@ public class Product : AuditableEntity
 
     public static Product Create(string? sku, string? name, string? unitOfMeasure, int reorderLevel) => new()
     {
-        Sku = Guard.RequiredText(sku, "SKU", SkuMaxLength),
-        Name = Guard.RequiredText(name, "Name", NameMaxLength),
-        UnitOfMeasure = Guard.RequiredText(unitOfMeasure, "Unit of measure", UnitOfMeasureMaxLength),
+        Sku = Guard.RequiredText(sku, "sku", "SKU", SkuMaxLength),
+        Name = Guard.RequiredText(name, "name", "Name", NameMaxLength),
+        UnitOfMeasure = Guard.RequiredText(unitOfMeasure, "unitOfMeasure", "Unit of measure", UnitOfMeasureMaxLength),
         ReorderLevel = EnsureReorderLevel(reorderLevel),
     };
 
     /// <summary>Changes everything except the SKU (PRD-2.1).</summary>
     public void Update(string? name, string? unitOfMeasure, int reorderLevel)
     {
-        var newName = Guard.RequiredText(name, "Name", NameMaxLength);
-        var newUnit = Guard.RequiredText(unitOfMeasure, "Unit of measure", UnitOfMeasureMaxLength);
+        var newName = Guard.RequiredText(name, "name", "Name", NameMaxLength);
+        var newUnit = Guard.RequiredText(unitOfMeasure, "unitOfMeasure", "Unit of measure", UnitOfMeasureMaxLength);
         var newLevel = EnsureReorderLevel(reorderLevel);
 
         Name = newName;
@@ -60,5 +60,5 @@ public class Product : AuditableEntity
     public void Activate() => IsActive = true;
 
     private static int EnsureReorderLevel(int reorderLevel) =>
-        reorderLevel >= 0 ? reorderLevel : throw new DomainException("Reorder level must be 0 or more.");
+        reorderLevel >= 0 ? reorderLevel : throw new ValidationFailedException("reorderLevel", "Reorder level must be 0 or more.");
 }

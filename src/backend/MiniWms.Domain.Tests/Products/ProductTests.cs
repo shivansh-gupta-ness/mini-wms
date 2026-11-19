@@ -37,7 +37,7 @@ public class ProductTests
     [Trait("AC", "TASK-005.6")]
     public void Create_rejects_a_negative_reorder_level(int level)
     {
-        Assert.Throws<DomainException>(() => Product.Create("SKU-1", "Widget", "EA", level));
+        Assert.Throws<ValidationFailedException>(() => Product.Create("SKU-1", "Widget", "EA", level));
     }
 
     [Theory]
@@ -47,9 +47,9 @@ public class ProductTests
     [Trait("AC", "TASK-005.6")]
     public void Create_requires_sku_name_and_unit_of_measure(string? blank)
     {
-        Assert.Throws<DomainException>(() => Product.Create(blank, "Widget", "EA", 0));
-        Assert.Throws<DomainException>(() => Product.Create("SKU-1", blank, "EA", 0));
-        Assert.Throws<DomainException>(() => Product.Create("SKU-1", "Widget", blank, 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create(blank, "Widget", "EA", 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create("SKU-1", blank, "EA", 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create("SKU-1", "Widget", blank, 0));
     }
 
     [Fact]
@@ -59,9 +59,9 @@ public class ProductTests
         var atLimit = Product.Create(new string('S', 40), new string('N', 150), new string('U', 20), 0);
 
         Assert.Equal(40, atLimit.Sku.Length);
-        Assert.Throws<DomainException>(() => Product.Create(new string('S', 41), "Widget", "EA", 0));
-        Assert.Throws<DomainException>(() => Product.Create("SKU-1", new string('N', 151), "EA", 0));
-        Assert.Throws<DomainException>(() => Product.Create("SKU-1", "Widget", new string('U', 21), 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create(new string('S', 41), "Widget", "EA", 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create("SKU-1", new string('N', 151), "EA", 0));
+        Assert.Throws<ValidationFailedException>(() => Product.Create("SKU-1", "Widget", new string('U', 21), 0));
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class ProductTests
     {
         var product = Product.Create("SKU-1", "Widget", "EA", 5);
 
-        Assert.Throws<DomainException>(() => product.Update("Gadget", "BOX", -1));
+        Assert.Throws<ValidationFailedException>(() => product.Update("Gadget", "BOX", -1));
 
         Assert.Equal("Widget", product.Name);
         Assert.Equal("EA", product.UnitOfMeasure);
@@ -112,7 +112,7 @@ public class ProductTests
     {
         var product = Product.Create("SKU-1", "Widget", "EA", 5);
 
-        Assert.Throws<DomainException>(() => product.Update(name, unit, 9));
+        Assert.Throws<ValidationFailedException>(() => product.Update(name, unit, 9));
 
         Assert.Equal("Widget", product.Name);
         Assert.Equal("EA", product.UnitOfMeasure);

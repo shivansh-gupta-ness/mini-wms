@@ -32,7 +32,7 @@ public static class WarehouseSeeder
         {
             warehouse = Warehouse.Create(code, name);
         }
-        catch (DomainException ex)
+        catch (Exception ex) when (ex is DomainException or ValidationFailedException)
         {
             throw new InvalidOperationException(
                 $"The warehouse seed configuration (Seed:Warehouse:Code / Name) is invalid: {ex.Message}", ex);

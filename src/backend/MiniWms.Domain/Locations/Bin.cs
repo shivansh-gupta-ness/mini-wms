@@ -22,12 +22,12 @@ public class Bin : AuditableEntity
     public static Bin Create(int zoneId, string? code, string? name) => new()
     {
         ZoneId = zoneId,
-        Code = Guard.RequiredText(code, "Code", CodeMaxLength),
-        Name = Guard.RequiredText(name, "Name", NameMaxLength),
+        Code = Guard.RequiredText(code, "code", "Code", CodeMaxLength),
+        Name = Guard.RequiredText(name, "name", "Name", NameMaxLength),
     };
 
     /// <summary>The code never changes after creation (LOC-2.1).</summary>
-    public void Rename(string? name) => Name = Guard.RequiredText(name, "Name", NameMaxLength);
+    public void Rename(string? name) => Name = Guard.RequiredText(name, "name", "Name", NameMaxLength);
 
     /// <param name="totalOnHand">Total quantity held in this bin across all products (LOC-2.2).</param>
     public void Deactivate(int totalOnHand)
