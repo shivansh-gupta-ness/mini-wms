@@ -1,32 +1,35 @@
 ---
 id: TASK-015
 type: task
-title: Record the first-run result in the AC log
+title: Add nosniff and no-store headers to API responses
 status: ready
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
-allowed_paths: [docs/reports/ac-log.md, docs/reports/README.md, docs/adr/ADR-005-testing-coverage-and-ac-log.md, docs/reports/TASK-015/**, tickets/TASK-015.md]
-docs: [docs/adr/ADR-005-testing-coverage-and-ac-log.md, docs/reports/evaluation.md]
+allowed_paths: [src/backend/MiniWms.Api/**, src/backend/MiniWms.Api.Tests/**, src/backend/REPO_CONTEXT.md, tickets/TASK-015.md, docs/reports/TASK-015/**, docs/reports/ac-log.md]
+docs: [docs/adr/ADR-003-api-conventions.md]
 parent: 
 depends_on: []
 ---
 
 ## Description
-The adoption report and the evaluation could not say how many acceptance criteria "passed first time", because `docs/reports/ac-log.md` only keeps the final result. Add one column that records, per ticket, how many criteria passed on the first full test run, and write down how to fill it. This is documentation only: no code, no harness change.
+Phase 6 hardening left response headers open (security review, finding I2: "only needed before any deployment"). This is the smallest useful part of it and needs no deployment decision: every API response carries `X-Content-Type-Options: nosniff` (a browser must not guess the content type of a JSON or problem response) and `Cache-Control: no-store` (warehouse data must not be kept by a browser or proxy cache). One small middleware, no new package, no configuration.
 
 ## Acceptance criteria
-1. Given `docs/reports/ac-log.md`, when read, then the table has a new last-but-one column "First-run PASS" (the number of criteria that passed on the first full run of the ticket's tests), placed before the PR column, and every existing row has a value: a number where the ticket's `ac-results.md` or the learning log states it, otherwise `n/r` (not recorded). No number is guessed.
-2. Given `docs/reports/README.md` and `docs/adr/ADR-005-testing-coverage-and-ac-log.md`, when read, then each says in one or two lines what "first-run PASS" means, that `n/r` marks old rows, and that the ticket's `ac-results.md` should state it (the count and the first failing criteria, if any) from the real output of the first full run.
-3. Given the 16 existing rows, when each `n/r` or number is checked against `docs/reports/<ID>/ac-results.md` and `docs/learning-log.md`, then none contradicts them (for example FEAT-001 API criteria that failed on the first run, and TASK-014 AC 3, are not shown as first-run PASS).
-4. Given `docs/reports/TASK-015/ac-results.md`, when read, then it records one row per criterion with PASS, FAIL, N/A or NOT RUN from the real check (`git diff` on the three files, a read of the table, and `node docs/specs/api/tools/ac-coverage.mjs` still reporting 19 of 19), and one row for TASK-015 is added to `docs/reports/ac-log.md` using the new column.
-5. Given the repository after the changes, when `dotnet build src/backend`, `dotnet test src/backend --no-build` and `npm test` in `src/frontend` run, then they pass as before (this ticket changes no code).
+1. Given any API route (a success, a 404 and a 400), when a request is sent, then the response has `X-Content-Type-Options: nosniff`.
+2. Given any API route (a success, a 404 and a 400), when a request is sent, then the response has `Cache-Control: no-store`.
+3. Given an error that the exception handlers turn into a problem response (400, 409, 413 and the generic 500), when it is returned, then both headers are still present and the problem body is unchanged.
+4. Given the CORS preflight and the existing CORS tests, when they run, then they pass unchanged (the new headers do not remove or replace any CORS header).
+5. Given the tests, when they run, then all pass with `[Trait("AC", "TASK-015.<n>")]` on those proving criteria 1 to 4, no existing test needs its expectation changed, the coverage gate holds (90% over Domain, Application and Api), `src/backend/REPO_CONTEXT.md` mentions the headers and stays under 80 lines, and `docs/reports/TASK-015/ac-results.md` and one row in `docs/reports/ac-log.md` record the real output.
 
 ## Out of scope
-- The pipeline prompts and skills that write the ac-log row (`.claude/prompts/`, `.claude/skills/`) and the plugin copies in `claude-plugins`: they are protected, so teaching them the new column is a separate `setup/` PR.
-- Guessing first-run results for old tickets, or re-running old tickets.
-- Any change to code, tests, CI or the harness.
+- HTTPS redirection, HSTS, `Content-Security-Policy` and config-driven CORS (finding I3 and the rest of I2: needed only before a deployment).
+- The Angular dev server and the static files of the frontend.
+- ADR-003 (a one-line note about the headers goes in a later docs PR).
 
 ## Notes and links
-- Source of the need: recommendation 3 in `docs/reports/adoption-report.md` and "Acceptance criteria" in `docs/reports/evaluation.md`.
-- Docs-only ticket: the proof is the command output and the checks of each criterion, as in `docs/reports/TASK-013/ac-results.md`.
+- Put the middleware next to `Common/RequestLimits` (for example `Common/Headers/`), registered early in `Program.cs` so that error and status-code responses also get the headers; mind the order with `UseCors` and the exception handler (headers set before `next()` are kept when a handler rewrites the response, but check how `UseExceptionHandler` clears headers and use `OnStarting` if needed).
+- Tests use the in-process `ApiFactory` (temporary database, never `App_Data`).
+- Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
+- Record AC results in `docs/reports/TASK-015/ac-results.md` and one row in `docs/reports/ac-log.md`.
+- The ticket was rewritten on 2026-11-23 at the owner's request: it was a docs-only ticket (first-run result in the AC log), now it is this small code task. The first-run idea is dropped.
