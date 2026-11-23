@@ -2,7 +2,7 @@
 id: TASK-015
 type: task
 title: Record the first-run result in the AC log
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -30,4 +30,3 @@ The adoption report and the evaluation could not say how many acceptance criteri
 ## Notes and links
 - Source of the need: recommendation 3 in `docs/reports/adoption-report.md` and "Acceptance criteria" in `docs/reports/evaluation.md`.
 - Docs-only ticket: the proof is the command output and the checks of each criterion, as in `docs/reports/TASK-013/ac-results.md`.
-- Status stays `draft` until the owner marks it `ready` (a chore PR, as for the earlier tickets).
