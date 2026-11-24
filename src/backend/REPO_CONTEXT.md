@@ -73,3 +73,6 @@ Put new code in the module folder, not at the project root.
 - `Api/Common/RequestLimits/RequestBodyLimitMiddleware` caps every request body at 65,536 bytes (inclusive) in the app, not in Kestrel: TestServer ignores Kestrel's limit. A declared `Content-Length` over the cap is a 413 at once; otherwise the body stream throws while it is read, and `RequestBodyTooLargeExceptionHandler` turns that into the same 413.
 - The 413 is `application/problem+json` with `type` `error`, `title` "Request body too large.", `status` and `traceId`; no `detail`, `errors` or limit text.
 - `AlwaysJsonProblemDetailsWriter` writes problem+json whatever the request's `Accept` is (the default writer declines `Accept: text/html`, which left a 500 with an empty body).
+
+## Response headers (TASK-015)
+- `Api/Common/Headers/SecurityHeadersMiddleware` (first in the pipeline) sets `X-Content-Type-Options: nosniff` and `Cache-Control: no-store` in `Response.OnStarting`, so error, 404 and CORS preflight responses carry them too; it overwrites, never appends.
