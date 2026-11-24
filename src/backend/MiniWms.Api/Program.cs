@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MiniWms.Api.Common;
 using MiniWms.Api.Common.Errors;
+using MiniWms.Api.Common.Headers;
 using MiniWms.Api.Common.RequestLimits;
 using MiniWms.Api.Locations;
 using MiniWms.Infrastructure;
@@ -78,6 +79,9 @@ if (app.Environment.IsDevelopment())
     db.Database.Migrate();
     WarehouseSeeder.Seed(db, app.Configuration);
 }
+
+// TASK-015: first, so every response (errors, status-code pages, CORS preflights) carries the security headers.
+app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // CORS must wrap the error handlers so error responses keep their CORS headers.
 app.UseCors(AngularDevCorsPolicy);

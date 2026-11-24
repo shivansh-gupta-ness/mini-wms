@@ -2,7 +2,7 @@
 id: TASK-015
 type: task
 title: Add nosniff and no-store headers to API responses
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -33,3 +33,6 @@ Phase 6 hardening left response headers open (security review, finding I2: "only
 - Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
 - Record AC results in `docs/reports/TASK-015/ac-results.md` and one row in `docs/reports/ac-log.md`.
 - The ticket was rewritten on 2026-11-23 at the owner's request: it was a docs-only ticket (first-run result in the AC log), now it is this small code task. The first-run idea is dropped.
+
+## Delivery
+PR 54. All 5 acceptance criteria PASS (in-process proof; no real-browser or running-Kestrel check); results in `docs/reports/TASK-015/ac-results.md` and the row in `docs/reports/ac-log.md`.
