@@ -21,4 +21,4 @@ Results are PASS, FAIL, N/A or NOT RUN, always from real test output. A ticket i
 | 2026-11-19 | FEAT-001 | locations | 27 | 27 | 0 | 0 | 0 | 92.6 | 100 | 98.87 (API) / 96.52 (screens) | #37, #41 |
 | 2026-11-20 | TASK-013 | backend-platform | 10 | 10 | 0 | 0 | 0 | n/a | 100 | - | #45 |
 | 2026-11-20 | TASK-014 | backend-platform | 5 | 5 | 0 | 0 | 0 | 100 | 100 | 97 | #46 |
-| 2026-11-23 | TASK-015 | backend-platform | 5 | 5 | 0 | 0 | 0 | 100 | 100 | 97 | - |
+| 2026-11-23 | TASK-015 | backend-platform | 5 | 5 | 0 | 0 | 0 | 100 | 100 | 97 | #54 |
