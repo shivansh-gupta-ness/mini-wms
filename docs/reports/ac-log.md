@@ -22,4 +22,4 @@ Results are PASS, FAIL, N/A or NOT RUN, always from real test output. A ticket i
 | 2026-11-20 | TASK-013 | backend-platform | 10 | 10 | 0 | 0 | 0 | n/a | 100 | - | #45 |
 | 2026-11-20 | TASK-014 | backend-platform | 5 | 5 | 0 | 0 | 0 | 100 | 100 | 97 | #46 |
 | 2026-11-23 | TASK-015 | backend-platform | 5 | 5 | 0 | 0 | 0 | 100 | 100 | 97 | #54 |
-| 2026-11-25 | TASK-016 | backend-platform | 5 | 5 | 0 | 0 | 0 | 60 | 100 | 97.05 (backend) / 96.52 (frontend) | pending |
+| 2026-11-25 | TASK-016 | backend-platform | 5 | 5 | 0 | 0 | 0 | 60 | 100 | 97.05 (backend) / 96.52 (frontend) | #58 |

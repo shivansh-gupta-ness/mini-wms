@@ -2,7 +2,7 @@
 id: TASK-016
 type: task
 title: Raise the REPO_CONTEXT line limit to 500
-status: in-review
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -34,3 +34,6 @@ The module context files are capped by tests: the backend file at under 80 lines
 - Places: `CoverageToolingTests.cs:222`, `SolutionStructureTests.cs:150`, `scaffold.spec.ts:134`, `tooling.spec.ts:84`, `proxy.spec.ts:52`, `locations.guards.spec.ts:103`.
 - The frontend tests split the text on newlines, so a trailing newline counts as one more line.
 - The ticket touches backend and frontend tests; like TASK-013 it uses the `backend-platform` component. Both components are low risk.
+
+## Delivery
+PR 58. All 5 acceptance criteria PASS (criteria 3 and 4 by diff review and real runs, no test; the backend skip of symlinks and junctions is untested); results in `docs/reports/TASK-016/ac-results.md` and the row in `docs/reports/ac-log.md`. The root limit text and the loading rule follow in the `setup/` PR.
