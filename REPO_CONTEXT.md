@@ -1,6 +1,6 @@
 # Mini WMS: repository context
 
-Vendor-neutral context for people and coding agents. Keep under 200 lines; only what the code cannot tell you.
+Vendor-neutral context for people and coding agents. Keep to at most 500 lines; only what the code cannot tell you.
 `CLAUDE.md` is a one-line shim that imports this file. Update this file in the same PR as the change it describes.
 
 ## What this is
@@ -30,7 +30,8 @@ are design only (`docs/specs/product.md` section 9, decision 7).
    stack pipeline skills `/run-feature-be` or `/run-feature-fe` (they run the prompts in `.claude/prompts/`), which call those two agents per stage and add the
    gates (mapping 100, pass 100, coverage 90) and STOP rules. Small BUG/TASK tickets use the agents directly. A feature that spans layers or
    repos is one ticket per layer/repo, linked by `parent:` / `depends_on:`; the API contract in `docs/specs/` is the hand-off.
-4. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR.
+4. Review: `/own-code-review <ID>` (against the plan), `/test-critique <ID>`, `/independent-code-review <ID>` (sees no plan), and `/ef-verify <ID>` when queries change.
+   These are read-only. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR. `/spec-drift` audits docs against code at any time.
 5. `pr-guard` (required check) and a Code Owner review must pass before merge. Nobody pushes to `main`.
 
 Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Doc-only changes use `chore/`; harness, CI and root context file changes use `setup/` (the only branches pr-guard lets change them).
@@ -47,9 +48,16 @@ blocked (secrets, CI, harness): no agent edits.
 - Contract lint: `npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml"` (rules in `.spectral.yaml`); AC coverage: `node docs/specs/api/tools/ac-coverage.mjs`
 - Token report: `node scripts/token-report.mjs` (also runs automatically when a turn ends)
 
+## Context files
+- Limit: at most 500 lines per `REPO_CONTEXT.md`. Tests cap the module files and their children (the frontend tests count the trailing newline). Nothing caps this root file, and it is loaded in every session: keep it short.
+- Split: a change that would push a file past 500 lines splits it in the same PR. Area details move to a child `REPO_CONTEXT.md` in the folder they describe. The parent keeps the shared rules, layout and commands (tests look for them) and an index table, `file | read when you touch`, that lists every child. Tests fail an unlisted child. A child can be split again.
+  If `allowed_paths` does not cover the new child file, stop and ask the owner.
+- Load only what is needed (the context chain): for each path in `allowed_paths`, read the `REPO_CONTEXT.md` in that folder and in each parent folder, parents first. Do not read sibling areas.
+  For a broad path such as `src/backend/**`, read the parent and use its index to pick only the children whose files the work touches. If the work moves into another area, load that area's file then.
+
 ## Rules agents must follow
 - Never edit `.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, this root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, secrets or `.env*`.
-  The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`; backend file under 80 lines, frontend file at most 78 counting the trailing newline) in the same PR as the change they describe.
+  The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`; at most 500 lines each) in the same PR as the change they describe.
 - Stay inside the ticket's `allowed_paths`. If scope must widen, stop and ask the owner.
 - No network commands. Do not push, merge or force-push; the owner does that.
 - Code wins over docs: if a doc disagrees with the code, flag it in the brief, do not silently follow the doc.

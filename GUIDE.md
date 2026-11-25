@@ -17,6 +17,9 @@ tickets/<ID>.md
    |   change-implementer  -> code
    |   test-writer         -> tests
    v
+/own-code-review -> /test-critique -> /independent-code-review (+ /ef-verify when queries change)   (skills, read-only)
+   |
+   v
 You review the diff -> /code-review (+ /security-review on high risk) -> open PR
    |
    v
@@ -34,13 +37,20 @@ Terms used below:
 
 ## 2. Skills
 
-All skills live in `.claude/skills/<name>/SKILL.md`. All three below are manual: they run only when you type them (`disable-model-invocation: true`).
+All skills live in `.claude/skills/<name>/SKILL.md`. All of them are manual: they run only when you type them (`disable-model-invocation: true`).
 
 | Skill | You type | When to use | What it does |
 |---|---|---|---|
 | `start-ticket` | `/start-ticket FEAT-001` | First step of every ticket | Checks the ID and that the ticket is `ready`, checks the tree is clean, creates the branch, runs `ticket-scout`, shows the brief and plan, then stops for your approval. After approval it writes `.claude/state/active-ticket.json` and starts the editing agents. |
 | `run-feature-be` | `/run-feature-be FEAT-001 [resume stage]` | Backend feature ticket, after approval | Runs `.claude/prompts/run-feature-be.md` (which loads `per-ticket-feature-prompts.md`). Stages A, 2, 3, 4, B, 5 sections 7-8, each ending in a STOP REPORT. |
 | `run-feature-fe` | `/run-feature-fe FEAT-002 [A or B]` | Frontend feature ticket, after approval | Runs `.claude/prompts/agent-prompt-fe.md` (Flow A or B). Needs the API contract in `docs/specs/` if the ticket has `depends_on`. |
+| `own-code-review` | `/own-code-review FEAT-001` | When the editing agents finish | Checks the change against the approved plan and the criteria, scope and leftovers; runs build and tests. |
+| `test-critique` | `/test-critique FEAT-001 [range]` | After `test-writer` | Criterion-to-test table, weak assertions, missing cases, changes the tests would not catch. |
+| `independent-code-review` | `/independent-code-review FEAT-001`, a range, or both | Before the PR, after `own-code-review` | Review by a fresh agent that gets only the ticket ID and range, never the plan or the author's reasoning. |
+| `ef-verify` | `/ef-verify [FEAT-001 or path]` | When EF Core queries or persistence change | Reads LINQ, configurations and migrations; reports SQL shape, index, paging and concurrency risks. It does not capture the real SQL. |
+| `spec-drift` | `/spec-drift [component or FEAT-001]` | After several merges | Compares specs, contracts, ADRs and context files with code and tests. |
+
+The five review skills change nothing: they show the agent's report and stop.
 
 Preconditions for both pipeline skills: `/start-ticket` was run and approved, the ticket's component and `allowed_paths` match the stack, risk is low or medium, the branch is `<feat|bug|task>/<ID>-*`, the tree is clean.
 
@@ -72,15 +82,24 @@ Defined in `.claude/agents/`.
 
 | Agent | Model / effort | Tools | Edits files? | Isolated worktree? | Invoked by |
 |---|---|---|---|---|---|
-| `ticket-scout` | haiku, low | Read, Grep, Glob | No (read-only) | No | `/start-ticket`, at the start of any ticket |
+| `ticket-scout` | opus, medium | Read, Grep, Glob | No (read-only) | No | `/start-ticket`, at the start of any ticket |
 | `change-implementer` | sonnet, medium | Read, Grep, Glob, Edit, Write, Bash, PowerShell | Yes, code, inside `allowed_paths` | Yes | `/run-feature-*` (BE stages A and B; FE code), or directly on small BUG/TASK tickets, only after plan approval |
 | `test-writer` | sonnet, medium | same as above | Yes, test paths only | Yes | `/run-feature-*` (BE stages 2, 3, 4; FE specs), or directly on small tickets |
+| `own-code-review` | opus, high | Read, Grep, Glob, Bash, PowerShell | No (by instruction) | No | `/own-code-review` |
+| `independent-code-review` | opus, high | same as above | No (by instruction) | No | `/independent-code-review` |
+| `test-critic` | opus, high | same as above | No (by instruction) | No | `/test-critique` |
+| `ef-query-verifier` | opus, high | same as above | No (by instruction) | No | `/ef-verify` |
+| `spec-drift-auditor` | opus, high | same as above | No (by instruction) | No | `/spec-drift` |
+
+The five review agents have no Edit or Write tool but do have a shell, for diffs and tests. Their shell is kept read-only by their instructions, the approval prompts and `command-guard`, not by a hard block.
 
 Rules that apply to the editing agents:
 - Work only after the owner approves the plan.
 - Stay inside the ticket's `allowed_paths`. If the scope must widen, stop and ask.
 - High risk: read and propose only; a person leads the edit. Blocked: no agent edits.
 - Stage only. Never commit, push or merge.
+
+Context files: the pipelines and agents load only the `REPO_CONTEXT.md` files that apply to the ticket's paths, and a file over 500 lines is split into child files. The rule is in the root `REPO_CONTEXT.md` ("Context files"). The size and the index are tested; the loading is an instruction.
 
 Agents are not run automatically by Claude on its own. A skill or you start them.
 
@@ -143,6 +162,7 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 | Any agent edits a file | `scope-guard` before, `format` after |
 | Any agent runs a shell command | `command-guard` before |
 | A turn or agent ends | `token-report`, `run-tests` |
+| The editing agents finish | You type `/own-code-review`, `/test-critique`, `/independent-code-review` (and `/ef-verify` when queries change) |
 | You finish reviewing | `/code-review`, `/security-review` (high risk) |
 | You open a PR | `pr-guard`, gitleaks, Code Owner review |
 | Any prompt you type | You append it to `prompt_logs/logs.md` (rule in `REPO_CONTEXT.md`) |
@@ -150,6 +170,7 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 ## 8. Known gaps
 
 - `/start-ticket`, `/run-feature-be` and `/run-feature-fe` have run on TASK-001 to TASK-012, BUG-001 and FEAT-001.
+- The five review agents and skills are not in the `core` plugin yet, and the plugin's `ticket-scout` is still haiku. Sync them.
 - `.claude/state/active-ticket.json` is not removed automatically. A stale file keeps the scope guard on; delete it when a ticket is done.
 - `prompt_logs/` changes every turn, so the tree is never clean. Commit it in periodic `chore/` PRs, or `/start-ticket` will stop on the dirty tree.
 - Hooks need `node` on your PATH.

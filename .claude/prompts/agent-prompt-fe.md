@@ -181,6 +181,11 @@ one at a time.
 Before any search, listing, or file read, read `REPO_CONTEXT_PATH` in full. This is the only
 wholesale read permitted in the run.
 
+**Hierarchical context (local harness rule).** If that document has an index of child `REPO_CONTEXT.md` files, also read in
+full the children whose folder contains files you will touch, and no others (root `REPO_CONTEXT.md`, "Context files"). If
+the work moves into another area, read that area's file then and say so in the final report. Reading those children is
+part of the permitted context read.
+
 That document already contains the route and page inventory, component index (shared vs
 feature-specific), type and model shapes, state and data-access patterns, the integration
 surface, the observed conventions, and the canonical paths for adding new code. It exists so
@@ -637,6 +642,11 @@ the final report as "Context changes proposed" for the owner to apply in a separ
 
 Skip this section only if `CONTEXT_UPDATE_ENABLED` is `false`, or `REPO_CONTEXT_PATH` is
 `<not-provided>`, or you modified no files. Say which applies in the final report.
+
+**Size (local harness rule).** Patch the context file nearest to the changed code. If that would push it past 500 lines,
+split it as the root `REPO_CONTEXT.md` ("Context files") says, if `allowed_paths` covers the child file; a split moves text,
+it does not rewrite it. Otherwise do not exceed the limit: list the split under "Context changes proposed". Stage every
+context file you changed, children included.
 
 **Incremental only.** Do not re-scan the repo. Do not regenerate the document. You already
 know exactly what changed - it is the set of files you created or modified. Drive the update
