@@ -48,6 +48,13 @@ blocked (secrets, CI, harness): no agent edits.
 - Contract lint: `npx @stoplight/spectral-cli@6.17.1 lint "docs/specs/api/*.yaml"` (rules in `.spectral.yaml`); AC coverage: `node docs/specs/api/tools/ac-coverage.mjs`
 - Token report: `node scripts/token-report.mjs` (also runs automatically when a turn ends)
 
+## Context files
+- Limit: at most 500 lines per `REPO_CONTEXT.md`. Tests cap the module files and their children (the frontend tests count the trailing newline). Nothing caps this root file, and it is loaded in every session: keep it short.
+- Split: a change that would push a file past 500 lines splits it in the same PR. Area details move to a child `REPO_CONTEXT.md` in the folder they describe. The parent keeps the shared rules, layout and commands (tests look for them) and an index table, `file | read when you touch`, that lists every child. Tests fail an unlisted child. A child can be split again.
+  If `allowed_paths` does not cover the new child file, stop and ask the owner.
+- Load only what is needed (the context chain): for each path in `allowed_paths`, read the `REPO_CONTEXT.md` in that folder and in each parent folder, parents first. Do not read sibling areas.
+  For a broad path such as `src/backend/**`, read the parent and use its index to pick only the children whose files the work touches. If the work moves into another area, load that area's file then.
+
 ## Rules agents must follow
 - Never edit `.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, this root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, secrets or `.env*`.
   The module files `src/backend/REPO_CONTEXT.md` and `src/frontend/REPO_CONTEXT.md` are part of the code: a ticket updates them (inside its `allowed_paths`; at most 500 lines each) in the same PR as the change they describe.

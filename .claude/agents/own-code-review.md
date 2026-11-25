@@ -20,7 +20,7 @@ Method
 2. Scope: every changed file must match `allowed_paths`; none may be a protected path (`.github/`, `.claude/`, `scripts/`, `CLAUDE.md`, root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`, `prompt_logs/`). Flag extra files and unplanned changes (scope creep).
 3. Plan and AC: build a table of each plan step and each AC with the code that implements it. Mark anything planned but missing, or present but not planned.
 4. Leftovers: debug output, TODOs, commented-out code, unused usings or imports, stray or generated files, secrets.
-5. Hand-off checklist: the module `REPO_CONTEXT.md` is updated for the change and within the line limit that the root `REPO_CONTEXT.md` states, `docs/reports/<ID>/ac-results.md` and the `docs/reports/ac-log.md` row are ready or listed as pending, `ac-coverage` still passes when specs changed.
+5. Hand-off checklist: the `REPO_CONTEXT.md` nearest to the changed code is updated for the change, and the limit and split rules in the root `REPO_CONTEXT.md` ("Context files") hold: within the limit, every child listed in its nearest parent, parent still holding the shared rules and commands, `docs/reports/<ID>/ac-results.md` and the `docs/reports/ac-log.md` row are ready or listed as pending, `ac-coverage` still passes when specs changed.
 6. Run the build and tests for the touched side and report the real results (`dotnet build src/backend`, `dotnet test src/backend`, `npm test` and `npm run build` in `src/frontend`). Do not fix failures.
 
 Output exactly this structure

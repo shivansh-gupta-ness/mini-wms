@@ -88,7 +88,7 @@ Defined in `.claude/agents/`.
 | `own-code-review` | opus, high | Read, Grep, Glob, Bash, PowerShell | No (by instruction) | No | `/own-code-review` |
 | `independent-code-review` | opus, high | same as above | No (by instruction) | No | `/independent-code-review` |
 | `test-critic` | opus, high | same as above | No (by instruction) | No | `/test-critique` |
-| `ef-query-verifier` | sonnet, high | same as above | No (by instruction) | No | `/ef-verify` |
+| `ef-query-verifier` | opus, high | same as above | No (by instruction) | No | `/ef-verify` |
 | `spec-drift-auditor` | opus, high | same as above | No (by instruction) | No | `/spec-drift` |
 
 The five review agents have no Edit or Write tool but do have a shell, for diffs and tests. Their shell is kept read-only by their instructions, the approval prompts and `command-guard`, not by a hard block.
@@ -98,6 +98,8 @@ Rules that apply to the editing agents:
 - Stay inside the ticket's `allowed_paths`. If the scope must widen, stop and ask.
 - High risk: read and propose only; a person leads the edit. Blocked: no agent edits.
 - Stage only. Never commit, push or merge.
+
+Context files: the pipelines and agents load only the `REPO_CONTEXT.md` files that apply to the ticket's paths, and a file over 500 lines is split into child files. The rule is in the root `REPO_CONTEXT.md` ("Context files"). The size and the index are tested; the loading is an instruction.
 
 Agents are not run automatically by Claude on its own. A skill or you start them.
 

@@ -18,7 +18,7 @@ Hard rules (hooks enforce some; on a block, stop and report)
 - Reports (`docs/reports/`) are claims, not evidence. Do not repeat a number from one (test counts, mutation results, coverage) unless a command you ran shows it; then cite the command. If a claim matters and you cannot check it, name the claim without its number and write "not verified".
 
 Method
-1. Read `tickets/<ID>.md` (AC, `allowed_paths`) and `docs/reports/<ID>/ac-results.md` if it exists. Read the module `REPO_CONTEXT.md` for test conventions and `docs/adr/ADR-005-testing-coverage-and-ac-log.md` for the testing rules.
+1. Read `tickets/<ID>.md` (AC, `allowed_paths`) and `docs/reports/<ID>/ac-results.md` if it exists. Read the context chain (root `REPO_CONTEXT.md`, "Context files") for test conventions and `docs/adr/ADR-005-testing-coverage-and-ac-log.md` for the testing rules.
 2. Find the tests of the ticket: backend `[Trait("AC", "<ID>.<n>")]`, frontend test names starting with `<ID>.<n>`. Get the change: on the ticket branch run `git diff --merge-base main -- . ":!prompt_logs"` (this includes uncommitted work) and `git status --short -- . ":!prompt_logs"`, and read every untracked file, because `git diff` does not show them. If you were given a range, use `git diff <range>` instead. If the change is empty, say so and stop.
 3. For each AC build a row: AC, tests that prove it, verdict `strong`, `weak` or `missing`.
 4. Check each test for: strong assertions (status, body and headers, not only "no exception"), one behaviour per test, Arrange/Act/Assert, no logic in tests, deterministic (no clock, ordering or shared state), real SQLite through `ApiFactory` or `TemporaryDatabase` instead of mocked EF (ADR-005).

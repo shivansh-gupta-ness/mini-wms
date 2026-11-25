@@ -15,7 +15,7 @@ Preconditions (check first; STOP and tell the owner if any fails)
 
 Method
 1. Read `.claude/prompts/run-feature-be.md` (master runner) and follow its "Execution Instructions for the Agent". Fill its Configuration from the ticket:
-   `STORY_KEY` = the ID, `SERVICE_PATHS` = the `src/backend/...` projects inside `allowed_paths`, `REPO_CONTEXT_PATHS` = the root and `src/backend` context files (the root `REPO_CONTEXT.md` is protected: read it, never edit it; only `src/backend/REPO_CONTEXT.md` may be updated, and only if it is inside `allowed_paths`),
+   `STORY_KEY` = the ID, `SERVICE_PATHS` = the `src/backend/...` projects inside `allowed_paths`, `REPO_CONTEXT_PATHS` = the context chain of `SERVICE_PATHS` (root `REPO_CONTEXT.md`, "Context files"): the root and `src/backend` files, plus only the child files that apply (the root `REPO_CONTEXT.md` is protected: read it, never edit it; only `src/backend/REPO_CONTEXT.md` and its children may be updated, and only if they are inside `allowed_paths`),
    `BASE_BRANCH` = `main`. Resume point = the second argument if given, else `A`. The pipeline definition is `.claude/prompts/per-ticket-feature-prompts.md`.
 2. Delegate by stage:
    - Prompts A and B (scope, Target Contract, implementation, AC verification): the `change-implementer` agent, with the pipeline prompt text as its task.

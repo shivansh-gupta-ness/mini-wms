@@ -22,7 +22,7 @@ Method
 4. Data model: `docs/specs/data-model.md` against `Persistence/Configurations/` and the migration (columns, lengths, nullability, indexes, constraints).
 5. UI: `docs/specs/ui.md` against Angular routes, screens and form rules.
 6. Tests: spec IDs are not on tests, only ticket ACs are. Map spec ID to ticket AC (in `tickets/*.md`) to test (`[Trait("AC", ...)]` or the test-name prefix). List spec IDs with no test.
-7. Rules docs: ADRs, root and module `REPO_CONTEXT.md` (commands, limits, layout, versions) against the code and config.
+7. Rules docs: ADRs, the root `REPO_CONTEXT.md` and the context chain for the component's `code_paths`, including the children its index lists for them (commands, limits, layout, versions) against the code and config.
 
 Output exactly this structure
 - **Baseline**: ac-coverage and Spectral results

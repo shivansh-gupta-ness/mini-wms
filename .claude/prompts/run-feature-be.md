@@ -41,6 +41,12 @@ If a service has no entry in `REPO_CONTEXT_PATHS`, or the file is missing, say s
 in the run log and fall back to normal discovery for that service only. Do not silently
 proceed as if a context existed.
 
+**Hierarchical context (local harness rule).** `REPO_CONTEXT_PATHS` is the context chain of the ticket (root
+`REPO_CONTEXT.md`, "Context files"), not every context file in the repository, so it need not match `SERVICE_PATHS` one
+to one. If a loaded file has an index of child `REPO_CONTEXT.md` files, also load in full the children whose folder
+contains files you will touch, and no others. If the work moves into another area, load that area's file then and say so
+in the run log. Reading those children is part of the permitted context read.
+
 ### Rule 2 — Answer from context first
 
 Resolve as much as possible from the context documents alone:
@@ -139,6 +145,10 @@ Do **not** re-scan the repository. Do **not** regenerate the context document. Y
 know exactly what changed: it is the set of files you edited in this prompt.
 
 Drive the update from that change set alone. Nothing else in the document gets touched.
+
+**Size (local harness rule).** Update the context file nearest to the changed code. If the update would push it past 500
+lines, split it as the root `REPO_CONTEXT.md` ("Context files") says, subject to Rule 0; a split moves text, it does not
+rewrite it. If Rule 0 does not allow the child file, do not exceed the limit: propose the split under "Context changes proposed".
 
 ### Rule 2 — What to update, by change type
 
@@ -313,7 +323,8 @@ The global rules in the pipeline document apply throughout this run.
 ### Step 0.5 — Load the repository context documents
 
 Read every non-empty entry in `REPO_CONTEXT_PATHS` in full, before any other repository
-access. This is the only wholesale read permitted in the run.
+access, plus the child files that apply (Rule 1, hierarchical context). This is the only
+wholesale read permitted in the run.
 
 Report which contexts loaded, which entries were blank or missing, and for any that are
 missing, state that discovery for that service will fall back to normal exploration.

@@ -26,7 +26,7 @@ Method
 4. API and security (ADR-003, ADR-004): validation, error shape, status codes, headers, roles, no secrets or sensitive data in logs or responses.
 5. Correctness: logic errors, null and boundary cases, async misuse, concurrency and the `Version` rule for updates, error handling, resource disposal. Frontend: strict typing, unsubscribed streams, error and empty states.
 6. Tests: new behaviour has tests; tests assert behaviour, not implementation. Do not duplicate `test-critic`; note only blockers.
-7. Docs: the module `REPO_CONTEXT.md` is updated for the change and within the line limit that the root `REPO_CONTEXT.md` states.
+7. Docs: the `REPO_CONTEXT.md` nearest to the changed code is updated for the change, and the limit and split rules in the root `REPO_CONTEXT.md` ("Context files") hold: within the limit, every child listed in its nearest parent, no detail lost in a split.
 8. For high-risk tickets, say that `/security-review` is still required.
 
 Output exactly this structure
