@@ -2,7 +2,7 @@
 id: TASK-016
 type: task
 title: Raise the REPO_CONTEXT line limit to 500
-status: draft
+status: ready
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
