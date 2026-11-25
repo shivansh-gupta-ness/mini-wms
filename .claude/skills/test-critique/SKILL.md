@@ -14,4 +14,4 @@ Preconditions (check first; STOP and tell the owner if any fails)
 Method
 1. Run the `test-critic` agent with the ticket ID and the range, if one was given.
 2. Show its report unchanged.
-3. STOP. Ask the owner which tests to add. Adding them is `test-writer` work under the active ticket; do not write tests here.
+3. STOP. Ask the owner which tests to add or strengthen, `must` rows first. Doing so is `test-writer` work under the active ticket; do not write tests here.
