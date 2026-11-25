@@ -138,16 +138,17 @@ Plugins are a way to reuse the skills and agents in other repositories.
 
 | Item | Detail |
 |---|---|
-| Marketplace repo | `shivansh-gupta-ness/claude-plugins` (private), marketplace name `mini-wms-plugins` |
+| Marketplace repo | `shivansh-gupta-ness/claude-plugins` (public on GitHub, checked 2026-11-26), marketplace name `mini-wms-plugins` |
 | Plugin | `core` |
-| Contents | Agents `ticket-scout`, `change-implementer`, `test-writer`; skills `start-ticket`, `run-feature-be`, `run-feature-fe`; the three adapted prompts in `plugins/core/prompts/` (from 0.3.0) |
-| Versions | `v0.1.0` tagged. 0.2.0 (editing agents) is PR #1 on `feat/editing-agents`. 0.3.0 (pipeline skills and prompts) is PR #2 on `feat/pipeline-skills`, based on PR #1. Neither is merged or tagged |
+| Contents | Agents `ticket-scout`, `change-implementer`, `test-writer`; skills `start-ticket`, `run-feature-be`, `run-feature-fe`; the three adapted prompts in `plugins/core/prompts/` (from 0.3.0). From 0.4.0 also the five review agents and their five skills |
+| Versions | `v0.1.0`, `v0.3.0`, `v0.3.1` and `v0.3.2` tagged (0.2.0 was not); plugin PRs #1 to #5 merged. 0.4.0 (review agents and skills, context file rule) is plugin PR #6; tag it after the merge |
 | Install in another repo | `/plugin marketplace add shivansh-gupta-ness/claude-plugins`, then `/plugin install core@mini-wms-plugins` |
 | Invoked | The same way as repo skills and agents once installed. In this repo the `.claude/` copies are used and win over the plugin copies. |
 
 Limits to know:
 - Plugin agents ignore `hooks`, `mcpServers` and `permissionMode`. Each repo must keep its own guards in its `.claude/settings.json`.
 - The plugin's `run-feature-*` skills read their prompts from the plugin (`${CLAUDE_PLUGIN_ROOT}/prompts`). Installed plugin skills are namespaced (`/core:run-feature-be`); this repo's own `.claude/skills/` versions use `.claude/prompts/`.
+- The review agents name files of this repository (ADRs, `docs/knowledge-map.yaml`, `docs/specs/`, the Locations module), so another repo must adapt them.
 - The repo and plugin copies of the agents, skills and prompts are duplicated. Change both, or the plugin drifts. The plugin copies of the prompts use `<PLUGIN_PROMPTS>/` in place of `.claude/prompts/`. In this repo, edit `.claude/prompts/` (the only adapted copy), then sync the plugin.
 
 Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/plugin`.
@@ -170,7 +171,7 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 ## 8. Known gaps
 
 - `/start-ticket`, `/run-feature-be` and `/run-feature-fe` have run on TASK-001 to TASK-012, BUG-001 and FEAT-001.
-- The five review agents and skills are not in the `core` plugin yet, and the plugin's `ticket-scout` is still haiku. Sync them.
+- The plugin's review agents and skills (0.4.0) have not been installed and run as a plugin.
 - `.claude/state/active-ticket.json` is not removed automatically. A stale file keeps the scope guard on; delete it when a ticket is done.
 - `prompt_logs/` changes every turn, so the tree is never clean. Commit it in periodic `chore/` PRs, or `/start-ticket` will stop on the dirty tree.
 - Hooks need `node` on your PATH.
