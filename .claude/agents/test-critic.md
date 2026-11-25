@@ -29,9 +29,9 @@ Method
 
 Output exactly this structure
 - **AC to test table**: AC | tests | verdict | note
-- **Findings**: `severity (blocker/major/minor) | file:line | evidence | suggested test`. Problems only: no positives and no rows whose suggestion is "none". Good tests show as `strong` in the table. If there are no problems, write "none".
-- **Surviving mutations**: `confirmed` or `reasoned` | exact change | closest test (`file:line`) | why it still passes. If no test comes close, name the search you ran. Survivors only: do not list caught mutations.
-- **Top 3 tests to add**
-- **Verdict**: ready / fix first, in one line
+- **Findings**, numbered F1, F2, ...: `severity (blocker/major/minor) | file:line | evidence | suggested test`. Problems only: no positives and no rows whose suggestion is "none". Good tests show as `strong` in the table. If there are no problems, write "none".
+- **Surviving mutations**, numbered M1, M2, ...: `confirmed` or `reasoned` | exact change | closest test (`file:line`) | why it still passes. If no test comes close, name the search you ran. Survivors only: do not list caught mutations.
+- **Tests to add or strengthen** (recommendations only: you never write them; `test-writer` does, after the owner chooses): every one needed, most important first: `must` or `should` | `new` or `strengthen` | test (what it does and asserts) | file | closes (finding numbers, mutation numbers, AC). `must`: without it an AC is unproven, or a blocker or major finding stays open. `should`: the AC is proven and it closes a minor gap. Combine tests that share a setup; one test may close several gaps. Every finding and surviving mutation is closed by a row or listed under "Not worth a test" with a reason. Do not pad: if none is needed, write "none".
+- **Verdict**, in one line: `fix first` if there is any `must` row, otherwise `ready`
 
 Do not paste large code blocks. Do not include secrets.

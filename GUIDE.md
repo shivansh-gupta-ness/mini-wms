@@ -45,7 +45,7 @@ All skills live in `.claude/skills/<name>/SKILL.md`. All of them are manual: the
 | `run-feature-be` | `/run-feature-be FEAT-001 [resume stage]` | Backend feature ticket, after approval | Runs `.claude/prompts/run-feature-be.md` (which loads `per-ticket-feature-prompts.md`). Stages A, 2, 3, 4, B, 5 sections 7-8, each ending in a STOP REPORT. |
 | `run-feature-fe` | `/run-feature-fe FEAT-002 [A or B]` | Frontend feature ticket, after approval | Runs `.claude/prompts/agent-prompt-fe.md` (Flow A or B). Needs the API contract in `docs/specs/` if the ticket has `depends_on`. |
 | `own-code-review` | `/own-code-review FEAT-001` | When the editing agents finish | Checks the change against the approved plan and the criteria, scope and leftovers; runs build and tests. |
-| `test-critique` | `/test-critique FEAT-001 [range]` | After `test-writer` | Criterion-to-test table, weak assertions, missing cases, changes the tests would not catch. |
+| `test-critique` | `/test-critique FEAT-001 [range]` | After `test-writer` | Criterion-to-test table, weak assertions, missing cases, changes the tests would not catch, and a ranked list of tests to add or strengthen (recommendations only). |
 | `independent-code-review` | `/independent-code-review FEAT-001`, a range, or both | Before the PR, after `own-code-review` | Review by a fresh agent that gets only the ticket ID and range, never the plan or the author's reasoning. |
 | `ef-verify` | `/ef-verify [FEAT-001 or path]` | When EF Core queries or persistence change | Reads LINQ, configurations and migrations; reports SQL shape, index, paging and concurrency risks. It does not capture the real SQL. |
 | `spec-drift` | `/spec-drift [component or FEAT-001]` | After several merges | Compares specs, contracts, ADRs and context files with code and tests. |
@@ -88,7 +88,7 @@ Defined in `.claude/agents/`.
 | `own-code-review` | opus, high | Read, Grep, Glob, Bash, PowerShell | No (by instruction) | No | `/own-code-review` |
 | `independent-code-review` | opus, high | same as above | No (by instruction) | No | `/independent-code-review` |
 | `test-critic` | opus, high | same as above | No (by instruction) | No | `/test-critique` |
-| `ef-query-verifier` | opus, high | same as above | No (by instruction) | No | `/ef-verify` |
+| `ef-query-verifier` | sonnet, high | same as above | No (by instruction) | No | `/ef-verify` |
 | `spec-drift-auditor` | opus, high | same as above | No (by instruction) | No | `/spec-drift` |
 
 The five review agents have no Edit or Write tool but do have a shell, for diffs and tests. Their shell is kept read-only by their instructions, the approval prompts and `command-guard`, not by a hard block.

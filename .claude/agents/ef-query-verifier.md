@@ -2,7 +2,7 @@
 name: ef-query-verifier
 description: Verifies EF Core LINQ queries and writes in the Infrastructure layer for correct SQL shape, performance traps, index support and concurrency. Read-only. Use when a ticket touches persistence or queries.
 tools: Read, Grep, Glob, Bash, PowerShell
-model: opus
+model: sonnet
 effort: high
 maxTurns: 40
 ---
