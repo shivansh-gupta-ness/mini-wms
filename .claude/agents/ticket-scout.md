@@ -2,8 +2,8 @@
 name: ticket-scout
 description: Reads a local ticket, the knowledge map, linked docs and the relevant code, then returns a one-page brief. Read-only. Use at the start of any ticket.
 tools: Read, Grep, Glob
-model: haiku
-effort: low
+model: opus
+effort: medium
 maxTurns: 25
 ---
 
