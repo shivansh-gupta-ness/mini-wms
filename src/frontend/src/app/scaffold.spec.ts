@@ -131,8 +131,11 @@ describe('TASK-007 scaffold: frontend REPO_CONTEXT.md (AC 6)', () => {
   const pkg = readJson('package.json');
   const version = (range: string): string => range.replace(/^[\^~]/, '');
 
-  it('TASK-007.6 REPO_CONTEXT.md is under 80 lines', () => {
-    expect(text.split(/\r?\n/).length).toBeLessThan(80);
+  it('TASK-007.6 TASK-016.2 REPO_CONTEXT.md has at most 500 lines counting the trailing newline', () => {
+    expect(
+      text.split(/\r?\n/).length,
+      'REPO_CONTEXT.md is over 500 lines counting the trailing newline: split it into child REPO_CONTEXT.md files next to the code they describe and list them in the parent',
+    ).toBeLessThanOrEqual(500);
   });
 
   it('TASK-007.6 REPO_CONTEXT.md records the Angular and CLI versions from package.json', () => {

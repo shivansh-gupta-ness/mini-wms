@@ -100,9 +100,12 @@ describe('FEAT-001 guards: docs, naming and mapping (AC 27)', () => {
     ...['confirm-dialog', 'empty-state', 'error-banner', 'status-chip'].flatMap((d) => listFiles(join(sharedDir, d), isSpec)),
   ];
 
-  it('FEAT-001.27 REPO_CONTEXT.md stays within 78 lines and documents the locations feature', () => {
+  it('FEAT-001.27 TASK-016.2 REPO_CONTEXT.md stays at most 500 lines counting the trailing newline and documents the locations feature', () => {
     const text = read(join(root, 'REPO_CONTEXT.md'));
-    expect(text.split(/\r?\n/).length).toBeLessThanOrEqual(78);
+    expect(
+      text.split(/\r?\n/).length,
+      'REPO_CONTEXT.md is over 500 lines counting the trailing newline: split it into child REPO_CONTEXT.md files next to the code they describe and list them in the parent',
+    ).toBeLessThanOrEqual(500);
     const missing = ['features/locations', 'locations.page.ts', 'LocationsApi', 'confirm-dialog', 'applyServerErrors', 'Reload'].filter(
       (term) => !text.includes(term),
     );
