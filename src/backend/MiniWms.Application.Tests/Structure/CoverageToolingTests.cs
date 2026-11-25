@@ -219,8 +219,11 @@ public class CoverageToolingTests
 
     [Fact]
     [Trait("AC", "TASK-003.7")]
-    public void Backend_REPO_CONTEXT_stays_under_80_lines() =>
-        Assert.True(File.ReadAllLines(BackendContextPath).Length < 80);
+    [Trait("AC", "TASK-016.1")]
+    public void Backend_REPO_CONTEXT_stays_within_500_lines() =>
+        Assert.True(
+            File.ReadAllLines(BackendContextPath).Length <= 500,
+            "REPO_CONTEXT.md is over 500 lines: split it into child REPO_CONTEXT.md files next to the code they describe and list them in the parent");
 
     private static string ManifestPath => Path.Combine(RepoLocator.RepoRoot, ".config", "dotnet-tools.json");
 
