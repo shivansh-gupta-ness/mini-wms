@@ -49,8 +49,11 @@ describe('TASK-011 tooling: frontend REPO_CONTEXT.md (AC 6)', () => {
     expect(text.includes('API: ok') || text.includes('API: unavailable')).toBe(true);
   });
 
-  it('TASK-011.6 REPO_CONTEXT.md has fewer than 80 lines counting the trailing newline', () => {
-    expect(text.split(/\r?\n/).length).toBeLessThan(80);
+  it('TASK-011.6 TASK-016.2 REPO_CONTEXT.md has at most 500 lines counting the trailing newline', () => {
+    expect(
+      text.split(/\r?\n/).length,
+      'REPO_CONTEXT.md is over 500 lines counting the trailing newline: split it into child REPO_CONTEXT.md files next to the code they describe and list them in the parent',
+    ).toBeLessThanOrEqual(500);
   });
 });
 
