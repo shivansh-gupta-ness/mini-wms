@@ -2,7 +2,7 @@
 id: TASK-017
 type: task
 title: Close the test gaps in the security header tests
-status: in-review
+status: done
 owner: shivansh-gupta-ness
 component: backend-platform
 risk: low
@@ -41,3 +41,6 @@ TASK-015 added `X-Content-Type-Options: nosniff` and `Cache-Control: no-store` t
 - Follows `tickets/TASK-015.md` (PR 54). The throwaway copy for criterion 7 is a clone or worktree outside the working tree, made and deleted by the main session with the owner's approval of the plan.
 - Tests use the in-process host with its temporary database, never `App_Data`.
 - Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
+
+## Delivery
+PR 63. All 7 acceptance criteria PASS (criteria 6 and 7 by diff review and real runs, no test; 18 of 18 mutations caught); results in `docs/reports/TASK-017/ac-results.md` and the row in `docs/reports/ac-log.md`. No production defect was found. `/code-review` was not run.
