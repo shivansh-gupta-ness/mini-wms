@@ -121,7 +121,7 @@ continue from where you left
 
 **Context:** Session was interrupted while writing harness hooks; resuming setup (hooks, agents, skill, plugin repo, GitHub repo + ruleset, adapted dev_prompts).
 
-**Tokens:** 8,154,706 total (in 90 · out 62,085 [thinking 17,889] · cache-read 7,887,686 · cache-write 204,845) · 45 API calls · **Model:** claude-sonnet-5-5 (45)
+**Tokens:** 8,629,215 total (in 104 · out 66,960 [thinking 18,567] · cache-read 8,304,233 · cache-write 257,918) · 51 API calls · **Model:** claude-sonnet-5-5 (51)
 
 ---
 ## Prompt 11 — 2026-11-17
@@ -592,6 +592,278 @@ analyze and make next tasks ready
 
 **Context (outcome):** Analysed the ticket graph: only TASK-004 is unblocked (deps 001 and 003 merged); 005 and 006 wait for 004, 008-010 wait for 007, 011 waits for 002 and 008. TASK-004 set to ready with two additions (extend the existing tool manifest; AC 9: existing Api tests must use a temp database) and notes. TASK-006 stays draft with a note on an open decision (409 detail vs BUG-001). Chore PR opened.
 
+---
+
+**User:**
+/start-ticket TASK-004
+
+**Context:** Checking PR 15 merge, ticket readiness and tree, then branching and scouting.
+
+---
+
+**User:**
+approve the plan, go ahead (TASK-004)
+
+**Context:** TASK-004 plan approved with the recommended answers: Infrastructure tests in Api.Tests (no new project), sidecar files covered (AC 6 and 7 amended), database per test with a unique name, derived factories keep the override, pools cleared before delete. Active ticket written; implementer first, then test-writer.
+
+---
+
+### 2026-11-19 — "yes do both" (commit/push/PR for TASK-004, and chore PR with learning-log row)
+
+---
+
+## 2026-11-25: review agents and skills
+
+**User:**
+test critique
+independent code review
+legacy parity checker(controller and stored procedure)
+ef core query verifier
+spec drift auditor 
+
+I want to create appropriate skills/agents/tools for this
+
+**User (answers to clarifying questions):**
+- Legacy input: "for now you can skip legacy parity checker"
+- Tool shape: "Read-only subagents plus slash skills (Recommended)"
+
+**User (plan feedback):**
+i want two different code review agent, -- 1) own-code-review 2) independent-code-review
+
+**User:**
+And, ticket-scout, spec drift auditor and both code-review agents should use opus 5.5 model and I want to increase each repo_context.md limit upto 500 lines
+
+**User:** approved the plan.
+
+**Context:** Branch `setup/review-agents`: five review agents and skills, `ticket-scout` on opus, root limit 500, GUIDE updated. `tickets/TASK-016.md` drafted for the limit tests. Nothing committed.
+
+---
+
+**User:**
+so, independent code reviewer doesn't get the plan right?
+
+**User:**
+do recommendex fix
+
+**Context:** `independent-code-review` no longer sees reports, the learning log or tickets in its diff, and reads a ticket only up to `## Notes and links`.
+
+---
+
+**User:**
+/independent-code-review TASK-015 ed68268^1..ed68268
+
+**User:**
+/test-critique
+
+**User:**
+/test-critique TASK-015 ed68268^1..ed68268
+
+**User:**
+yes, make those three changes to test-critic
+
+**Context:** Trial runs on TASK-015. `test-critic` repeated a stale mutation count from the report, so it no longer repeats unchecked report numbers, labels each mutation confirmed or reasoned, and lists problems only in findings.
+
+---
+
+**User:**
+/test-critique TASK-015 ed68268^1..ed68268 (rerun)
+
+**User:**
+yes, add the rule and move it to opus
+
+**Context:** The rerun still listed mutations that existing tests catch. `test-critic` must now search all test projects and name the closest test for each survivor, and runs on opus.
+
+---
+
+**User:**
+/test-critique TASK-015 ed68268^1..ed68268 (third run, opus)
+
+**User:**
+what task17 will contains?
+
+**User:**
+should i increase the repo_context.md lines limit from 80 to 500
+
+**User (answer to clarifying question):** 500 for all three
+
+**User:** approved the plan.
+
+**Context:** 200 was recommended; the owner kept 500 for all three `REPO_CONTEXT.md` files. TASK-017 (TASK-015 test gaps) was described, not drafted.
+
+---
+
+**User:**
+task 016 is unused
+
+**User:**
+I have even opened the pr from myself
+
+**User:**
+/start-ticket TASK-016
+
+**User:** pasted terminal output: the "chore: TASK-016 ready" commit was empty and the branch was pushed without it.
+
+**Context:** `/start-ticket` stopped because TASK-016 was merged as `draft`. Status set to `ready` on `chore/ticket-016-ready`; the owner commits and pushes.
+
+---
+
+**User:**
+you opne the pr
+
+**User:**
+/start-ticket TASK-016
+
+**User:**
+modification in plan, if 500 lines limit exceeds then make the repo_context.md file hierarichacal and load only those file which is needed for context
+
+**Context:** PR 57 opened and merged. TASK-016 branch created and scouted. The plan is being revised for a hierarchical split; nothing edited, awaiting approval.
+
+---
+
+**User:**
+approve the revised plan, go ahead
+
+**User:**
+why multiple newly created agents are not available in this branch?
+
+**User:**
+/code-review
+
+**User:**
+go with option A, commit and open the pr (interrupted), then: consider the findings
+
+**User:**
+yes, push the commit from step 2
+
+**User:**
+I merged the PR, go ahead with both steps
+
+**User:**
+deleted it, go ahead with both steps
+
+**Context:** TASK-016 implemented by `test-writer` (three rounds), `/code-review` findings 1 to 5 fixed, PR 58 opened and merged. The guard blocked deleting the active-ticket file, so the owner deleted it. Next: `setup/review-agents` with the splitting and loading rule.
+
+---
+
+**User:**
+continue with the plan of adding and testing new agents/skills
+
+**Context:** Trial runs of `spec-drift-auditor`, `ef-query-verifier` and `own-code-review`, the model check and an edit-refusal test, on `setup/review-agents` (rule edits uncommitted).
+
+---
+
+**User:**
+yes, fix ef-query-verifier, rerun it, then open the setup PR
+
+**Context:** The search rule alone did not fix `ef-query-verifier`; it moved to opus as agreed and then cited the race tests correctly. The `setup/review-agents` PR is opened.
+
+---
+
+**User:**
+where the instrunction of hierarchical splitting of repo_context.md is mentioned in main branch?
+
+**User:**
+in test critic why only top 3 tests to add?
+
+**User (answer to clarifying question):** All, ranked
+
+**User (plan feedback):** first tell me wdym by must and should here, do you write new test cases? (then approved the plan)
+
+**Context:** `test-critic` lists every test to add or strengthen, ranked must or should, on `setup/test-critic-all-tests`. Nothing committed.
+
+---
+
+**Correction (2026-11-26):** the earlier context line "The search rule alone did not fix `ef-query-verifier`; it moved to opus as agreed and then cited the race tests correctly" is wrong. The token report shows that run was on sonnet. The rerun before it most likely ran before Claude Code reloaded the edited agent file. The version now in the repo (opus, test-list check) has not been run. The PR 59 description has the same error.
+
+---
+
+**User:**
+go with option A, open the PR and fix PR 59
+
+**Context:** `ef-query-verifier` back to sonnet with its rules; two confirmed-definition runs, then the PR for `setup/test-critic-all-tests`.
+
+---
+
+**User:**
+do second one
+
+**Context:** Read as "sync to the core plugin". Synced locally in `claude-plugins` on `chore/sync-review-agents` (v0.4.0), not committed or pushed; that repository is public on GitHub although GUIDE.md says private.
+
+---
+
+**User:**
+push the sync and fix GUIDE.md
+
+**Context:** Plugin PR 6 (v0.4.0) and the GUIDE.md chore PR opened; GUIDE merges after the plugin PR.
+
+---
+
+**User:**
+I merged PR 61, draft TASK-017
+
+**Context:** `tickets/TASK-017.md` drafted on `chore/ticket-017`, not committed.
+
+---
+
+**User:**
+set it to ready, commit and open the PR
+
+**Context:** TASK-017 set to ready and its chore PR opened.
+
+---
+
+**User:**
+/start-ticket TASK-017 (first run stopped: PR 62 not merged; second run after the merge)
+
+**Context:** Branch created, `ticket-scout` (opus) run; stops for approval.
+
+---
+
+**User:**
+approve the plan, go ahead (before the brief arrived; not acted on)
+
+---
+
+**User:**
+go, approve the plan with all four
+
+**Context:** TASK-017 approved with four owner decisions; `test-writer` starts.
+
+---
+
+**User:**
+/own-code-review TASK-017
+
+**User:**
+/independent-code-review TASK-017
+
+**User:**
+/test-critique TASK-017
+
+**User:**
+yes, go ahead with those four tests
+
+**User:**
+/security-review (twice)
+
+**User:**
+commint and open new pr
+
+**User:**
+i merged it, now do it --- I can push one more commit as with TASK-016: #63 in the ac-log row, a Delivery section and status: done
+
+**User:**
+merged PR 64 and deleted both, update the prompt log
+
+**Context (outcome):** TASK-017 done. Reviews: own pass, independent approve, test-critique ready (no must rows), security no findings; `/code-review` not run. Four more tests added after the reviews (criteria 2 and 3 amended), 762 backend tests, coverage 97.05%, 18 of 18 mutations caught in a throwaway clone. PR 63 merged before its close-out, so the PR number, `done` and Delivery went in PR 64. The owner deleted the active-ticket file and the clone, because `command-guard` blocks both.
+
 **Tokens:** 481,361 total (in 6 · out 1,565 [thinking 62] · cache-read 479,325 · cache-write 465) · 2 API calls · **Model:** claude-sonnet-5-5 (2)
+
+---
+
+**User:**
+yes, commit prompt_logs and open the PR
+
+**Context:** `prompt_logs/` committed on `chore/prompt-logs-2026-11-26` and its PR opened.
 
 ---
