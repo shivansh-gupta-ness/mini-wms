@@ -52,6 +52,21 @@ All skills live in `.claude/skills/<name>/SKILL.md`. All of them are manual: the
 
 The five review skills change nothing: they show the agent's report and stop.
 
+### Skill inputs and outputs
+
+"Reads" is what the skill or its agent opens; "Produces" is what you get back and every file it writes.
+
+| Skill | Input you give | Reads | Produces |
+|---|---|---|---|
+| `/start-ticket` | A ticket ID (`FEAT-001`, `BUG-001`, `TASK-001`) | `tickets/<ID>.md` on `main`, `git status` | The branch `<feat\|bug\|task>/<ID>-<slug>` and the scout's one-page brief, then it stops. After your approval: `.claude/state/active-ticket.json`, the agents' changes carried back to the branch (unstaged), `docs/reports/<ID>/ac-results.md` and a row in `docs/reports/ac-log.md`, and the changed files, test results and criterion totals. A learning-log row is proposed, not written |
+| `/run-feature-be` | A ticket ID, optionally a stage to resume from (`A`, `2`, `3`, `4`, `B`, `5.8`) | The ticket, `.claude/prompts/run-feature-be.md` and `per-ticket-feature-prompts.md`, the context chain | Code and tests for each stage (staged, not committed), a STOP REPORT at every stop, then `docs/reports/<ID>/` (with `ac-results.md`), the `## Delivery` section in the ticket, the `ac-log.md` row and a "Pipeline complete" block with the criterion totals |
+| `/run-feature-fe` | A ticket ID, optionally flow `A` (API integration) or `B` (new feature) | The ticket, `.claude/prompts/agent-prompt-fe.md`, `src/frontend/REPO_CONTEXT.md` and its children, the API contract in `docs/specs/` | Components and specs (staged, not committed), updates to the frontend context file, and a final report including `docs/reports/<ID>/ac-results.md` |
+| `/own-code-review` | A ticket ID. The skill also passes the plan you approved (it asks if the plan is not in the conversation) | The ticket, the plan, the diff against `main` including untracked files | The `own-code-review` agent's report (below). No file changes |
+| `/test-critique` | A ticket ID, optionally a git range for a merged ticket | The ticket, the diff, the tests, `docs/reports/<ID>/ac-results.md` | The `test-critic` agent's report (below). No file changes |
+| `/independent-code-review` | A ticket ID, a git range, or both. Nothing else is passed | The ticket up to `## Notes and links`, the diff without reports, tickets or logs | The `independent-code-review` agent's report (below). No file changes |
+| `/ef-verify` | Optionally a ticket ID or a path under `src/backend/MiniWms.Infrastructure/` (default: `Locations/`) | Queries, entity configurations, migrations, ADR-002, `data-model.md` | The `ef-query-verifier` agent's report (below). No file changes |
+| `/spec-drift` | Optionally a component from `docs/knowledge-map.yaml` or a ticket ID (default: `locations`) | `docs/specs/` (product, contracts, data model, UI), ADRs, the context files, code and tests | The `spec-drift-auditor` agent's report (below). No file changes |
+
 Preconditions for both pipeline skills: `/start-ticket` was run and approved, the ticket's component and `allowed_paths` match the stack, risk is low or medium, the branch is `<feat|bug|task>/<ID>-*`, the tree is clean.
 
 ### Backend stages
@@ -90,6 +105,21 @@ Defined in `.claude/agents/`.
 | `test-critic` | opus, high | same as above | No (by instruction) | No | `/test-critique` |
 | `ef-query-verifier` | sonnet, high | same as above | No (by instruction) | No | `/ef-verify` |
 | `spec-drift-auditor` | opus, high | same as above | No (by instruction) | No | `/spec-drift` |
+
+### Agent inputs and outputs
+
+| Agent | Input it gets | Output |
+|---|---|---|
+| `ticket-scout` | A ticket ID | A one-page brief: ticket, goal, criteria copied word for word, relevant code and docs (with any doc and code disagreement), context files, allowed and protected paths, risks and unknowns, a 3 to 7 step plan, and what the risk level allows |
+| `change-implementer` | The approved plan and the ticket's criteria | Code changes inside `allowed_paths`, in its own worktree (never committed), and a report: files changed, commands run with results, anything skipped or uncertain, and any scope it wanted but did not have |
+| `test-writer` | The criteria and the brief (or a list of tests to add) | Tests in the test paths of `allowed_paths`, in its own worktree, and a report: criterion-to-test mapping, commands run with results, and any gap. It never changes production code |
+| `own-code-review` | A ticket ID and the approved plan | Plan and criteria table, scope check, findings (severity, file and line, evidence, fix), commands run, and a verdict: pass or fix first, with a punch list |
+| `independent-code-review` | A ticket ID, a git range, or both, nothing else | Summary from the diff only, findings, what was checked and clean, what was not verified, and a verdict: approve, approve with changes, or block |
+| `test-critic` | A ticket ID, optionally a git range | Criterion-to-test table, numbered findings, numbered surviving mutations (each `confirmed` or `reasoned`, with the closest test), a ranked list of tests to add or strengthen (`must` or `should`), and a verdict: ready or fix first |
+| `ef-query-verifier` | A ticket ID or an Infrastructure path (default: `Locations/`) | Query table (LINQ, expected SQL shape, verdict), findings with the recommended rewrite or index, what needs real SQL capture, and a verdict: clean or fix first |
+| `spec-drift-auditor` | A component or a ticket ID (default: `locations`) | Baseline (`ac-coverage.mjs` and the Spectral lint), a drift table (spec claim and code reality, each with file and line, and which side to fix), spec IDs with no test, what was not verified, and a verdict: in sync or drift found |
+
+Every review finding cites a file and line, and an agent writes "unknown" instead of guessing.
 
 The five review agents have no Edit or Write tool but do have a shell, for diffs and tests. Their shell is kept read-only by their instructions, the approval prompts and `command-guard`, not by a hard block.
 
@@ -141,7 +171,7 @@ Plugins are a way to reuse the skills and agents in other repositories.
 | Marketplace repo | `shivansh-gupta-ness/claude-plugins` (public on GitHub, checked 2026-11-26), marketplace name `mini-wms-plugins` |
 | Plugin | `core` |
 | Contents | Agents `ticket-scout`, `change-implementer`, `test-writer`; skills `start-ticket`, `run-feature-be`, `run-feature-fe`; the three adapted prompts in `plugins/core/prompts/` (from 0.3.0). From 0.4.0 also the five review agents and their five skills |
-| Versions | `v0.1.0`, `v0.3.0`, `v0.3.1` and `v0.3.2` tagged (0.2.0 was not); plugin PRs #1 to #5 merged. 0.4.0 (review agents and skills, context file rule) is plugin PR #6; tag it after the merge |
+| Versions | `v0.1.0`, `v0.3.0`, `v0.3.1`, `v0.3.2` and `v0.4.0` tagged (0.2.0 was not); plugin PRs #1 to #6 merged. 0.4.0 added the review agents and skills and the context file rule |
 | Install in another repo | `/plugin marketplace add shivansh-gupta-ness/claude-plugins`, then `/plugin install core@mini-wms-plugins` |
 | Invoked | The same way as repo skills and agents once installed. In this repo the `.claude/` copies are used and win over the plugin copies. |
 
@@ -170,9 +200,9 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 
 ## 8. Known gaps
 
-- `/start-ticket`, `/run-feature-be` and `/run-feature-fe` have run on TASK-001 to TASK-012, BUG-001 and FEAT-001.
+- `/start-ticket` has run on TASK-002 to TASK-017, BUG-001 and FEAT-001 (TASK-001 was done by the main session). `/run-feature-be` and `/run-feature-fe` have never run on a ticket: FEAT-001 used the agents directly (owner decision, `docs/reports/FEAT-001/ac-results.md`). The review skills have run on TASK-015 (as a test), TASK-016 and TASK-017.
 - The plugin's review agents and skills (0.4.0) have not been installed and run as a plugin.
-- `.claude/state/active-ticket.json` is not removed automatically. A stale file keeps the scope guard on; delete it when a ticket is done.
-- `prompt_logs/` changes every turn, so the tree is never clean. Commit it in periodic `chore/` PRs, or `/start-ticket` will stop on the dirty tree.
+- `.claude/state/active-ticket.json` is not removed automatically, and `command-guard` blocks agents from deleting it. A stale file keeps the scope guard on; you delete it when a ticket is done.
+- `prompt_logs/` changes every turn, so the tree is never clean. `/start-ticket` ignores that folder; commit it in periodic `chore/` PRs. If `git switch main` refuses because of those files, update `main` first with `git fetch origin main:main`.
 - Hooks need `node` on your PATH.
 - Direct push to `main` rejection has not been confirmed. Try `git push origin main` once.
