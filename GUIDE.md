@@ -10,14 +10,15 @@ A ticket in `tickets/` moves through a fixed path. A person approves the plan; a
 tickets/<ID>.md
    |
    v
-/start-ticket <ID>          (skill)   ticket-scout reads, you approve the plan
+/start-ticket <ID>          (skill)   ticket-scout reads, spec-drift-auditor checks the component (any drift stops it), you approve the plan
    |
    v
 /run-feature-be | /run-feature-fe   (skills, features)   or the agents directly (small BUG/TASK)
    |   change-implementer  -> code
    |   test-writer         -> tests
    v
-/own-code-review -> /test-critique -> /independent-code-review (+ /ef-verify when queries change)   (skills, read-only)
+review chain: own-code-review -> test-critic -> independent-code-review (+ ef-query-verifier when persistence changes) -> spec-drift-auditor
+   (run by /start-ticket after the build, or by /review-ticket; each review is also its own skill; read-only, one stop at the end)
    |
    v
 You review the diff -> /code-review (+ /security-review on high risk) -> open PR
@@ -41,16 +42,17 @@ All skills live in `.claude/skills/<name>/SKILL.md`. All of them are manual: the
 
 | Skill | You type | When to use | What it does |
 |---|---|---|---|
-| `start-ticket` | `/start-ticket FEAT-001` | First step of every ticket | Checks the ID and that the ticket is `ready`, checks the tree is clean, creates the branch, runs `ticket-scout`, shows the brief and plan, then stops for your approval. After approval it writes `.claude/state/active-ticket.json` and starts the editing agents. |
+| `start-ticket` | `/start-ticket FEAT-001` | First step of every ticket | Checks the ID and that the ticket is `ready`, checks the tree is clean, creates the branch, runs `ticket-scout` and `spec-drift-auditor` on the ticket's component (any drift stops it for your decision), shows the brief and plan, then stops for your approval. After the build it runs the review chain and stops once more. After approval it writes `.claude/state/active-ticket.json` and starts the editing agents. |
 | `run-feature-be` | `/run-feature-be FEAT-001 [resume stage]` | Backend feature ticket, after approval | Runs `.claude/prompts/run-feature-be.md` (which loads `per-ticket-feature-prompts.md`). Stages A, 2, 3, 4, B, 5 sections 7-8, each ending in a STOP REPORT. |
 | `run-feature-fe` | `/run-feature-fe FEAT-002 [A or B]` | Frontend feature ticket, after approval | Runs `.claude/prompts/agent-prompt-fe.md` (Flow A or B). Needs the API contract in `docs/specs/` if the ticket has `depends_on`. |
-| `own-code-review` | `/own-code-review FEAT-001` | When the editing agents finish | Checks the change against the approved plan and the criteria, scope and leftovers; runs build and tests. |
+| `review-ticket` | `/review-ticket FEAT-001 [range]` | When the editing agents finish (`/start-ticket` already runs it); again after fixes | Runs the five review agents one after the other (`ef-query-verifier` only when persistence changes; `spec-drift-auditor` on the ticket's component), shows every report and one summary table, then stops once for your choice of findings. Any drift found must be fixed, or a decision to continue recorded, before the PR. |
+| `own-code-review` | `/own-code-review FEAT-001 [range]` | When the editing agents finish | Checks the change against the approved plan and the criteria, scope and leftovers; runs build and tests. |
 | `test-critique` | `/test-critique FEAT-001 [range]` | After `test-writer` | Criterion-to-test table, weak assertions, missing cases, changes the tests would not catch, and a ranked list of tests to add or strengthen (recommendations only). |
 | `independent-code-review` | `/independent-code-review FEAT-001`, a range, or both | Before the PR, after `own-code-review` | Review by a fresh agent that gets only the ticket ID and range, never the plan or the author's reasoning. |
 | `ef-verify` | `/ef-verify [FEAT-001 or path]` | When EF Core queries or persistence change | Reads LINQ, configurations and migrations; reports SQL shape, index, paging and concurrency risks. It does not capture the real SQL. |
 | `spec-drift` | `/spec-drift [component or FEAT-001]` | After several merges | Compares specs, contracts, ADRs and context files with code and tests. |
 
-The five review skills change nothing: they show the agent's report and stop.
+The six review skills change nothing: they show the agents' reports and stop. Any drift `spec-drift-auditor` finds in the ticket's component stops a ticket, before the plan and again after the build, until the docs or the code are fixed or you record a decision to continue (owner rule, 2026-11-26). `/review-ticket` is the chain; the other five run one review each and still work on their own.
 
 ### Skill inputs and outputs
 
@@ -61,7 +63,8 @@ The five review skills change nothing: they show the agent's report and stop.
 | `/start-ticket` | A ticket ID (`FEAT-001`, `BUG-001`, `TASK-001`) | `tickets/<ID>.md` on `main`, `git status` | The branch `<feat\|bug\|task>/<ID>-<slug>` and the scout's one-page brief, then it stops. After your approval: `.claude/state/active-ticket.json`, the agents' changes carried back to the branch (unstaged), `docs/reports/<ID>/ac-results.md` and a row in `docs/reports/ac-log.md`, and the changed files, test results and criterion totals. A learning-log row is proposed, not written |
 | `/run-feature-be` | A ticket ID, optionally a stage to resume from (`A`, `2`, `3`, `4`, `B`, `5.8`) | The ticket, `.claude/prompts/run-feature-be.md` and `per-ticket-feature-prompts.md`, the context chain | Code and tests for each stage (staged, not committed), a STOP REPORT at every stop, then `docs/reports/<ID>/` (with `ac-results.md`), the `## Delivery` section in the ticket, the `ac-log.md` row and a "Pipeline complete" block with the criterion totals |
 | `/run-feature-fe` | A ticket ID, optionally flow `A` (API integration) or `B` (new feature) | The ticket, `.claude/prompts/agent-prompt-fe.md`, `src/frontend/REPO_CONTEXT.md` and its children, the API contract in `docs/specs/` | Components and specs (staged, not committed), updates to the frontend context file, and a final report including `docs/reports/<ID>/ac-results.md` |
-| `/own-code-review` | A ticket ID. The skill also passes the plan you approved (it asks if the plan is not in the conversation) | The ticket, the plan, the diff against `main` including untracked files | The `own-code-review` agent's report (below). No file changes |
+| `/review-ticket` | A ticket ID, optionally a git range for a merged ticket. The skill passes the plan you approved to `own-code-review` only | Everything the five review agents read | Their five reports unchanged (or four, with the reason `ef-query-verifier` was skipped) and one summary table of verdicts, blockers, majors, `must` rows and drift rows. No file changes |
+| `/own-code-review` | A ticket ID, optionally a git range for a merged ticket. The skill also passes the plan you approved (it asks if the plan is not in the conversation) | The ticket, the plan, the diff against `main` including untracked files | The `own-code-review` agent's report (below). No file changes |
 | `/test-critique` | A ticket ID, optionally a git range for a merged ticket | The ticket, the diff, the tests, `docs/reports/<ID>/ac-results.md` | The `test-critic` agent's report (below). No file changes |
 | `/independent-code-review` | A ticket ID, a git range, or both. Nothing else is passed | The ticket up to `## Notes and links`, the diff without reports, tickets or logs | The `independent-code-review` agent's report (below). No file changes |
 | `/ef-verify` | Optionally a ticket ID or a path under `src/backend/MiniWms.Infrastructure/` (default: `Locations/`) | Queries, entity configurations, migrations, ADR-002, `data-model.md` | The `ef-query-verifier` agent's report (below). No file changes |
@@ -113,7 +116,7 @@ Defined in `.claude/agents/`.
 | `ticket-scout` | A ticket ID | A one-page brief: ticket, goal, criteria copied word for word, relevant code and docs (with any doc and code disagreement), context files, allowed and protected paths, risks and unknowns, a 3 to 7 step plan, and what the risk level allows |
 | `change-implementer` | The approved plan and the ticket's criteria | Code changes inside `allowed_paths`, in its own worktree (never committed), and a report: files changed, commands run with results, anything skipped or uncertain, and any scope it wanted but did not have |
 | `test-writer` | The criteria and the brief (or a list of tests to add) | Tests in the test paths of `allowed_paths`, in its own worktree, and a report: criterion-to-test mapping, commands run with results, and any gap. It never changes production code |
-| `own-code-review` | A ticket ID and the approved plan | Plan and criteria table, scope check, findings (severity, file and line, evidence, fix), commands run, and a verdict: pass or fix first, with a punch list |
+| `own-code-review` | A ticket ID, the approved plan, optionally a git range | Plan and criteria table, scope check, findings (severity, file and line, evidence, fix), commands run, and a verdict: pass or fix first, with a punch list |
 | `independent-code-review` | A ticket ID, a git range, or both, nothing else | Summary from the diff only, findings, what was checked and clean, what was not verified, and a verdict: approve, approve with changes, or block |
 | `test-critic` | A ticket ID, optionally a git range | Criterion-to-test table, numbered findings, numbered surviving mutations (each `confirmed` or `reasoned`, with the closest test), a ranked list of tests to add or strengthen (`must` or `should`), and a verdict: ready or fix first |
 | `ef-query-verifier` | A ticket ID or an Infrastructure path (default: `Locations/`) | Query table (LINQ, expected SQL shape, verdict), findings with the recommended rewrite or index, what needs real SQL capture, and a verdict: clean or fix first |
@@ -193,7 +196,7 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 | Any agent edits a file | `scope-guard` before, `format` after |
 | Any agent runs a shell command | `command-guard` before |
 | A turn or agent ends | `token-report`, `run-tests` |
-| The editing agents finish | You type `/own-code-review`, `/test-critique`, `/independent-code-review` (and `/ef-verify` when queries change) |
+| The editing agents finish | `/start-ticket` runs the review chain and stops once; or you type `/review-ticket`, or a single review skill |
 | You finish reviewing | `/code-review`, `/security-review` (high risk) |
 | You open a PR | `pr-guard`, gitleaks, Code Owner review |
 | Any prompt you type | You append it to `prompt_logs/logs.md` (rule in `REPO_CONTEXT.md`) |
@@ -201,7 +204,8 @@ Planned: the `csharp-lsp` code-intelligence plugin, installed by you through `/p
 ## 8. Known gaps
 
 - `/start-ticket` has run on TASK-002 to TASK-017, BUG-001 and FEAT-001 (TASK-001 was done by the main session). `/run-feature-be` and `/run-feature-fe` have never run on a ticket: FEAT-001 used the agents directly (owner decision, `docs/reports/FEAT-001/ac-results.md`). The review skills have run on TASK-015 (as a test), TASK-016 and TASK-017.
-- The plugin's review agents and skills (0.4.0) have not been installed and run as a plugin.
+- The plugin's review agents and skills (0.4.0) have not been installed and run as a plugin. `/review-ticket`, the range for `/own-code-review` and the drift stops in `/start-ticket` are not in the plugin yet.
+- `/review-ticket` and the `/start-ticket` steps that run `spec-drift-auditor` and the review chain have not run yet; they were reviewed by reading only.
 - `.claude/state/active-ticket.json` is not removed automatically, and `command-guard` blocks agents from deleting it. A stale file keeps the scope guard on; you delete it when a ticket is done.
 - `prompt_logs/` changes every turn, so the tree is never clean. `/start-ticket` ignores that folder; commit it in periodic `chore/` PRs. If `git switch main` refuses because of those files, update `main` first with `git fetch origin main:main`.
 - Hooks need `node` on your PATH.
