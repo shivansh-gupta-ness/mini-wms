@@ -44,9 +44,14 @@ internal sealed class LocationQueries(AppDbContext context) : ILocationQueries
                 EF.Functions.Like(z.Code, pattern, LikeEscape) || EF.Functions.Like(z.Name, pattern, LikeEscape));
         }
 
+        // Name has no column collation (BINARY); order it case-insensitively here, because ApplySort must stay free of EF Core.
         var sorted = string.Equals(sort?.Field, "type", StringComparison.OrdinalIgnoreCase)
             ? (sort!.Descending ? zones.OrderByDescending(ZoneTypeOrder) : zones.OrderBy(ZoneTypeOrder)).ThenBy(z => z.Id)
-            : zones.ApplySort(sort);
+            : string.Equals(sort?.Field, "name", StringComparison.OrdinalIgnoreCase)
+                ? (sort!.Descending
+                    ? zones.OrderByDescending(z => EF.Functions.Collate(z.Name, "NOCASE"))
+                    : zones.OrderBy(z => EF.Functions.Collate(z.Name, "NOCASE"))).ThenBy(z => z.Id)
+                : zones.ApplySort(sort);
 
         var page = await sorted
             .Select(z => new ZoneRow(
@@ -91,7 +96,7 @@ internal sealed class LocationQueries(AppDbContext context) : ILocationQueries
         IOrderedQueryable<BinPair> sorted = sort?.Field.ToLowerInvariant() switch
         {
             "code" => descending ? bins.OrderByDescending(p => p.Bin.Code) : bins.OrderBy(p => p.Bin.Code),
-            "name" => descending ? bins.OrderByDescending(p => p.Bin.Name) : bins.OrderBy(p => p.Bin.Name),
+            "name" => descending ? bins.OrderByDescending(p => EF.Functions.Collate(p.Bin.Name, "NOCASE")) : bins.OrderBy(p => EF.Functions.Collate(p.Bin.Name, "NOCASE")),
             "zone" => descending ? bins.OrderByDescending(p => p.Zone.Code) : bins.OrderBy(p => p.Zone.Code),
             "isactive" => descending ? bins.OrderByDescending(p => p.Bin.IsActive) : bins.OrderBy(p => p.Bin.IsActive),
             _ => bins.OrderBy(p => p.Bin.Id),

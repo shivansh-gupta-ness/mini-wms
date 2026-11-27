@@ -60,6 +60,7 @@ Put new code in the module folder, not at the project root.
 - Errors: `ValidationFailedException` (Domain; field rules: blank, too long, negative, invalid type; carries camelCase field names) and FluentValidation's `ValidationException` -> 400 with `errors`. `DomainException` (business-rule conflicts) and `DbUpdateConcurrencyException` -> 409 `conflict` with `detail`. Handlers are `IExceptionHandler`s in `Api/Common/Errors`, registered in `Program.cs`; anything else stays a generic 500.
 - `detail` is kept by the problem-details customizer only when one of our handlers marks the response and the status is 4xx. Never use it for 401/403/404, 5xx or unexpected exceptions.
 - Lists: `Application/Common/Paging` (`PagedQuery` page 1, size 25, max 100; `PagedResult<T>` = items, page, pageSize, totalItems), `Common/Sorting` (`sort=field` or `-field`, one field, per-module `SortFields<T>` allow-list, `Id` tie-breaker, unknown field is a field-level 400), `Common/Validation/PagedQueryValidator<T>`. `ApplySort` + `ToPagedResult` work on any `IQueryable`.
+- Zone and bin `name` sorts use `EF.Functions.Collate(Name, "NOCASE")` in `LocationQueries` (ASCII only; the `Name` columns have no collation, and `ApplySort` stays free of EF Core).
 - Updates: apply the client's version with `db.UseClientVersion(entity, version)` (`Infrastructure/Persistence/VersionedUpdate`) before `SaveChanges`; `ApplyAudit` overwrites a directly set `Version`.
 
 ## Locations module (FEAT-001, contract `docs/specs/api/locations.yaml`)

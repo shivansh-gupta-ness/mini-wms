@@ -162,6 +162,82 @@ public sealed class LocationListApiTests : IDisposable
         Assert.Equal(expected, await CodesAsync($"{Bins}?sort={sort}"));
     }
 
+    // TASK-018: mixed-case names, in id order: ZA "apple", ZB "Banana", ZC "Apple", ZD "cherry", ZE "Zebra".
+    // A binary (case-sensitive) order would put Apple, Banana, Zebra before apple and cherry; "apple" and "Apple" are equal ignoring case.
+    private async Task SeedMixedCaseZonesAsync()
+    {
+        await host.CreateZoneAsync("ZA", "apple");
+        await host.CreateZoneAsync("ZB", "Banana");
+        await host.CreateZoneAsync("ZC", "Apple");
+        await host.CreateZoneAsync("ZD", "cherry");
+        await host.CreateZoneAsync("ZE", "Zebra");
+    }
+
+    // TASK-018: one zone, bins in id order: B1 "apple", B2 "Banana", B3 "Apple", B4 "cherry", B5 "Zebra".
+    private async Task SeedMixedCaseBinsAsync()
+    {
+        var zone = LocationsHost.Id(await host.CreateZoneAsync("M"));
+        await host.CreateBinAsync(zone, "B1", "apple");
+        await host.CreateBinAsync(zone, "B2", "Banana");
+        await host.CreateBinAsync(zone, "B3", "Apple");
+        await host.CreateBinAsync(zone, "B4", "cherry");
+        await host.CreateBinAsync(zone, "B5", "Zebra");
+    }
+
+    [Theory]
+    [InlineData("name", "ZA,ZC,ZB,ZD,ZE")]
+    [InlineData("-name", "ZE,ZD,ZB,ZA,ZC")]
+    [Trait("AC", "TASK-018.1")]
+    public async Task Zones_sort_by_name_without_regard_to_case_and_equal_names_keep_the_id_order(string sort, string expected)
+    {
+        await SeedMixedCaseZonesAsync();
+
+        Assert.Equal(expected, await CodesAsync($"{Zones}?sort={sort}"));
+    }
+
+    [Theory]
+    [InlineData("name", "B1,B3,B2,B4,B5")]
+    [InlineData("-name", "B5,B4,B2,B1,B3")]
+    [Trait("AC", "TASK-018.2")]
+    public async Task Bins_sort_by_name_without_regard_to_case_and_equal_names_keep_the_id_order(string sort, string expected)
+    {
+        await SeedMixedCaseBinsAsync();
+
+        Assert.Equal(expected, await CodesAsync($"{Bins}?sort={sort}"));
+    }
+
+    [Fact]
+    [Trait("AC", "TASK-018.4")]
+    public async Task Zones_name_order_holds_across_page_boundaries()
+    {
+        await SeedMixedCaseZonesAsync();
+
+        var first = await CodesAsync($"{Zones}?sort=name&pageSize=2&page=1");
+        var second = await CodesAsync($"{Zones}?sort=name&pageSize=2&page=2");
+        var third = await CodesAsync($"{Zones}?sort=name&pageSize=2&page=3");
+
+        // Page 1 can only hold the case-insensitively first names if the order is applied in SQL before Skip/Take, not to the fetched page.
+        Assert.Equal("ZA,ZC", first);
+        Assert.Equal("ZA,ZC,ZB,ZD,ZE", string.Join(",", first, second, third));
+        Assert.Equal(await CodesAsync($"{Zones}?sort=name"), string.Join(",", first, second, third));
+    }
+
+    [Fact]
+    [Trait("AC", "TASK-018.4")]
+    public async Task Bins_name_order_holds_across_page_boundaries()
+    {
+        await SeedMixedCaseBinsAsync();
+
+        var first = await CodesAsync($"{Bins}?sort=name&pageSize=2&page=1");
+        var second = await CodesAsync($"{Bins}?sort=name&pageSize=2&page=2");
+        var third = await CodesAsync($"{Bins}?sort=name&pageSize=2&page=3");
+
+        // Page 1 can only hold the case-insensitively first names if the order is applied in SQL before Skip/Take, not to the fetched page.
+        Assert.Equal("B1,B3", first);
+        Assert.Equal("B1,B3,B2,B4,B5", string.Join(",", first, second, third));
+        Assert.Equal(await CodesAsync($"{Bins}?sort=name"), string.Join(",", first, second, third));
+    }
+
     [Fact]
     [Trait("AC", "FEAT-001.11")]
     public async Task Without_a_sort_the_lists_come_back_in_id_order()
