@@ -95,15 +95,14 @@ internal sealed class LocationQueries(AppDbContext context) : ILocationQueries
         var descending = sort?.Descending ?? false;
         IOrderedQueryable<BinPair> sorted = sort?.Field.ToLowerInvariant() switch
         {
-            "code" => descending ? bins.OrderByDescending(p => p.Bin.Code) : bins.OrderBy(p => p.Bin.Code),
-            "name" => descending ? bins.OrderByDescending(p => EF.Functions.Collate(p.Bin.Name, "NOCASE")) : bins.OrderBy(p => EF.Functions.Collate(p.Bin.Name, "NOCASE")),
-            "zone" => descending ? bins.OrderByDescending(p => p.Zone.Code) : bins.OrderBy(p => p.Zone.Code),
-            "isactive" => descending ? bins.OrderByDescending(p => p.Bin.IsActive) : bins.OrderBy(p => p.Bin.IsActive),
+            "code" => (descending ? bins.OrderByDescending(p => p.Bin.Code) : bins.OrderBy(p => p.Bin.Code)).ThenBy(p => p.Bin.Id),
+            "name" => (descending ? bins.OrderByDescending(p => EF.Functions.Collate(p.Bin.Name, "NOCASE")) : bins.OrderBy(p => EF.Functions.Collate(p.Bin.Name, "NOCASE"))).ThenBy(p => p.Bin.Id),
+            "zone" => (descending ? bins.OrderByDescending(p => p.Zone.Code) : bins.OrderBy(p => p.Zone.Code)).ThenBy(p => p.Bin.Id),
+            "isactive" => (descending ? bins.OrderByDescending(p => p.Bin.IsActive) : bins.OrderBy(p => p.Bin.IsActive)).ThenBy(p => p.Bin.Id),
             _ => bins.OrderBy(p => p.Bin.Id),
         };
 
         var page = await sorted
-            .ThenBy(p => p.Bin.Id)
             .Select(p => new BinRow(p.Bin.Id, p.Bin.ZoneId, p.Zone.Code, p.Bin.Code, p.Bin.Name, p.Bin.IsActive, p.Bin.Version))
             .ToPagedResultAsync(paging, cancellationToken);
 
