@@ -19,19 +19,19 @@ Run the agents one after the other, never in parallel: two `dotnet` builds at on
 3. **`security-reviewer`**, for every ticket whatever its risk: a fresh agent (never a fork, never a continued agent) whose whole prompt is the ticket ID and the range if given, like step 2.
 4. **`test-critic`**: its prompt is the ticket ID and the range if given.
 5. **`ef-query-verifier`**, only if the change touches persistence: any path under `src/backend/MiniWms.Infrastructure/` (queries, stores, `Persistence/`, `Migrations/`). Check with `git diff --name-only --merge-base main` and `git status --short -uall` on the ticket branch, or `git diff --name-only <range>`. Its prompt is the ticket ID. If no such path changed, skip it and say so, naming the check.
-6. **`spec-drift-auditor`**: its prompt is the ticket's `component` (from the ticket). It checks whether the docs and the code still agree after the change.
+6. **`spec-drift-auditor`**: its prompt is the ticket's `component` (from the ticket) and the ticket ID, plus the range if given. It checks whether the docs and the code still agree after the change, lists every drift it finds, and marks the rows that come from this change. Drift never stops the chain or the ticket.
 
 Output
 - Each agent's report unchanged, in the order above. Do not argue with, soften or drop findings.
-- Then one summary table: agent | verdict | blockers | majors | `must` rows (test-critic) | critical and high findings (security-reviewer) | drift rows (spec-drift-auditor) | run or skipped, and why.
+- Then one summary table: agent | verdict | blockers | majors | `must` rows (test-critic) | critical and high findings (security-reviewer) | drift rows, and how many come from this change (spec-drift-auditor) | run or skipped, and why.
 
 Report files (copies of what the chat shows; never edit, soften or drop anything)
 - `docs/reports/<ID>/code_summary.md`: a header (ticket, branch, range, date), the changed files (`git diff --stat --merge-base main` plus untracked files from `git status --short -uall`, or `git diff --stat <range>`), what `change-implementer` and `test-writer` reported if they ran in this conversation, the build and test results from `own-code-review`'s "Commands run", and the AC totals from `docs/reports/<ID>/ac-results.md`.
-- `docs/reports/<ID>/review_findings.md`: a header (ticket, range, date, first run or rerun after fixes), each agent's report unchanged in the order above, the summary table, and the stop notices below (security block, drift). If fail fast stopped the chain, it holds the `own-code-review` report and the "skipped" rows.
+- `docs/reports/<ID>/review_findings.md`: a header (ticket, range, date, first run or rerun after fixes), each agent's report unchanged in the order above, the summary table, and the stop notice below (security block) if any. If fail fast stopped the chain, it holds the `own-code-review` report and the "skipped" rows.
 - Write both on the ticket branch with the ticket active, overwriting earlier copies so they match the latest review. If `docs/reports/<ID>/**` is outside `allowed_paths`, the ticket is `high` or `blocked`, or no ticket is active (a merged ticket reviewed by range), do not write: say so and the owner saves them from the chat.
 
 Then STOP, once
-- If `spec-drift-auditor` says "drift found", say first that any drift in the component stops the ticket (owner rule): the docs or the code must be fixed, or the owner records in the ticket Notes a decision to continue, before `/code-review` and the PR.
+- Drift is a finding, not a stop (owner rule, 2026-11-27). If `spec-drift-auditor` says "drift found", list every row; name the rows from this change first. The owner decides per row: fix it in this ticket, send it to a follow-up, or leave it. No decision needs recording before `/code-review` and the PR.
 - Ask the owner which findings to act on. Code fixes go to `change-implementer`, test fixes to `test-writer`, under the active ticket; after fixes the owner reruns `/review-ticket` or a single review skill. Do not fix anything here.
 - If `security-reviewer` says "block", say so before the other findings: a critical or high finding must be fixed before `/code-review` and the PR.
 - Remind the owner that `/code-review` comes next, and the built-in `/security-review` as a second look if the ticket risk is high.
