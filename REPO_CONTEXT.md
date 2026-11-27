@@ -25,13 +25,13 @@ are design only (`docs/specs/product.md` section 9, decision 7).
 
 ## How work flows
 1. A ticket file in `tickets/` has an owner, a component, risk, acceptance criteria and `allowed_paths`.
-2. `/start-ticket <ID>` runs `ticket-scout` and `spec-drift-auditor` (any drift in the component stops it for the owner), shows a one-page brief and a plan, and waits for the owner's approval.
+2. `/start-ticket <ID>` runs `ticket-scout`, shows a one-page brief and a plan (saved as `docs/reports/<ID>/ticket_plan.md`), and waits for the owner's approval.
 3. After approval `change-implementer` and `test-writer` edit in a worktree, only inside `allowed_paths`. Feature tickets run through the
    stack pipeline skills `/run-feature-be` or `/run-feature-fe` (they run the prompts in `.claude/prompts/`), which call those two agents per stage and add the
    gates (mapping 100, pass 100, coverage 90) and STOP rules. Small BUG/TASK tickets use the agents directly. A feature that spans layers or
    repos is one ticket per layer/repo, linked by `parent:` / `depends_on:`; the API contract in `docs/specs/` is the hand-off.
-4. Review: `/start-ticket` then runs the review chain (also `/review-ticket <ID>`): `own-code-review` (against the plan), `test-critic`, `independent-code-review` (sees no plan), `ef-query-verifier` when persistence changes,
-   and `spec-drift-auditor`, then stops once; drift found stops the PR. Each also runs alone as `/own-code-review`, `/test-critique`, `/independent-code-review`, `/ef-verify`, `/spec-drift`. These are read-only. The owner reviews the diff, runs `/code-review` (and `/security-review` on high risk), then opens a PR.
+4. Review: `/start-ticket` then runs the review chain (also `/review-ticket <ID>`): `own-code-review` (against the plan; if the build or tests fail the chain stops here), `independent-code-review` (sees no plan), `security-reviewer` (every risk level), `test-critic`, `ef-query-verifier` when persistence changes,
+   and `spec-drift-auditor`, then stops once; drift or a critical or high security finding stops the PR. Each also runs alone as `/own-code-review`, `/independent-code-review`, `/security-check`, `/test-critique`, `/ef-verify`, `/spec-drift`. These change no code; the chain saves its output as `docs/reports/<ID>/code_summary.md` and `review_findings.md`. The owner reviews the diff, runs `/code-review` (and the built-in `/security-review` as a second look on high risk), then opens a PR.
 5. `pr-guard` (required check) and a Code Owner review must pass before merge. Nobody pushes to `main`.
 
 Branches: `feat/FEAT-001-short-name`, `bug/BUG-001-...`, `task/TASK-001-...`. Doc-only changes use `chore/`; harness, CI and root context file changes use `setup/` (the only branches pr-guard lets change them).
