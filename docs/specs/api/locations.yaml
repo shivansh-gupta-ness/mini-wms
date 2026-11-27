@@ -43,7 +43,7 @@ paths:
       operationId: listZones
       summary: List zones (paged, sortable, searchable)
       tags: [Zones]
-      description: Returns a page of zones, optionally filtered by type, active state or a search text on code or name. Allowed sort fields are code, name, type and isActive (prefix with - for descending). binCount counts all bins of the zone, including inactive ones.
+      description: Returns a page of zones, optionally filtered by type, active state or a search text on code or name. Allowed sort fields are code, name, type and isActive (prefix with - for descending). Sorting by name ignores case for ASCII letters only. binCount counts all bins of the zone, including inactive ones.
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
@@ -113,7 +113,7 @@ paths:
       operationId: listBins
       summary: List bins (paged, sortable, searchable)
       tags: [Bins]
-      description: Returns a page of bins, optionally filtered by zone, active state or a search text on code or name. Allowed sort fields are code, name, zone (the zone code) and isActive (prefix with - for descending).
+      description: Returns a page of bins, optionally filtered by zone, active state or a search text on code or name. Allowed sort fields are code, name, zone (the zone code) and isActive (prefix with - for descending). Sorting by name ignores case for ASCII letters only.
       x-acceptance-criteria: [LOC-3.1, LOC-3.2]
       parameters:
         - { $ref: '#/components/parameters/Page' }
