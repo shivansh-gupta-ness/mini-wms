@@ -2,7 +2,7 @@
 id: TASK-018
 type: task
 title: Sort zones and bins by name without regard to case
-status: in-review
+status: done
 owner: shivansh-gupta-ness
 component: locations
 risk: low
@@ -39,3 +39,6 @@ depends_on: []
 - Run `/ef-verify TASK-018` after the change; `/review-ticket` runs it automatically because a path under `MiniWms.Infrastructure` changes.
 - `/start-ticket` now runs `spec-drift-auditor` on the `locations` component before the plan and stops on any drift. `docs/specs/api/locations.yaml` had drift rows in the last audit (for example the undeclared 413), so expect that stop and decide whether to fix first or record a decision to continue.
 - Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
+
+## Delivery
+PR 69. All 6 acceptance criteria PASS (criterion 3 by the existing sort tests, 5 and 6 by the diff and real runs); results in `docs/reports/TASK-018/ac-results.md` and the row in `docs/reports/ac-log.md`. Reverting the fix makes exactly the 6 new cases fail. The 12 doc-side drift rows in `locations` and the three `/code-review` findings are follow-ups.
