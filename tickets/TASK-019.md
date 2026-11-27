@@ -2,7 +2,7 @@
 id: TASK-019
 type: task
 title: Order the default bins list by Id once
-status: ready
+status: done
 owner: shivansh-gupta-ness
 component: locations
 risk: low
@@ -31,3 +31,7 @@ With no `sort`, `GET /api/v1/bins` orders by `Bin.Id` twice. The `switch` in `Lo
 - The `switch` is in `ListBinsAsync` in `src/backend/MiniWms.Infrastructure/Locations/LocationQueries.cs`; the shared `.ThenBy(p => p.Bin.Id)` follows it.
 - If proving criterion 3 needs more than reading the code, ask the owner before adding a test outside `LocationListApiTests.cs`.
 - Do not edit protected paths (`.github/`, `.claude/`, `scripts/`, the root `REPO_CONTEXT.md`, `docs/knowledge-map.yaml`).
+- Owner decisions (2026-11-27): no new tests and no new traits; criteria 1 and 2 are proven by the existing bins tests passing unchanged. After the review chain, the owner continued with all 9 drift rows that `spec-drift-auditor` found in `locations` (none from TASK-019; rows 1 to 8 are the TASK-018 rows waiting for their `chore/` PR, row 9 is the missing index table in the root context file, a `setup/` fix) and acted on no findings.
+
+## Delivery
+PR 72. All 4 acceptance criteria PASS (1 and 2 by the existing tests unchanged, 3 and 4 by the diff and real runs); 768 backend tests pass, coverage 97.05%. Results in `docs/reports/TASK-019/ac-results.md`, the plan in `ticket_plan.md`, the build and review output in `code_summary.md` and `review_findings.md`, and the row in `docs/reports/ac-log.md`. Follow-ups, not acted on: the tied-name test `test-critic` suggested (a `name` tie-break on `Code` would pass today), a SQL-text check for the order (waits on the `ToQueryString()` decision), and the 9 drift rows.
